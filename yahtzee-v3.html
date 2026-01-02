@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="data:application/json,%7B%22name%22%3A%22Yahtzee%22%2C%22short_name%22%3A%22Yahtzee%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23312e81%22%2C%22theme_color%22%3A%22%234f46e5%22%7D">
+  <title>Yahtzee Scorer</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #312e81 0%, #581c87 50%, #831843 100%); min-height: 100vh; }
+    .container { max-width: 28rem; margin: 0 auto; padding: 1rem; }
+    .text-center { text-align: center; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mt-4 { margin-top: 1rem; }
+    .p-3 { padding: 0.75rem; }
+    .p-4 { padding: 1rem; }
+    .p-5 { padding: 1.25rem; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+    .py-5 { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-3 { gap: 0.75rem; }
+    .flex { display: flex; }
+    .flex-1 { flex: 1; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .justify-center { justify-content: center; }
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-cols-6 { grid-template-columns: repeat(6, 1fr); }
+    .space-y-2 > * + * { margin-top: 0.5rem; }
+    .space-y-3 > * + * { margin-top: 0.75rem; }
+    .overflow-x-auto { overflow-x: auto; }
+    .whitespace-nowrap { white-space: nowrap; }
+    .flex-shrink-0 { flex-shrink: 0; }
+    
+    .rounded-lg { border-radius: 0.5rem; }
+    .rounded-xl { border-radius: 0.75rem; }
+    .rounded-2xl { border-radius: 1rem; }
+    .rounded-full { border-radius: 9999px; }
+    
+    .text-xs { font-size: 0.75rem; }
+    .text-sm { font-size: 0.875rem; }
+    .text-lg { font-size: 1.125rem; }
+    .text-xl { font-size: 1.25rem; }
+    .text-2xl { font-size: 1.5rem; }
+    .text-3xl { font-size: 1.875rem; }
+    .text-4xl { font-size: 2.25rem; }
+    .text-5xl { font-size: 3rem; }
+    .font-medium { font-weight: 500; }
+    .font-bold { font-weight: 700; }
+    .font-black { font-weight: 900; }
+    
+    .text-white { color: white; }
+    .text-gray-400 { color: #9ca3af; }
+    .text-gray-500 { color: #6b7280; }
+    .text-gray-600 { color: #4b5563; }
+    .text-gray-800 { color: #1f2937; }
+    .text-purple-200 { color: #e9d5ff; }
+    .text-purple-600 { color: #9333ea; }
+    .text-purple-700 { color: #7c3aed; }
+    .text-blue-600 { color: #2563eb; }
+    .text-blue-700 { color: #1d4ed8; }
+    .text-blue-800 { color: #1e40af; }
+    .text-green-600 { color: #16a34a; }
+    .text-green-700 { color: #15803d; }
+    .text-red-400 { color: #f87171; }
+    .text-red-500 { color: #ef4444; }
+    .text-yellow-400 { color: #facc15; }
+    .text-yellow-600 { color: #ca8a04; }
+    .text-yellow-800 { color: #854d0e; }
+    
+    .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+    .glass-dark { background: rgba(255,255,255,0.25); }
+    
+    .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    
+    /* Base button - NO background defined here */
+    .btn { 
+      border: none; 
+      cursor: pointer; 
+      transition: all 0.15s; 
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn:active { transform: scale(0.95); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    
+    /* Text-only button (transparent background) */
+    .btn-text {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-text:active { transform: scale(0.95); opacity: 0.7; }
+    
+    /* Primary action button */
+    .btn-primary { 
+      background: linear-gradient(to right, #22c55e, #059669); 
+      color: white; 
+      font-weight: 900; 
+      padding: 1.25rem; 
+      border-radius: 1rem; 
+      font-size: 1.25rem; 
+      width: 100%; 
+    }
+    
+    /* Resume game button */
+    .btn-resume {
+      background: linear-gradient(to right, #f97316, #ea580c);
+      color: white;
+      font-weight: 900;
+      padding: 1.25rem;
+      border-radius: 1rem;
+      font-size: 1.25rem;
+      width: 100%;
+    }
+    
+    /* Secondary button */
+    .btn-secondary { 
+      background: rgba(255,255,255,0.1); 
+      color: white; 
+      font-weight: 700; 
+      padding: 1rem; 
+      border-radius: 0.75rem; 
+      width: 100%; 
+      border: 1px solid rgba(255,255,255,0.1); 
+    }
+    
+    /* Small button base */
+    .btn-small { 
+      padding: 0.5rem 0.75rem; 
+      font-size: 0.875rem; 
+      border-radius: 0.5rem; 
+      font-weight: 600; 
+    }
+    
+    /* Colored buttons - used in modals */
+    .btn-blue {
+      background-color: #2563eb;
+      color: white;
+    }
+    .btn-green {
+      background-color: #22c55e;
+      color: white;
+    }
+    .btn-purple {
+      background-color: #a855f7;
+      color: white;
+    }
+    .btn-orange {
+      background-color: #f97316;
+      color: white;
+    }
+    .btn-yellow {
+      background-color: #eab308;
+      color: white;
+    }
+    .btn-gray {
+      background-color: #f3f4f6;
+      color: #6b7280;
+    }
+    .btn-gray-dark {
+      background-color: #e5e7eb;
+      color: #9ca3af;
+    }
+    
+    .input { 
+      border: 2px solid #e5e7eb; 
+      border-radius: 0.75rem; 
+      padding: 0.75rem 1rem; 
+      font-size: 1rem; 
+      width: 100%; 
+      font-family: inherit;
+      background: white;
+    }
+    .input:focus { outline: none; border-color: #3b82f6; }
+    
+    .card { 
+      background: white; 
+      border-radius: 1rem; 
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); 
+      overflow: hidden; 
+    }
+    
+    .header-gradient { background: linear-gradient(to right, #4f46e5, #9333ea); }
+    .upper-gradient { background: linear-gradient(to right, #3b82f6, #2563eb); }
+    .lower-gradient { background: linear-gradient(to right, #9333ea, #7c3aed); }
+    .total-gradient { background: linear-gradient(to right, #4f46e5, #9333ea); }
+    
+    .modal-overlay { 
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0,0,0,0.5); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      z-index: 50; 
+      padding: 1rem; 
+    }
+    .modal { 
+      background: white; 
+      border-radius: 1rem; 
+      padding: 1.25rem; 
+      width: 100%; 
+      max-width: 24rem; 
+      max-height: 80vh; 
+      overflow: auto; 
+    }
+    
+    .color-dot { width: 1rem; height: 1rem; border-radius: 9999px; flex-shrink: 0; }
+    .color-dot-sm { width: 0.75rem; height: 0.75rem; border-radius: 9999px; flex-shrink: 0; }
+    
+    .checkbox { 
+      width: 1.25rem; 
+      height: 1.25rem; 
+      border-radius: 9999px; 
+      border: 2px solid white; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      flex-shrink: 0; 
+    }
+    .checkbox-inner { width: 0.75rem; height: 0.75rem; border-radius: 9999px; background: white; }
+    
+    .score-btn { 
+      min-width: 4rem; 
+      padding: 0.5rem 1rem; 
+      border-radius: 0.75rem; 
+      font-weight: 700; 
+      font-size: 1.125rem; 
+      border: none; 
+      cursor: pointer; 
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .score-btn:active { transform: scale(0.95); }
+    .score-filled-blue { background-color: #dbeafe; color: #1d4ed8; }
+    .score-filled-purple { background-color: #f3e8ff; color: #7c3aed; }
+    .score-empty { background-color: #f3f4f6; color: #9ca3af; border: 2px dashed #d1d5db; }
+    
+    .picker-btn { 
+      background-color: #eff6ff; 
+      border: none; 
+      border-radius: 0.75rem; 
+      padding: 0.75rem; 
+      cursor: pointer; 
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .picker-btn:active { background-color: #dbeafe; transform: scale(0.95); }
+    .picker-btn-green { 
+      background-color: #f0fdf4; 
+      border: 2px solid #bbf7d0; 
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .picker-btn-green:active { background-color: #dcfce7; transform: scale(0.95); }
+    .picker-btn-red { 
+      background-color: #fef2f2; 
+      border: 2px solid #fecaca; 
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .picker-btn-red:active { background-color: #fee2e2; transform: scale(0.95); }
+    .picker-btn-purple { 
+      background-color: #faf5ff; 
+      border: none; 
+      border-radius: 0.5rem; 
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .picker-btn-purple:active { background-color: #f3e8ff; transform: scale(0.95); }
+    
+    .player-tab { 
+      padding: 0.5rem 1rem; 
+      border-radius: 9999px; 
+      font-size: 0.875rem; 
+      font-weight: 700; 
+      white-space: nowrap; 
+      border: none; 
+      cursor: pointer; 
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .player-tab:active { transform: scale(0.95); }
+    .player-tab-active { color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .player-tab-inactive { background-color: #f3f4f6; color: #4b5563; }
+    
+    .standing-bar { 
+      height: 2.5rem; 
+      border-radius: 0.75rem; 
+      display: flex; 
+      align-items: center; 
+      padding: 0 0.75rem; 
+      color: white; 
+      font-weight: 700; 
+      font-size: 0.875rem; 
+      transition: width 0.5s; 
+    }
+    
+    .divider { height: 1px; background-color: #f3f4f6; }
+    
+    .sticky { position: sticky; top: 0; z-index: 20; }
+    .sticky-tabs { position: sticky; top: 2.75rem; z-index: 10; }
+    
+    /* Small transparent action buttons */
+    .clear-btn {
+      background: transparent;
+      border: none;
+      color: #f87171;
+      font-size: 0.875rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      font-family: inherit;
+      line-height: 1;
+    }
+    .clear-btn:active { transform: scale(0.9); }
+    
+    .order-btn {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 0.875rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      font-family: inherit;
+      line-height: 1;
+    }
+    .order-btn:active { transform: scale(0.9); }
+    
+    .delete-btn {
+      background: transparent;
+      border: none;
+      color: #f87171;
+      font-size: 0.875rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      font-family: inherit;
+      font-weight: 500;
+    }
+    .delete-btn:active { transform: scale(0.9); opacity: 0.7; }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1f2937;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      z-index: 100;
+      animation: toast-in 0.3s ease, toast-out 0.3s ease 1.7s forwards;
+    }
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateX(-50%) translateY(1rem); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes toast-out {
+      from { opacity: 1; transform: translateX(-50%) translateY(0); }
+      to { opacity: 0; transform: translateX(-50%) translateY(1rem); }
+    }
+    
+    /* Current turn indicator */
+    .current-turn-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+    .pulse-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast"></div>
+
+  <script>
+    const UPPER = [
+      { id: 'ones', name: 'Ones', value: 1 },
+      { id: 'twos', name: 'Twos', value: 2 },
+      { id: 'threes', name: 'Threes', value: 3 },
+      { id: 'fours', name: 'Fours', value: 4 },
+      { id: 'fives', name: 'Fives', value: 5 },
+      { id: 'sixes', name: 'Sixes', value: 6 },
+    ];
+
+    const LOWER = [
+      { id: 'threeOfKind', name: '3 of a Kind', type: 'sum', max: 30 },
+      { id: 'fourOfKind', name: '4 of a Kind', type: 'sum', max: 30 },
+      { id: 'fullHouse', name: 'Full House', type: 'fixed', fixed: 25 },
+      { id: 'smallStraight', name: 'Sm. Straight', type: 'fixed', fixed: 30 },
+      { id: 'largeStraight', name: 'Lg. Straight', type: 'fixed', fixed: 40 },
+      { id: 'yahtzee', name: 'YAHTZEE!', type: 'fixed', fixed: 50 },
+      { id: 'chance', name: 'Chance', type: 'sum', max: 30 },
+    ];
+
+    const COLORS = ['#3b82f6','#ef4444','#22c55e','#f59e0b','#8b5cf6','#ec4899','#06b6d4','#f97316'];
+
+    let S = {
+      view: 'setup',
+      known: JSON.parse(localStorage.getItem('yahtzeeP') || '[]'),
+      game: [],
+      cur: 0,
+      history: JSON.parse(localStorage.getItem('yahtzeeH') || '[]'),
+      savedGame: JSON.parse(localStorage.getItem('yahtzeeSaved') || 'null'),
+      start: null,
+      picker: null,
+      mgr: false,
+      stats: null
+    };
+
+    const save = () => { 
+      localStorage.setItem('yahtzeeP', JSON.stringify(S.known)); 
+      localStorage.setItem('yahtzeeH', JSON.stringify(S.history)); 
+    };
+    
+    const saveCurrentGame = () => {
+      const gameState = {
+        game: S.game,
+        cur: S.cur,
+        start: S.start,
+        savedAt: Date.now()
+      };
+      localStorage.setItem('yahtzeeSaved', JSON.stringify(gameState));
+      S.savedGame = gameState;
+    };
+    
+    const clearSavedGame = () => {
+      localStorage.removeItem('yahtzeeSaved');
+      S.savedGame = null;
+    };
+    
+    const empty = () => ({ ones:null, twos:null, threes:null, fours:null, fives:null, sixes:null, threeOfKind:null, fourOfKind:null, fullHouse:null, smallStraight:null, largeStraight:null, yahtzee:null, chance:null, bonus:0 });
+    const upTot = s => ['ones','twos','threes','fours','fives','sixes'].reduce((a,c) => a+(s[c]||0), 0);
+    const upBonus = s => upTot(s) >= 63 ? 35 : 0;
+    const loTot = s => ['threeOfKind','fourOfKind','fullHouse','smallStraight','largeStraight','yahtzee','chance'].reduce((a,c) => a+(s[c]||0), 0) + (s.bonus||0);
+    const grand = s => upTot(s) + upBonus(s) + loTot(s);
+    const color = id => { const i = S.known.findIndex(p => p.id === id); return COLORS[i % COLORS.length]; };
+    
+    const isGameComplete = () => {
+      return S.game.every(p => {
+        const s = p.scores;
+        return s.ones !== null && s.twos !== null && s.threes !== null && 
+               s.fours !== null && s.fives !== null && s.sixes !== null &&
+               s.threeOfKind !== null && s.fourOfKind !== null && s.fullHouse !== null &&
+               s.smallStraight !== null && s.largeStraight !== null && s.yahtzee !== null && s.chance !== null;
+      });
+    };
+    
+    const showToast = (msg) => {
+      const toast = document.getElementById('toast');
+      toast.innerHTML = '<div class="toast">' + msg + '</div>';
+      setTimeout(() => { toast.innerHTML = ''; }, 2000);
+    };
+
+    function R() {
+      const app = document.getElementById('app');
+      if (S.view === 'setup') app.innerHTML = setup();
+      else if (S.view === 'history') app.innerHTML = hist();
+      else app.innerHTML = gameView();
+    }
+
+    function setup() {
+      const pl = S.known.length === 0 
+        ? '<div class="text-center py-5 text-purple-200"><p class="mb-2">No players yet!</p><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">+ Add Players</button></div>'
+        : S.known.map((p,i) => {
+            const sel = S.game.some(g => g.id === p.id);
+            const gi = S.game.findIndex(g => g.id === p.id);
+            return '<div class="flex items-center gap-2 rounded-xl p-3 '+(sel?'glass-dark':'glass')+'" style="'+(sel?'box-shadow:0 0 0 2px white;':'')+'" onclick="tog('+p.id+')">'+
+              '<div class="checkbox">'+(sel?'<div class="checkbox-inner"></div>':'')+'</div>'+
+              '<div class="color-dot" style="background:'+COLORS[i%COLORS.length]+'"></div>'+
+              '<span class="flex-1 font-medium text-white">'+p.name+'</span>'+
+              (sel?'<button class="order-btn" onclick="event.stopPropagation();mv('+gi+',-1)">▲</button><button class="order-btn" onclick="event.stopPropagation();mv('+gi+',1)">▼</button>':'')+
+              '<button class="btn btn-small glass text-white text-xs" onclick="event.stopPropagation();S.stats=S.known.find(x=>x.id==='+p.id+');R()">📊</button>'+
+            '</div>';
+          }).join('');
+
+      const ord = S.game.length > 0 ? '<div class="glass rounded-xl p-3 mt-4"><p class="text-sm text-purple-200 mb-1">Play order:</p><p class="font-medium text-white">'+S.game.map(p=>p.name).join(' → ')+'</p></div>' : '';
+      
+      const resumeBtn = S.savedGame ? 
+        '<button class="btn btn-resume mb-4" onclick="resumeGame()">▶️ RESUME GAME</button>'+
+        '<button class="btn btn-secondary mb-4" onclick="discardSaved()">🗑️ Discard Saved Game</button>' : '';
+
+      return '<div class="container" style="min-height:100vh">'+
+        '<div class="text-center mb-6"><div class="text-5xl mb-2">🎲</div><h1 class="text-4xl font-black text-white">YAHTZEE</h1><p class="text-purple-200 text-sm">Score Keeper</p></div>'+
+        (S.savedGame ? '<div class="glass rounded-2xl p-4 mb-4"><p class="text-white font-bold mb-2">📌 Saved Game</p><p class="text-purple-200 text-sm">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">Saved '+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
+        resumeBtn+
+        '<div class="glass rounded-2xl p-5 mb-4">'+
+          '<div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-white">Select Players</h2><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">⚙️ Manage</button></div>'+
+          '<div class="space-y-2">'+pl+'</div>'+ord+
+        '</div>'+
+        '<button class="btn btn-primary" onclick="start()" '+(S.game.length===0?'disabled':'')+'>'+(S.game.length===0?'Select Players':'🎮 START NEW ('+S.game.length+')')+'</button>'+
+        '<button class="btn btn-secondary mt-4" onclick="S.view=\'history\';R()">📜 Game History</button>'+
+      '</div>'+(S.mgr?mgr():'')+(S.stats?statsModal():'');
+    }
+
+    function mgr() {
+      const pl = S.known.map((p,i) => 
+        '<div class="flex items-center gap-2 bg-gray-50 rounded-xl p-3">'+
+          '<div class="color-dot" style="background:'+COLORS[i%COLORS.length]+'"></div>'+
+          '<input type="text" class="input flex-1" value="'+p.name+'" onchange="ren('+p.id+',this.value)">'+
+          '<button class="delete-btn" onclick="del('+p.id+')">Delete</button>'+
+        '</div>'
+      ).join('');
+      return '<div class="modal-overlay" onclick="S.mgr=false;save();R()"><div class="modal" onclick="event.stopPropagation()">'+
+        '<h2 class="text-xl font-black text-gray-800 mb-4">👥 Manage Players</h2>'+
+        '<div class="space-y-2 mb-4">'+pl+'</div>'+
+        '<div class="flex gap-2 mb-4"><input type="text" id="np" class="input flex-1" placeholder="New player..." onkeypress="if(event.key===\'Enter\')addP()"><button class="btn btn-blue btn-small text-white" onclick="addP()">Add</button></div>'+
+        '<button class="btn btn-green font-bold py-3 rounded-xl w-full" onclick="S.mgr=false;save();R()">Done</button>'+
+      '</div></div>';
+    }
+
+    function statsModal() {
+      const p = S.stats;
+      const games = S.history.filter(g => g.players.some(x => x.pid === p.id));
+      const res = games.map(g => g.players.find(x => x.pid === p.id)).filter(Boolean);
+      const wins = games.filter(g => { const s = [...g.players].sort((a,b) => b.total - a.total); return s[0]?.pid === p.id; }).length;
+      const hi = res.length ? Math.max(...res.map(r => r.total)) : 0;
+      const avg = res.length ? Math.round(res.reduce((a,r) => a + r.total, 0) / res.length) : 0;
+      const ytz = res.reduce((a,r) => a + (r.scores.yahtzee === 50 ? 1 : 0) + (r.scores.bonus / 100), 0);
+
+      const st = res.length === 0 
+        ? '<p class="text-center text-gray-400 py-5">No games yet</p>'
+        : '<div class="grid grid-cols-2 gap-3 mb-4">'+
+            '<div class="bg-blue-50 rounded-xl p-4 text-center"><div class="text-3xl font-black text-blue-600">'+res.length+'</div><div class="text-xs text-gray-500">Games</div></div>'+
+            '<div class="bg-yellow-50 rounded-xl p-4 text-center"><div class="text-3xl font-black text-yellow-600">'+wins+'</div><div class="text-xs text-gray-500">Wins ('+(res.length?Math.round(wins/res.length*100):0)+'%)</div></div>'+
+            '<div class="bg-green-50 rounded-xl p-4 text-center"><div class="text-3xl font-black text-green-600">'+hi+'</div><div class="text-xs text-gray-500">High Score</div></div>'+
+            '<div class="bg-purple-50 rounded-xl p-4 text-center"><div class="text-3xl font-black text-purple-600">'+avg+'</div><div class="text-xs text-gray-500">Average</div></div>'+
+          '</div>'+
+          '<div class="bg-red-50 rounded-xl p-4 text-center mb-4"><div class="text-3xl font-black text-red-500">🎲 '+ytz+'</div><div class="text-xs text-gray-500">Yahtzees</div></div>';
+
+      return '<div class="modal-overlay" onclick="S.stats=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
+        '<h2 class="text-2xl font-black text-gray-800 mb-1">'+p.name+'</h2><p class="text-gray-500 text-sm mb-4">Statistics</p>'+st+
+        '<button class="btn btn-gray font-medium py-3 rounded-xl w-full" onclick="S.stats=null;R()">Close</button>'+
+      '</div></div>';
+    }
+
+    function hist() {
+      const g = S.history.length === 0 
+        ? '<div class="text-center py-5 text-purple-200"><p class="text-5xl mb-4">📜</p><p>No games yet</p></div>'
+        : S.history.map(h => {
+            const sorted = [...h.players].sort((a,b) => b.total - a.total);
+            const pls = sorted.map((p,i) => 
+              '<div class="flex justify-between items-center '+(i===0?'text-yellow-400 font-bold':'text-white')+'">'+
+                '<div class="flex items-center gap-2"><div class="color-dot-sm" style="background:'+color(p.pid)+'"></div><span>'+(i===0?'🏆 ':'')+p.name+'</span></div>'+
+                '<span class="text-lg">'+p.total+'</span>'+
+              '</div>'
+            ).join('');
+            return '<div class="glass rounded-2xl p-4">'+
+              '<div class="flex justify-between items-start mb-3">'+
+                '<div><p class="font-bold text-white">'+new Date(h.date).toLocaleDateString()+'</p><p class="text-sm text-purple-200">'+new Date(h.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+(h.dur?' • '+h.dur+'m':'')+'</p></div>'+
+                '<button class="delete-btn" style="color:#f87171" onclick="delH('+h.id+')">🗑️</button>'+
+              '</div>'+
+              '<div class="space-y-2">'+pls+'</div>'+
+            '</div>';
+          }).join('');
+
+      return '<div class="container" style="min-height:100vh">'+
+        '<div class="flex items-center justify-between mb-6"><button class="btn-text text-purple-200 text-lg font-medium" onclick="S.view=\'setup\';R()">← Back</button><h1 class="text-2xl font-black text-white">📜 History</h1><div style="width:4rem"></div></div>'+
+        '<div class="space-y-3">'+g+'</div>'+
+      '</div>';
+    }
+
+    function gameView() {
+      const cp = S.game[S.cur];
+      const sc = cp.scores;
+
+      const tabs = S.game.map((p,i) => 
+        '<button class="player-tab flex-shrink-0 '+(i===S.cur?'player-tab-active':'player-tab-inactive')+'" style="'+(i===S.cur?'background:'+color(p.id):'')+'" onclick="S.cur='+i+';R()">'+p.name+': '+grand(p.scores)+'</button>'
+      ).join('');
+
+      const up = UPPER.map(c => {
+        const v = sc[c.id];
+        return '<div class="flex items-center justify-between px-4 py-3">'+
+          '<div class="flex-1"><span class="font-medium text-gray-800">'+c.name+'</span><span class="text-xs text-gray-400 ml-2">('+[0,1,2,3,4,5].map(n=>n*c.value).join(',')+')</span></div>'+
+          '<div class="flex items-center gap-2">'+
+            (v!==null?'<button class="clear-btn" onclick="clr(\''+c.id+'\')">✕</button>':'')+
+            '<button class="score-btn '+(v!==null?'score-filled-blue':'score-empty')+'" onclick="openUp(\''+c.id+'\','+c.value+',\''+c.name+'\')">'+(v!==null?v:'Tap')+'</button>'+
+          '</div>'+
+        '</div><div class="divider"></div>';
+      }).join('');
+
+      const lo = LOWER.map(c => {
+        const v = sc[c.id];
+        return '<div class="flex items-center justify-between px-4 py-3">'+
+          '<div class="flex-1"><span class="font-medium text-gray-800">'+c.name+'</span><span class="text-xs text-gray-400 ml-2">'+(c.type==='fixed'?'(0/'+c.fixed+')':'(0-'+c.max+')')+'</span></div>'+
+          '<div class="flex items-center gap-2">'+
+            (v!==null?'<button class="clear-btn" onclick="clr(\''+c.id+'\')">✕</button>':'')+
+            '<button class="score-btn '+(v!==null?'score-filled-purple':'score-empty')+'" onclick="openLo(\''+c.id+'\',\''+c.type+'\','+(c.fixed||c.max)+',\''+c.name+'\')">'+(v!==null?v:'Tap')+'</button>'+
+          '</div>'+
+        '</div><div class="divider"></div>';
+      }).join('');
+
+      const stand = [...S.game].map(p => ({...p, t: grand(p.scores)})).sort((a,b) => b.t - a.t).map((p,r) =>
+        '<div class="flex items-center gap-3">'+
+          '<span class="text-xl" style="width:2rem;text-align:center">'+(r===0?'🥇':r===1?'🥈':r===2?'🥉':r+1)+'</span>'+
+          '<div class="flex-1 rounded-xl bg-gray-100" style="height:2.5rem"><div class="standing-bar" style="background:'+color(p.id)+';width:'+Math.max(30,p.t/4)+'%">'+p.name+'</div></div>'+
+          '<span class="font-black text-lg" style="width:3rem;text-align:right">'+p.t+'</span>'+
+        '</div>'
+      ).join('');
+      
+      const gameComplete = isGameComplete();
+
+      return '<div style="min-height:100vh;background:#f9fafb;padding-bottom:6rem">'+
+        '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
+          '<button class="btn btn-small glass text-white" onclick="pauseG()">⏸️ Pause</button>'+
+          '<h1 class="font-black text-lg">🎲 YAHTZEE</h1>'+
+          '<button class="btn btn-small '+(gameComplete?'btn-green':'btn-orange')+'" onclick="'+(gameComplete?'finishG()':'saveG()')+'">'+(gameComplete?'Finish ✓':'Save')+'</button>'+
+        '</div></div>'+
+        '<div class="bg-white shadow-md sticky-tabs"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
+        '<div class="p-3" style="max-width:28rem;margin:0 auto">'+
+          '<div class="card p-4 mb-4" style="border-left:4px solid '+color(cp.id)+'">'+
+            '<div class="current-turn-indicator"><div class="pulse-dot"></div><span class="text-gray-500 text-sm font-medium">Current Turn</span></div>'+
+            '<h2 class="font-black text-2xl" style="color:'+color(cp.id)+'">'+cp.name+'</h2>'+
+          '</div>'+
+          '<div class="card mb-4">'+
+            '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'bg-green-400':'glass')+'">'+upTot(sc)+'/63</span></div>'+
+            up+
+            '<div class="flex items-center justify-between px-4 py-3 bg-blue-50"><span class="font-bold text-blue-800">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
+          '</div>'+
+          '<div class="card mb-4">'+
+            '<div class="lower-gradient text-white px-4 py-3 font-bold">Lower Section</div>'+
+            lo+
+            '<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">'+
+              '<div><span class="font-bold text-yellow-800">Yahtzee Bonus</span><span class="text-yellow-600 text-xs ml-2">+100 each</span></div>'+
+              '<div class="flex items-center gap-2"><span class="font-black text-xl text-yellow-600">+'+sc.bonus+'</span><button class="btn btn-small '+(sc.yahtzee===50?'btn-yellow':'btn-gray-dark')+' font-bold" onclick="addBonus()" '+(sc.yahtzee!==50?'disabled':'')+'>+100</button></div>'+
+            '</div>'+
+          '</div>'+
+          '<div class="total-gradient text-white rounded-2xl shadow-lg p-5 mb-4"><div class="flex justify-between items-center">'+
+            '<div><p style="opacity:0.7" class="text-sm">Grand Total</p><p class="text-4xl font-black">'+grand(sc)+'</p></div>'+
+            '<div class="text-sm" style="text-align:right;opacity:0.7"><p>Upper: '+upTot(sc)+' + '+upBonus(sc)+'</p><p>Lower: '+loTot(sc)+'</p></div>'+
+          '</div></div>'+
+          '<div class="card p-4"><h3 class="font-bold mb-3 text-gray-800">🏆 Standings</h3><div class="space-y-2">'+stand+'</div></div>'+
+        '</div>'+
+      '</div>'+(S.picker?picker():'');
+    }
+
+    function picker() {
+      const c = S.picker;
+      if (c.t === 'upper') {
+        const btns = [0,1,2,3,4,5].map(n => 
+          '<button class="picker-btn" onclick="sel('+n*c.v+')"><div class="text-2xl font-black text-blue-600">'+n*c.v+'</div><div class="text-xs text-gray-500">'+n+' × '+c.v+'</div></button>'
+        ).join('');
+        return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
+          '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3><p class="text-blue-600 text-sm mt-1">How many '+c.v+'s did you roll?</p></div>'+
+          '<div class="grid grid-cols-3 gap-2 mb-4">'+btns+'</div>'+
+          '<button class="btn btn-gray font-medium py-3 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
+        '</div></div>';
+      } else if (c.t === 'fixed') {
+        return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
+          '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3></div>'+
+          '<div class="grid grid-cols-2 gap-3 mb-4">'+
+            '<button class="picker-btn-green p-4" onclick="sel('+c.v+')"><div class="text-3xl font-black text-green-600">✓ '+c.v+'</div><div class="text-sm text-green-700 font-medium">Got it!</div></button>'+
+            '<button class="picker-btn-red p-4" onclick="sel(0)"><div class="text-3xl font-black text-red-400">✗ 0</div><div class="text-sm text-red-500 font-medium">Missed</div></button>'+
+          '</div>'+
+          '<button class="btn btn-gray font-medium py-3 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
+        '</div></div>';
+      } else {
+        const quick = [5,10,15,20,25,30].map(n => '<button class="picker-btn-purple text-purple-700 font-bold text-sm" onclick="sel('+n+')">'+n+'</button>').join('');
+        return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
+          '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3><p class="text-purple-600 text-xs mt-1">Sum of all dice (5-30)</p></div>'+
+          '<button class="picker-btn-red w-full mb-3 p-3" onclick="sel(0)"><span class="font-black text-red-500">✗ Score 0</span></button>'+
+          '<p class="text-xs text-gray-400 mb-2 text-center">Quick select:</p>'+
+          '<div class="grid grid-cols-6 gap-1 mb-3">'+quick+'</div>'+
+          '<div class="flex gap-2 mb-4"><input type="number" id="cust" min="5" max="30" class="input flex-1 text-center text-xl font-bold" placeholder="Custom..."><button class="btn btn-purple font-bold px-4 rounded-xl" onclick="subCust()">✓</button></div>'+
+          '<button class="btn btn-gray font-medium py-3 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
+        '</div></div>';
+      }
+    }
+
+    function tog(id) {
+      const p = S.known.find(x => x.id === id);
+      const ex = S.game.find(x => x.id === id);
+      if (ex) S.game = S.game.filter(x => x.id !== id);
+      else if (S.game.length < 8) S.game.push({...p, scores: empty()});
+      R();
+    }
+
+    function mv(i, d) {
+      const ni = i + d;
+      if (ni < 0 || ni >= S.game.length) return;
+      const t = S.game[i];
+      S.game[i] = S.game[ni];
+      S.game[ni] = t;
+      R();
+    }
+
+    function addP() {
+      const inp = document.getElementById('np');
+      if (inp && inp.value.trim()) {
+        S.known.push({id: Date.now(), name: inp.value.trim()});
+        inp.value = '';
+        save();
+        R();
+      }
+    }
+
+    function ren(id, name) {
+      const p = S.known.find(x => x.id === id);
+      if (p && name.trim()) p.name = name.trim();
+      save();
+    }
+
+    function del(id) {
+      if (confirm('Delete player?')) {
+        S.known = S.known.filter(x => x.id !== id);
+        S.game = S.game.filter(x => x.id !== id);
+        save();
+        R();
+      }
+    }
+
+    function start() {
+      if (S.game.length === 0) return;
+      S.start = Date.now();
+      S.cur = 0;
+      S.view = 'game';
+      clearSavedGame();
+      R();
+    }
+    
+    function resumeGame() {
+      if (S.savedGame) {
+        S.game = S.savedGame.game;
+        S.cur = S.savedGame.cur;
+        S.start = S.savedGame.start;
+        S.view = 'game';
+        showToast('Game resumed!');
+        R();
+      }
+    }
+    
+    function discardSaved() {
+      if (confirm('Discard saved game?')) {
+        clearSavedGame();
+        R();
+      }
+    }
+
+    function delH(id) {
+      if (confirm('Delete game?')) {
+        S.history = S.history.filter(x => x.id !== id);
+        save();
+        R();
+      }
+    }
+
+    function next() { 
+      S.cur = (S.cur + 1) % S.game.length; 
+      R(); 
+    }
+
+    function openUp(id, v, name) { S.picker = {id, v, name, t: 'upper'}; R(); }
+    function openLo(id, type, v, name) { S.picker = {id, v, name, t: type}; R(); }
+
+    function sel(v) {
+      S.game[S.cur].scores[S.picker.id] = v;
+      S.picker = null;
+      
+      // Auto-save game state
+      saveCurrentGame();
+      
+      // Auto-advance to next player
+      const nextPlayer = (S.cur + 1) % S.game.length;
+      const nextPlayerName = S.game[nextPlayer].name;
+      S.cur = nextPlayer;
+      
+      R();
+      showToast(nextPlayerName + "'s turn");
+    }
+
+    function subCust() {
+      const inp = document.getElementById('cust');
+      const v = parseInt(inp.value);
+      if (v >= 0 && v <= 30) sel(v);
+    }
+
+    function clr(id) { 
+      S.game[S.cur].scores[id] = null; 
+      saveCurrentGame();
+      R(); 
+    }
+
+    function addBonus() {
+      if (S.game[S.cur].scores.yahtzee === 50) {
+        S.game[S.cur].scores.bonus += 100;
+        saveCurrentGame();
+        R();
+      }
+    }
+
+    function pauseG() {
+      saveCurrentGame();
+      S.game = [];
+      S.cur = 0;
+      S.view = 'setup';
+      showToast('Game saved!');
+      R();
+    }
+
+    function saveG() {
+      saveCurrentGame();
+      showToast('Progress saved!');
+    }
+    
+    function finishG() {
+      const rec = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        dur: S.start ? Math.round((Date.now() - S.start) / 60000) : null,
+        players: S.game.map(p => ({pid: p.id, name: p.name, scores: {...p.scores}, total: grand(p.scores)}))
+      };
+      S.history.unshift(rec);
+      save();
+      clearSavedGame();
+      S.game = [];
+      S.cur = 0;
+      S.view = 'setup';
+      showToast('Game finished! 🎉');
+      R();
+    }
+
+    R();
+  </script>
+</body>
+</html>

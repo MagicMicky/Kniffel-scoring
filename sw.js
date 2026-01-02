@@ -1,8 +1,9 @@
-const CACHE_NAME = 'kniffel-v2';
+const CACHE_NAME = 'kniffel-v3';
 const urlsToCache = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './version.json'
 ];
 
 // Install service worker and cache files

@@ -605,6 +605,24 @@
       else app.innerHTML = gameView();
     }
 
+    function navigateTo(view) {
+      S.view = view;
+      history.pushState({ view: view }, '', '#' + view);
+      R();
+    }
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', (event) => {
+      if (event.state && event.state.view) {
+        S.view = event.state.view;
+        R();
+      } else {
+        // Default to setup if no state
+        S.view = 'setup';
+        R();
+      }
+    });
+
     function setup() {
       const pl = S.known.length === 0 
         ? '<div class="text-center py-5 text-purple-200"><p class="mb-2">No players yet!</p><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">+ Add Players</button></div>'
@@ -635,7 +653,7 @@
           '<div class="space-y-2">'+pl+'</div>'+ord+
         '</div>'+
         '<button class="btn btn-primary" onclick="start()" '+(S.game.length===0?'disabled':'')+'>'+(S.game.length===0?'Select Players':'🎮 START NEW ('+S.game.length+')')+'</button>'+
-        '<button class="btn btn-secondary mt-4" onclick="S.view=\'history\';R()">📜 Game History</button>'+
+        '<button class="btn btn-secondary mt-4" onclick="navigateTo(\'history\')">📜 Game History</button>'+
         '<div class="grid grid-cols-2 gap-2 mt-4">'+
           '<button class="btn btn-secondary" onclick="exportData()">📥 Export</button>'+
           '<button class="btn btn-secondary" onclick="triggerImport()">📤 Import</button>'+
@@ -705,7 +723,7 @@
           }).join('');
 
       return '<div class="container" style="min-height:100vh">'+
-        '<div class="flex items-center justify-between mb-6"><button class="btn-text text-purple-200 text-lg font-medium" onclick="S.view=\'setup\';R()">← Back</button><h1 class="text-2xl font-black text-white">📜 History</h1><div style="width:4rem"></div></div>'+
+        '<div class="flex items-center justify-between mb-6"><button class="btn-text text-purple-200 text-lg font-medium" onclick="navigateTo(\'setup\')">← Back</button><h1 class="text-2xl font-black text-white">📜 History</h1><div style="width:4rem"></div></div>'+
         '<div class="space-y-3">'+g+'</div>'+
       '</div>';
     }
@@ -863,9 +881,8 @@
       if (S.game.length === 0) return;
       S.start = Date.now();
       S.cur = 0;
-      S.view = 'game';
       clearSavedGame();
-      R();
+      navigateTo('game');
     }
     
     function resumeGame() {
@@ -873,9 +890,8 @@
         S.game = S.savedGame.game;
         S.cur = S.savedGame.cur;
         S.start = S.savedGame.start;
-        S.view = 'game';
         showToast('Game resumed!');
-        R();
+        navigateTo('game');
       }
     }
     
@@ -942,9 +958,8 @@
       saveCurrentGame();
       S.game = [];
       S.cur = 0;
-      S.view = 'setup';
       showToast('Game paused & saved! ⏸️');
-      R();
+      navigateTo('setup');
     }
 
     function saveG() {
@@ -964,11 +979,12 @@
       clearSavedGame();
       S.game = [];
       S.cur = 0;
-      S.view = 'setup';
       showToast('Game finished! 🎉');
-      R();
+      navigateTo('setup');
     }
 
+    // Initialize history state
+    history.replaceState({ view: S.view }, '', '#' + S.view);
     R();
 
     // Load and display version

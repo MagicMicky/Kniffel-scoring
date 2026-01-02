@@ -752,7 +752,7 @@
 
       return '<div style="min-height:100vh;background:#f9fafb;padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
-          '<button class="btn btn-small glass text-white" onclick="pauseG()">⏸️ Pause</button>'+
+          '<button class="btn-text text-white text-lg font-medium" onclick="pauseG()">← Back</button>'+
           '<h1 class="font-black text-lg">🎲 YAHTZEE</h1>'+
           '<button class="btn btn-small '+(gameComplete?'btn-green':'btn-orange')+'" onclick="'+(gameComplete?'finishG()':'saveG()')+'">'+(gameComplete?'Finish ✓':'Save')+'</button>'+
         '</div></div>'+
@@ -943,7 +943,7 @@
       S.game = [];
       S.cur = 0;
       S.view = 'setup';
-      showToast('Game saved!');
+      showToast('Game paused & saved! ⏸️');
       R();
     }
 

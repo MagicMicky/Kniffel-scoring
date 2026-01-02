@@ -1,0 +1,41 @@
+#!/bin/bash
+# Auto-update version.json and service worker cache before each commit
+
+# Only update if index.html, manifest.json, or sw.js changed
+if git diff --cached --name-only | grep -qE '(index\.html|manifest\.json|sw\.js)'; then
+
+  # Get commit count as version number (e.g., 1.0.47 for 47th commit)
+  COMMIT_COUNT=$(git rev-list --count HEAD 2>/dev/null || echo "0")
+  VERSION="1.0.$COMMIT_COUNT"
+
+  # Get current commit hash (will be the previous commit since we're in pre-commit)
+  COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "initial")
+
+  # Get current date in ISO format
+  DATE=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+
+  # Update version.json
+  cat > version.json << EOF
+{
+  "version": "$VERSION",
+  "commit": "$COMMIT",
+  "updated": "$DATE"
+}
+EOF
+
+  # Read current cache version from sw.js
+  if [ -f sw.js ]; then
+    CURRENT_CACHE=$(grep -oP "CACHE_NAME = 'kniffel-v\K\d+" sw.js 2>/dev/null || echo "0")
+    NEW_CACHE=$((CURRENT_CACHE + 1))
+
+    # Update service worker cache name
+    sed -i "s/const CACHE_NAME = 'kniffel-v[0-9]*'/const CACHE_NAME = 'kniffel-v$NEW_CACHE'/" sw.js
+
+    # Add updated files to the commit
+    git add version.json sw.js
+
+    echo "✅ Auto-updated version to $VERSION (cache: kniffel-v$NEW_CACHE)"
+  fi
+fi
+
+exit 0

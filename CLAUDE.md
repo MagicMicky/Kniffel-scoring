@@ -10,13 +10,38 @@ This document provides comprehensive instructions for managing, updating, and ma
 
 ## 📱 Table of Contents
 
-1. [GitHub Pages Setup](#github-pages-setup)
-2. [Installing the PWA](#installing-the-pwa)
-3. [Updating the PWA](#updating-the-pwa)
-4. [Export & Import Data](#export--import-data)
-5. [Data Safety & localStorage](#data-safety--localstorage)
-6. [Troubleshooting](#troubleshooting)
-7. [Development Workflow](#development-workflow)
+1. [Game Modes](#game-modes)
+2. [GitHub Pages Setup](#github-pages-setup)
+3. [Installing the PWA](#installing-the-pwa)
+4. [Updating the PWA](#updating-the-pwa)
+5. [Export & Import Data](#export--import-data)
+6. [Data Safety & localStorage](#data-safety--localstorage)
+7. [Troubleshooting](#troubleshooting)
+8. [Development Workflow](#development-workflow)
+
+---
+
+## 🎮 Game Modes
+
+The app supports two modes, selectable on the setup screen:
+
+### Score Mode (📝)
+Use your own physical dice. Manually tap score categories to enter values. Best for playing with real dice at a table.
+
+### Play Mode (🎲)
+Roll virtual dice on your phone! Features:
+- **Shake to roll** - Shake your phone to roll the dice (requires motion permission on iOS)
+- **Tap to hold** - Tap any die to hold/release it between rolls
+- **3 rolls per turn** - Standard Yahtzee rules
+- **Auto-calculation** - Scores are calculated automatically based on dice
+- **Haptic feedback** - Vibration on roll and Yahtzee
+- **Yahtzee detection** - Special notification and bonus handling
+
+**Technical Notes:**
+- Uses DeviceMotion API for shake detection
+- iOS 13+ requires user permission (requested on first tap)
+- Falls back to roll button if motion unavailable
+- Dice state is saved/restored with game state
 
 ---
 
@@ -349,7 +374,7 @@ Edit the files as needed:
 - `index.html` - Main app code
 - `sw.js` - Service worker (caching, offline)
 - `manifest.json` - PWA metadata
-- `claude.md` - Documentation (this file)
+- `CLAUDE.md` - Documentation (this file)
 
 **3. Test Locally**
 
@@ -458,4 +483,4 @@ Built with ❤️ as a Progressive Web App for Yahtzee/Kniffel scoring.
 ---
 
 **Last Updated:** 2026-01-03
-**Version:** 2.1
+**Version:** 2.2 (added Game Mode with virtual dice)

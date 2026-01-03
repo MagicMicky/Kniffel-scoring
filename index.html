@@ -29,6 +29,7 @@
     .gap-3 { gap: 0.75rem; }
     .flex { display: flex; }
     .flex-1 { flex: 1; }
+    .w-full { width: 100%; }
     .items-center { align-items: center; }
     .justify-between { justify-content: space-between; }
     .justify-center { justify-content: center; }
@@ -674,7 +675,7 @@
         '<h2 class="text-xl font-black text-gray-800 mb-4">👥 Manage Players</h2>'+
         '<div class="space-y-2 mb-4">'+pl+'</div>'+
         '<div class="flex gap-2 mb-4"><input type="text" id="np" class="input flex-1" placeholder="New player..." onkeypress="if(event.key===\'Enter\')addP()"><button class="btn btn-blue btn-small text-white" onclick="addP()">Add</button></div>'+
-        '<button class="btn btn-green font-bold py-3 rounded-xl w-full" onclick="S.mgr=false;save();R()">Done</button>'+
+        '<button class="btn btn-green font-bold py-3 px-4 rounded-xl w-full" onclick="S.mgr=false;save();R()">Done</button>'+
       '</div></div>';
     }
 
@@ -699,7 +700,7 @@
 
       return '<div class="modal-overlay" onclick="S.stats=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
         '<h2 class="text-2xl font-black text-gray-800 mb-1">'+p.name+'</h2><p class="text-gray-500 text-sm mb-4">Statistics</p>'+st+
-        '<button class="btn btn-gray font-medium py-3 rounded-xl w-full" onclick="S.stats=null;R()">Close</button>'+
+        '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.stats=null;R()">Close</button>'+
       '</div></div>';
     }
 
@@ -812,7 +813,7 @@
         return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
           '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3><p class="text-blue-600 text-sm mt-1">How many '+c.v+'s did you roll?</p></div>'+
           '<div class="grid grid-cols-3 gap-2 mb-4">'+btns+'</div>'+
-          '<button class="btn btn-gray font-medium py-3 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
+          '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
         '</div></div>';
       } else if (c.t === 'fixed') {
         return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
@@ -821,7 +822,7 @@
             '<button class="picker-btn-green p-4" onclick="sel('+c.v+')"><div class="text-3xl font-black text-green-600">✓ '+c.v+'</div><div class="text-sm text-green-700 font-medium">Got it!</div></button>'+
             '<button class="picker-btn-red p-4" onclick="sel(0)"><div class="text-3xl font-black text-red-400">✗ 0</div><div class="text-sm text-red-500 font-medium">Missed</div></button>'+
           '</div>'+
-          '<button class="btn btn-gray font-medium py-3 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
+          '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
         '</div></div>';
       } else {
         const quick = [5,10,15,20,25,30].map(n => '<button class="picker-btn-purple text-purple-700 font-bold text-sm" onclick="sel('+n+')">'+n+'</button>').join('');
@@ -830,8 +831,8 @@
           '<button class="picker-btn-red w-full mb-3 p-3" onclick="sel(0)"><span class="font-black text-red-500">✗ Score 0</span></button>'+
           '<p class="text-xs text-gray-400 mb-2 text-center">Quick select:</p>'+
           '<div class="grid grid-cols-6 gap-1 mb-3">'+quick+'</div>'+
-          '<div class="flex gap-2 mb-4"><input type="number" id="cust" min="5" max="30" class="input flex-1 text-center text-xl font-bold" placeholder="Custom..."><button class="btn btn-purple font-bold px-4 rounded-xl" onclick="subCust()">✓</button></div>'+
-          '<button class="btn btn-gray font-medium py-3 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
+          '<div class="flex gap-2 mb-4"><input type="number" id="cust" min="5" max="30" class="input flex-1 text-center text-xl font-bold" placeholder="Custom..."><button class="btn btn-purple font-bold py-3 px-4 rounded-xl" onclick="subCust()">✓</button></div>'+
+          '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
         '</div></div>';
       }
     }

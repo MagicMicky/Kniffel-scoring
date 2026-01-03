@@ -1,5 +1,11 @@
 # Kniffel Scoring PWA - Documentation
 
+> ⚠️ **CRITICAL - DO THIS FIRST BEFORE ANY WORK:**
+> ```bash
+> bash setup-hooks.sh
+> ```
+> This installs git hooks for automatic version updates. Without this, PWA users won't get update notifications!
+
 This document provides comprehensive instructions for managing, updating, and maintaining your Kniffel (Yahtzee) scoring Progressive Web App.
 
 ## 📱 Table of Contents

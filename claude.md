@@ -303,6 +303,28 @@ Your data will still be there after reload!
 
 ## 👨‍💻 Development Workflow
 
+### Initial Setup (Run Once Per Session)
+
+**Install Git Hooks for Automatic Versioning**
+
+Before making any changes, install the git hooks:
+
+```bash
+bash setup-hooks.sh
+```
+
+This installs a pre-commit hook that automatically:
+- Updates `version.json` with version `1.0.X` (where X = commit count)
+- Increments the service worker cache name (`kniffel-v5` → `v6` → `v7`, etc.)
+- Includes these files in your commit automatically
+
+**You'll see this output when committing:**
+```
+✅ Auto-updated version to 1.0.20 (cache: kniffel-v7)
+```
+
+This ensures users always get update notifications when you deploy new versions!
+
 ### For Making Changes
 
 **1. Create a New Branch**
@@ -360,20 +382,27 @@ Click the link or go to your repository and click **"Compare & pull request"**.
 
 GitHub Pages automatically rebuilds within 1-2 minutes after merging to `main`.
 
-### Service Worker Updates
+### Automatic Version Management
 
-**When changing app code, ALWAYS update the service worker cache version:**
+**Version updates are now fully automated!**
 
-In `sw.js`, increment the version:
-```javascript
-// Before
-const CACHE_NAME = 'kniffel-v2';
+When you commit changes to `index.html`, `manifest.json`, or `sw.js`, the pre-commit hook automatically:
 
-// After your changes
-const CACHE_NAME = 'kniffel-v3';
+1. **Updates `version.json`** with the next version number based on commit count
+2. **Increments service worker cache** in `sw.js` (e.g., `kniffel-v5` → `kniffel-v6`)
+3. **Adds these files** to your commit
+
+**You don't need to manually update versions anymore!**
+
+The hook output shows what was updated:
+```
+✅ Auto-updated version to 1.0.20 (cache: kniffel-v7)
 ```
 
-This ensures users get the latest version!
+**Note:** If you ever need to manually update the cache version, edit `sw.js`:
+```javascript
+const CACHE_NAME = 'kniffel-v7';  // Change this number
+```
 
 ### Testing PWA Features
 
@@ -422,5 +451,5 @@ Built with ❤️ as a Progressive Web App for Yahtzee/Kniffel scoring.
 
 ---
 
-**Last Updated:** 2026-01-02
-**Version:** 2.0
+**Last Updated:** 2026-01-03
+**Version:** 2.1

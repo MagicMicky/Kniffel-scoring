@@ -632,6 +632,7 @@
       held: [false, false, false, false, false],
       rollCount: 0,
       rolling: false,
+      turnStarted: false, // Must tap "Start Turn" before rolling
       // Shake detection
       shakeEnabled: false,
       lastShake: 0
@@ -652,7 +653,8 @@
         mode: S.mode,
         dice: S.dice,
         held: S.held,
-        rollCount: S.rollCount
+        rollCount: S.rollCount,
+        turnStarted: S.turnStarted
       };
       localStorage.setItem('yahtzeeSaved', JSON.stringify(gameState));
       S.savedGame = gameState;
@@ -684,7 +686,7 @@
     const rollDie = () => Math.floor(Math.random() * 6) + 1;
 
     const rollDice = () => {
-      if (S.rolling || S.rollCount >= 3) return;
+      if (!S.turnStarted || S.rolling || S.rollCount >= 3) return;
 
       // Haptic feedback
       if (navigator.vibrate) {
@@ -726,6 +728,12 @@
       S.held = [false, false, false, false, false];
       S.rollCount = 0;
       S.rolling = false;
+      S.turnStarted = false;
+    };
+
+    const startTurn = () => {
+      S.turnStarted = true;
+      R();
     };
 
     // Score calculation engine for play mode
@@ -1057,19 +1065,31 @@
 
       // Dice area for play mode
       const diceArea = isPlayMode ? '<div class="dice-area">'+
-        '<div class="roll-info">'+
-          '<span class="roll-count">'+(S.rollCount === 0 ? 'Roll to start!' : 'Roll '+S.rollCount+' of 3')+'</span>'+
-          '<span class="shake-hint">'+(S.shakeEnabled ? '📳 Shake enabled' : 'Tap button to roll')+'</span>'+
-        '</div>'+
-        '<div class="dice-container" style="padding-bottom:1.5rem">'+
-          S.dice.map((d, i) =>
-            '<div class="die '+(S.held[i]?'held':'')+(S.rolling && !S.held[i]?' rolling':'')+'" onclick="toggleHold('+i+')">'+dieFace(d)+'</div>'
-          ).join('')+
-        '</div>'+
-        '<button class="roll-btn" onclick="rollDice()" '+(S.rollCount >= 3 || S.rolling ? 'disabled' : '')+'>'+
-          (S.rollCount === 0 ? '🎲 Roll Dice!' : S.rollCount >= 3 ? 'Select a score below' : '🎲 Roll Again ('+S.rollCount+'/3)')+
-        '</button>'+
-        (S.rollCount > 0 && !S.rolling ? '<p class="text-center text-xs mt-2" style="color:rgba(255,255,255,0.6)">Tap dice to hold/release</p>' : '')+
+        (S.turnStarted ?
+          // Turn started - show dice and roll button
+          '<div class="roll-info">'+
+            '<span class="roll-count">'+(S.rollCount === 0 ? 'Roll to start!' : 'Roll '+S.rollCount+' of 3')+'</span>'+
+            '<span class="shake-hint">'+(S.shakeEnabled ? '📳 Shake enabled' : 'Tap button to roll')+'</span>'+
+          '</div>'+
+          '<div class="dice-container" style="padding-bottom:1.5rem">'+
+            S.dice.map((d, i) =>
+              '<div class="die '+(S.held[i]?'held':'')+(S.rolling && !S.held[i]?' rolling':'')+'" onclick="toggleHold('+i+')">'+dieFace(d)+'</div>'
+            ).join('')+
+          '</div>'+
+          '<button class="roll-btn" onclick="rollDice()" '+(S.rollCount >= 3 || S.rolling ? 'disabled' : '')+'>'+
+            (S.rollCount === 0 ? '🎲 Roll Dice!' : S.rollCount >= 3 ? 'Select a score below' : '🎲 Roll Again ('+S.rollCount+'/3)')+
+          '</button>'+
+          (S.rollCount > 0 && !S.rolling ? '<p class="text-center text-xs mt-2" style="color:rgba(255,255,255,0.6)">Tap dice to hold/release</p>' : '')
+        :
+          // Turn not started - show start button
+          '<div class="text-center py-4">'+
+            '<p class="text-white text-lg font-bold mb-2">Ready to roll?</p>'+
+            '<p class="text-white text-xs mb-4" style="opacity:0.7">Tap the button when you\'re ready</p>'+
+            '<button class="roll-btn" onclick="startTurn()" style="background:linear-gradient(to right,#8b5cf6,#7c3aed)">'+
+              '👆 Start My Turn'+
+            '</button>'+
+          '</div>'
+        )+
       '</div>' : '';
 
       // Score buttons for play mode vs score mode
@@ -1319,7 +1339,7 @@
     // Shake detection setup
     function setupShakeDetection() {
       const SHAKE_THRESHOLD = 20;
-      const SHAKE_COOLDOWN = 600;
+      const SHAKE_COOLDOWN = 2000; // 2 seconds between shakes to prevent accidental double-rolls
 
       // Check if DeviceMotionEvent is available
       if (!('DeviceMotionEvent' in window)) {
@@ -1355,7 +1375,7 @@
       function addShakeListener() {
         window.addEventListener('devicemotion', (e) => {
           if (S.view !== 'game' || S.mode !== 'play') return;
-          if (S.rolling || S.rollCount >= 3) return;
+          if (!S.turnStarted || S.rolling || S.rollCount >= 3) return;
 
           const acc = e.accelerationIncludingGravity;
           if (!acc) return;
@@ -1387,6 +1407,7 @@
           S.dice = S.savedGame.dice || [1, 1, 1, 1, 1];
           S.held = S.savedGame.held || [false, false, false, false, false];
           S.rollCount = S.savedGame.rollCount || 0;
+          S.turnStarted = S.savedGame.turnStarted || false;
           if (S.mode === 'play') {
             setupShakeDetection();
           }

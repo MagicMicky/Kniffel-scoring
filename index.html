@@ -688,9 +688,9 @@
     const rollDice = () => {
       if (!S.turnStarted || S.rolling || S.rollCount >= 3) return;
 
-      // Haptic feedback
+      // Haptic feedback - simple single pulse
       if (navigator.vibrate) {
-        navigator.vibrate([50, 30, 50, 30, 50]);
+        navigator.vibrate(50);
       }
 
       S.rolling = true;
@@ -711,7 +711,8 @@
           // Check for Yahtzee and notify
           if (calcScore(S.dice, 'yahtzee') === 50) {
             showToast('🎉 YAHTZEE!');
-            if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+            // Fun but brief celebration pattern
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
           }
         }
       }, 50);
@@ -721,9 +722,9 @@
       if (S.rollCount === 0 || S.rolling) return; // Can't hold before first roll
       S.held[index] = !S.held[index];
 
-      // Brief haptic feedback (like keyboard typing)
+      // Very brief haptic feedback (like keyboard typing)
       if (navigator.vibrate) {
-        navigator.vibrate(10);
+        navigator.vibrate(5);
       }
 
       R();
@@ -740,9 +741,9 @@
     const startTurn = () => {
       S.turnStarted = true;
 
-      // Haptic feedback when starting turn (similar to roll)
+      // Haptic feedback when starting turn (same as roll)
       if (navigator.vibrate) {
-        navigator.vibrate([50, 30, 50]);
+        navigator.vibrate(50);
       }
 
       R();

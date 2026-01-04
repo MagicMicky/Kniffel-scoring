@@ -946,21 +946,30 @@
       const previousView = S.view;
       if (event.state && event.state.view) {
         S.view = event.state.view;
+
+        // Restore history detail state if present
+        if (S.view === 'history' && event.state.gameId) {
+          const game = S.history.find(h => h.id === event.state.gameId);
+          if (game) {
+            S.selectedHistoryGame = game;
+            S.historyDetailPlayer = 0;
+          }
+        } else if (S.view === 'history') {
+          // Clear history detail state when navigating to history list
+          S.selectedHistoryGame = null;
+          S.historyDetailPlayer = 0;
+        }
       } else {
         // Default to setup if no state
         S.view = 'setup';
+        S.selectedHistoryGame = null;
+        S.historyDetailPlayer = 0;
       }
 
       // If going from game back to setup, clear game state to prevent cached scores
       if (previousView === 'game' && S.view === 'setup') {
         S.game = [];
         S.cur = 0;
-      }
-
-      // Clear history detail state when navigating to history list
-      if (S.view === 'history') {
-        S.selectedHistoryGame = null;
-        S.historyDetailPlayer = 0;
       }
 
       R();
@@ -1087,14 +1096,14 @@
       if (game) {
         S.selectedHistoryGame = game;
         S.historyDetailPlayer = 0;
+        history.pushState({ view: 'history', gameId: gameId }, '', '#history-detail');
         R();
       }
     }
 
     function closeHistoryDetail() {
-      S.selectedHistoryGame = null;
-      S.historyDetailPlayer = 0;
-      R();
+      // Use browser back instead of directly modifying state
+      history.back();
     }
 
     function switchHistoryPlayer(index) {

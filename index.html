@@ -424,6 +424,166 @@
     .version-footer:hover {
       color: rgba(255, 255, 255, 0.8);
     }
+
+    /* Mode toggle styles */
+    .mode-toggle {
+      display: flex;
+      background: rgba(255,255,255,0.1);
+      border-radius: 0.75rem;
+      padding: 0.25rem;
+      margin-bottom: 1rem;
+    }
+    .mode-btn {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .mode-btn.active {
+      background: white;
+      color: #4f46e5;
+    }
+
+    /* Dice styles */
+    .dice-area {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .dice-container {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .die {
+      width: 3.5rem;
+      height: 3.5rem;
+      background: white;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #1f2937;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    .die:active {
+      transform: scale(0.95);
+    }
+    .die.held {
+      background: #fef3c7;
+      border: 3px solid #f59e0b;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+    }
+    .die.held::after {
+      content: 'HOLD';
+      position: absolute;
+      bottom: -1.25rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: #f59e0b;
+      white-space: nowrap;
+    }
+    .die.rolling {
+      animation: dice-roll 0.1s ease-in-out infinite;
+    }
+    @keyframes dice-roll {
+      0% { transform: rotate(-5deg) scale(1.05); }
+      50% { transform: rotate(5deg) scale(0.95); }
+      100% { transform: rotate(-5deg) scale(1.05); }
+    }
+    .roll-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(to right, #22c55e, #16a34a);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 1.125rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .roll-btn:active {
+      transform: scale(0.98);
+    }
+    .roll-btn:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .roll-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      color: white;
+    }
+    .roll-count {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .shake-hint {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+
+    /* Score suggestion styles */
+    .score-suggestion {
+      background: #dcfce7;
+      border: 2px solid #22c55e;
+    }
+    .score-suggestion-text {
+      color: #16a34a;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    /* Play mode category button */
+    .score-btn-play {
+      min-width: 4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 1.125rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .score-btn-play:active {
+      transform: scale(0.95);
+    }
+    .score-btn-play:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .score-available {
+      background: #dcfce7;
+      color: #16a34a;
+      border: 2px solid #22c55e;
+    }
+    .score-zero-only {
+      background: #fee2e2;
+      color: #ef4444;
+      border: 2px dashed #fca5a5;
+    }
   </style>
 </head>
 <body>
@@ -464,7 +624,18 @@
       start: null,
       picker: null,
       mgr: false,
-      stats: null
+      stats: null,
+      // Game mode: 'score' (manual entry) or 'play' (with dice)
+      mode: 'score',
+      // Dice state for play mode
+      dice: [1, 1, 1, 1, 1],
+      held: [false, false, false, false, false],
+      rollCount: 0,
+      rolling: false,
+      turnStarted: false, // Must tap "Start Turn" before rolling
+      // Shake detection
+      shakeEnabled: false,
+      lastShake: 0
     };
 
     const save = () => { 
@@ -477,7 +648,13 @@
         game: S.game,
         cur: S.cur,
         start: S.start,
-        savedAt: Date.now()
+        savedAt: Date.now(),
+        // Save play mode state
+        mode: S.mode,
+        dice: S.dice,
+        held: S.held,
+        rollCount: S.rollCount,
+        turnStarted: S.turnStarted
       };
       localStorage.setItem('yahtzeeSaved', JSON.stringify(gameState));
       S.savedGame = gameState;
@@ -498,11 +675,133 @@
     const isGameComplete = () => {
       return S.game.every(p => {
         const s = p.scores;
-        return s.ones !== null && s.twos !== null && s.threes !== null && 
+        return s.ones !== null && s.twos !== null && s.threes !== null &&
                s.fours !== null && s.fives !== null && s.sixes !== null &&
                s.threeOfKind !== null && s.fourOfKind !== null && s.fullHouse !== null &&
                s.smallStraight !== null && s.largeStraight !== null && s.yahtzee !== null && s.chance !== null;
       });
+    };
+
+    // Dice rolling functions
+    const rollDie = () => Math.floor(Math.random() * 6) + 1;
+
+    const rollDice = () => {
+      if (!S.turnStarted || S.rolling || S.rollCount >= 3) return;
+
+      // Haptic feedback
+      if (navigator.vibrate) {
+        navigator.vibrate([50, 30, 50, 30, 50]);
+      }
+
+      S.rolling = true;
+      R();
+
+      // Animate for 400ms
+      let animCount = 0;
+      const animInterval = setInterval(() => {
+        S.dice = S.dice.map((d, i) => S.held[i] ? d : rollDie());
+        R();
+        animCount++;
+        if (animCount >= 8) {
+          clearInterval(animInterval);
+          S.rolling = false;
+          S.rollCount++;
+          R();
+
+          // Check for Yahtzee and notify
+          if (calcScore(S.dice, 'yahtzee') === 50) {
+            showToast('🎉 YAHTZEE!');
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]);
+          }
+        }
+      }, 50);
+    };
+
+    const toggleHold = (index) => {
+      if (S.rollCount === 0 || S.rolling) return; // Can't hold before first roll
+      S.held[index] = !S.held[index];
+      R();
+    };
+
+    const resetDiceForTurn = () => {
+      S.dice = [1, 1, 1, 1, 1];
+      S.held = [false, false, false, false, false];
+      S.rollCount = 0;
+      S.rolling = false;
+      S.turnStarted = false;
+    };
+
+    const startTurn = () => {
+      S.turnStarted = true;
+      R();
+    };
+
+    // Score calculation engine for play mode
+    const calcScore = (dice, category) => {
+      const counts = [0, 0, 0, 0, 0, 0, 0]; // index 0 unused, 1-6 for dice values
+      dice.forEach(d => counts[d]++);
+      const sum = dice.reduce((a, b) => a + b, 0);
+      const sortedCounts = [...counts.slice(1)].sort((a, b) => b - a);
+      const uniqueValues = new Set(dice);
+      const sortedDice = [...dice].sort((a, b) => a - b);
+
+      switch (category) {
+        // Upper section - count specific number
+        case 'ones': return counts[1] * 1;
+        case 'twos': return counts[2] * 2;
+        case 'threes': return counts[3] * 3;
+        case 'fours': return counts[4] * 4;
+        case 'fives': return counts[5] * 5;
+        case 'sixes': return counts[6] * 6;
+
+        // Three of a kind - sum of all dice if 3+ match
+        case 'threeOfKind':
+          return sortedCounts[0] >= 3 ? sum : 0;
+
+        // Four of a kind - sum of all dice if 4+ match
+        case 'fourOfKind':
+          return sortedCounts[0] >= 4 ? sum : 0;
+
+        // Full House - 3 of one, 2 of another = 25 points
+        case 'fullHouse':
+          return (sortedCounts[0] === 3 && sortedCounts[1] === 2) ? 25 : 0;
+
+        // Small Straight - 4 consecutive = 30 points
+        case 'smallStraight': {
+          const patterns = [[1,2,3,4], [2,3,4,5], [3,4,5,6]];
+          const hasSmall = patterns.some(p => p.every(n => uniqueValues.has(n)));
+          return hasSmall ? 30 : 0;
+        }
+
+        // Large Straight - 5 consecutive = 40 points
+        case 'largeStraight': {
+          const isLarge = (sortedDice.join('') === '12345' || sortedDice.join('') === '23456');
+          return isLarge ? 40 : 0;
+        }
+
+        // Yahtzee - all 5 same = 50 points
+        case 'yahtzee':
+          return sortedCounts[0] === 5 ? 50 : 0;
+
+        // Chance - sum of all dice
+        case 'chance':
+          return sum;
+
+        default:
+          return 0;
+      }
+    };
+
+    // Get all possible scores for current dice
+    const getPossibleScores = (dice) => {
+      const categories = ['ones', 'twos', 'threes', 'fours', 'fives', 'sixes',
+                          'threeOfKind', 'fourOfKind', 'fullHouse',
+                          'smallStraight', 'largeStraight', 'yahtzee', 'chance'];
+      const scores = {};
+      categories.forEach(cat => {
+        scores[cat] = calcScore(dice, cat);
+      });
+      return scores;
     };
     
     const showToast = (msg) => {
@@ -626,7 +925,7 @@
     });
 
     function setup() {
-      const pl = S.known.length === 0 
+      const pl = S.known.length === 0
         ? '<div class="text-center py-5 text-purple-200"><p class="mb-2">No players yet!</p><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">+ Add Players</button></div>'
         : S.known.map((p,i) => {
             const sel = S.game.some(g => g.id === p.id);
@@ -641,20 +940,30 @@
           }).join('');
 
       const ord = S.game.length > 0 ? '<div class="glass rounded-xl p-3 mt-4"><p class="text-sm text-purple-200 mb-1">Play order:</p><p class="font-medium text-white">'+S.game.map(p=>p.name).join(' → ')+'</p></div>' : '';
-      
-      const resumeBtn = S.savedGame ? 
+
+      const resumeBtn = S.savedGame ?
         '<button class="btn btn-resume mb-4" onclick="resumeGame()">▶️ RESUME GAME</button>'+
         '<button class="btn btn-secondary mb-4" onclick="discardSaved()">🗑️ Discard Saved Game</button>' : '';
 
+      const modeToggle = '<div class="mode-toggle">'+
+        '<button class="mode-btn '+(S.mode==='score'?'active':'')+'" onclick="S.mode=\'score\';R()">📝 Score Only</button>'+
+        '<button class="mode-btn '+(S.mode==='play'?'active':'')+'" onclick="S.mode=\'play\';R()">🎲 Play Mode</button>'+
+      '</div>';
+
+      const modeDesc = S.mode === 'play'
+        ? '<div class="glass rounded-xl p-3 mb-4"><p class="text-white text-sm font-medium">🎲 Play Mode</p><p class="text-purple-200 text-xs mt-1">Roll dice on your phone! Shake to roll or tap the button. Scores are calculated automatically.</p></div>'
+        : '<div class="glass rounded-xl p-3 mb-4"><p class="text-white text-sm font-medium">📝 Score Mode</p><p class="text-purple-200 text-xs mt-1">Use your own dice. Manually enter scores as you play.</p></div>';
+
       return '<div class="container" style="min-height:100vh">'+
         '<div class="text-center mb-6"><div class="text-5xl mb-2">🎲</div><h1 class="text-4xl font-black text-white">YAHTZEE</h1><p class="text-purple-200 text-sm">Score Keeper</p></div>'+
-        (S.savedGame ? '<div class="glass rounded-2xl p-4 mb-4"><p class="text-white font-bold mb-2">📌 Saved Game</p><p class="text-purple-200 text-sm">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">Saved '+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
+        modeToggle+modeDesc+
+        (S.savedGame ? '<div class="glass rounded-2xl p-4 mb-4"><p class="text-white font-bold mb-2">📌 Saved Game '+(S.savedGame.mode === 'play' ? '🎲' : '📝')+'</p><p class="text-purple-200 text-sm">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">Saved '+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
         resumeBtn+
         '<div class="glass rounded-2xl p-5 mb-4">'+
           '<div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-white">Select Players</h2><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">⚙️ Manage</button></div>'+
           '<div class="space-y-2">'+pl+'</div>'+ord+
         '</div>'+
-        '<button class="btn btn-primary" onclick="start()" '+(S.game.length===0?'disabled':'')+'>'+(S.game.length===0?'Select Players':'🎮 START NEW ('+S.game.length+')')+'</button>'+
+        '<button class="btn btn-primary" onclick="start()" '+(S.game.length===0?'disabled':'')+'>'+(S.game.length===0?'Select Players':(S.mode==='play'?'🎲 START GAME':'📝 START SCORING')+' ('+S.game.length+')')+'</button>'+
         '<button class="btn btn-secondary mt-4" onclick="navigateTo(\'history\')">📜 Game History</button>'+
         '<div class="grid grid-cols-2 gap-2 mt-4">'+
           '<button class="btn btn-secondary" onclick="exportData()">📥 Export</button>'+
@@ -730,34 +1039,130 @@
       '</div>';
     }
 
+    // Dice face display using dots
+    const dieFace = (value) => {
+      const dots = {
+        1: '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:10px;height:10px;background:#1f2937;border-radius:50%"></div>',
+        2: '<div style="position:absolute;top:20%;left:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;bottom:20%;right:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div>',
+        3: '<div style="position:absolute;top:20%;left:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;bottom:20%;right:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div>',
+        4: '<div style="position:absolute;top:20%;left:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;top:20%;right:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;bottom:20%;left:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;bottom:20%;right:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div>',
+        5: '<div style="position:absolute;top:20%;left:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;top:20%;right:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;bottom:20%;left:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;bottom:20%;right:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div>',
+        6: '<div style="position:absolute;top:20%;left:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;top:20%;right:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;top:50%;left:20%;transform:translateY(-50%);width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;top:50%;right:20%;transform:translateY(-50%);width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;bottom:20%;left:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div><div style="position:absolute;bottom:20%;right:20%;width:8px;height:8px;background:#1f2937;border-radius:50%"></div>'
+      };
+      return dots[value] || '';
+    };
+
     function gameView() {
       const cp = S.game[S.cur];
       const sc = cp.scores;
+      const isPlayMode = S.mode === 'play';
+      const possibleScores = isPlayMode && S.rollCount > 0 ? getPossibleScores(S.dice) : {};
+      const canSelectScore = isPlayMode && S.rollCount > 0 && !S.rolling;
 
-      const tabs = S.game.map((p,i) => 
-        '<button class="player-tab flex-shrink-0 '+(i===S.cur?'player-tab-active':'player-tab-inactive')+'" style="'+(i===S.cur?'background:'+color(p.id):'')+'" onclick="S.cur='+i+';R()">'+p.name+': '+grand(p.scores)+'</button>'
+      const tabs = S.game.map((p,i) =>
+        '<button class="player-tab flex-shrink-0 '+(i===S.cur?'player-tab-active':'player-tab-inactive')+'" style="'+(i===S.cur?'background:'+color(p.id):'')+'" onclick="'+(isPlayMode?'':'S.cur='+i+';R()')+'">'+p.name+': '+grand(p.scores)+'</button>'
       ).join('');
 
+      // Dice area for play mode
+      const diceArea = isPlayMode ? '<div class="dice-area">'+
+        (S.turnStarted ?
+          // Turn started - show dice and roll button
+          '<div class="roll-info">'+
+            '<span class="roll-count">'+(S.rollCount === 0 ? 'Roll to start!' : 'Roll '+S.rollCount+' of 3')+'</span>'+
+            '<span class="shake-hint">'+(S.shakeEnabled ? '📳 Shake enabled' : 'Tap button to roll')+'</span>'+
+          '</div>'+
+          '<div class="dice-container" style="padding-bottom:1.5rem">'+
+            S.dice.map((d, i) =>
+              '<div class="die '+(S.held[i]?'held':'')+(S.rolling && !S.held[i]?' rolling':'')+'" onclick="toggleHold('+i+')">'+dieFace(d)+'</div>'
+            ).join('')+
+          '</div>'+
+          '<button class="roll-btn" onclick="rollDice()" '+(S.rollCount >= 3 || S.rolling ? 'disabled' : '')+'>'+
+            (S.rollCount === 0 ? '🎲 Roll Dice!' : S.rollCount >= 3 ? 'Select a score below' : '🎲 Roll Again ('+S.rollCount+'/3)')+
+          '</button>'+
+          (S.rollCount > 0 && !S.rolling ? '<p class="text-center text-xs mt-2" style="color:rgba(255,255,255,0.6)">Tap dice to hold/release</p>' : '')
+        :
+          // Turn not started - show start button
+          '<div class="text-center py-4">'+
+            '<p class="text-white text-lg font-bold mb-2">Ready to roll?</p>'+
+            '<p class="text-white text-xs mb-4" style="opacity:0.7">Tap the button when you\'re ready</p>'+
+            '<button class="roll-btn" onclick="startTurn()" style="background:linear-gradient(to right,#8b5cf6,#7c3aed)">'+
+              '👆 Start My Turn'+
+            '</button>'+
+          '</div>'
+        )+
+      '</div>' : '';
+
+      // Score buttons for play mode vs score mode
       const up = UPPER.map(c => {
         const v = sc[c.id];
-        return '<div class="flex items-center justify-between px-4 py-3">'+
-          '<div class="flex-1"><span class="font-medium text-gray-800">'+c.name+'</span><span class="text-xs text-gray-400 ml-2">('+[0,1,2,3,4,5].map(n=>n*c.value).join(',')+')</span></div>'+
-          '<div class="flex items-center gap-2">'+
-            (v!==null?'<button class="clear-btn" onclick="clr(\''+c.id+'\')">✕</button>':'')+
-            '<button class="score-btn '+(v!==null?'score-filled-blue':'score-empty')+'" onclick="openUp(\''+c.id+'\','+c.value+',\''+c.name+'\')">'+(v!==null?v:'Tap')+'</button>'+
-          '</div>'+
-        '</div><div class="divider"></div>';
+        const possible = possibleScores[c.id];
+        const canSelect = canSelectScore && v === null;
+
+        if (isPlayMode) {
+          // Play mode - show calculated scores
+          if (v !== null) {
+            return '<div class="flex items-center justify-between px-4 py-3">'+
+              '<span class="font-medium text-gray-800">'+c.name+'</span>'+
+              '<span class="score-btn score-filled-blue">'+v+'</span>'+
+            '</div><div class="divider"></div>';
+          } else if (canSelect) {
+            const btnClass = possible > 0 ? 'score-available' : 'score-zero-only';
+            return '<div class="flex items-center justify-between px-4 py-3">'+
+              '<span class="font-medium text-gray-800">'+c.name+'</span>'+
+              '<button class="score-btn-play '+btnClass+'" onclick="selectPlayScore(\''+c.id+'\','+possible+')">'+possible+'</button>'+
+            '</div><div class="divider"></div>';
+          } else {
+            return '<div class="flex items-center justify-between px-4 py-3">'+
+              '<span class="font-medium text-gray-400">'+c.name+'</span>'+
+              '<span class="score-btn score-empty">-</span>'+
+            '</div><div class="divider"></div>';
+          }
+        } else {
+          // Score mode - original behavior
+          return '<div class="flex items-center justify-between px-4 py-3">'+
+            '<div class="flex-1"><span class="font-medium text-gray-800">'+c.name+'</span><span class="text-xs text-gray-400 ml-2">('+[0,1,2,3,4,5].map(n=>n*c.value).join(',')+')</span></div>'+
+            '<div class="flex items-center gap-2">'+
+              (v!==null?'<button class="clear-btn" onclick="clr(\''+c.id+'\')">✕</button>':'')+
+              '<button class="score-btn '+(v!==null?'score-filled-blue':'score-empty')+'" onclick="openUp(\''+c.id+'\','+c.value+',\''+c.name+'\')">'+(v!==null?v:'Tap')+'</button>'+
+            '</div>'+
+          '</div><div class="divider"></div>';
+        }
       }).join('');
 
       const lo = LOWER.map(c => {
         const v = sc[c.id];
-        return '<div class="flex items-center justify-between px-4 py-3">'+
-          '<div class="flex-1"><span class="font-medium text-gray-800">'+c.name+'</span><span class="text-xs text-gray-400 ml-2">'+(c.type==='fixed'?'(0/'+c.fixed+')':'(0-'+c.max+')')+'</span></div>'+
-          '<div class="flex items-center gap-2">'+
-            (v!==null?'<button class="clear-btn" onclick="clr(\''+c.id+'\')">✕</button>':'')+
-            '<button class="score-btn '+(v!==null?'score-filled-purple':'score-empty')+'" onclick="openLo(\''+c.id+'\',\''+c.type+'\','+(c.fixed||c.max)+',\''+c.name+'\')">'+(v!==null?v:'Tap')+'</button>'+
-          '</div>'+
-        '</div><div class="divider"></div>';
+        const possible = possibleScores[c.id];
+        const canSelect = canSelectScore && v === null;
+
+        if (isPlayMode) {
+          // Play mode - show calculated scores
+          if (v !== null) {
+            return '<div class="flex items-center justify-between px-4 py-3">'+
+              '<span class="font-medium text-gray-800">'+c.name+'</span>'+
+              '<span class="score-btn score-filled-purple">'+v+'</span>'+
+            '</div><div class="divider"></div>';
+          } else if (canSelect) {
+            const btnClass = possible > 0 ? 'score-available' : 'score-zero-only';
+            return '<div class="flex items-center justify-between px-4 py-3">'+
+              '<span class="font-medium text-gray-800">'+c.name+'</span>'+
+              '<button class="score-btn-play '+btnClass+'" onclick="selectPlayScore(\''+c.id+'\','+possible+')">'+possible+'</button>'+
+            '</div><div class="divider"></div>';
+          } else {
+            return '<div class="flex items-center justify-between px-4 py-3">'+
+              '<span class="font-medium text-gray-400">'+c.name+'</span>'+
+              '<span class="score-btn score-empty">-</span>'+
+            '</div><div class="divider"></div>';
+          }
+        } else {
+          // Score mode - original behavior
+          return '<div class="flex items-center justify-between px-4 py-3">'+
+            '<div class="flex-1"><span class="font-medium text-gray-800">'+c.name+'</span><span class="text-xs text-gray-400 ml-2">'+(c.type==='fixed'?'(0/'+c.fixed+')':'(0-'+c.max+')')+'</span></div>'+
+            '<div class="flex items-center gap-2">'+
+              (v!==null?'<button class="clear-btn" onclick="clr(\''+c.id+'\')">✕</button>':'')+
+              '<button class="score-btn '+(v!==null?'score-filled-purple':'score-empty')+'" onclick="openLo(\''+c.id+'\',\''+c.type+'\','+(c.fixed||c.max)+',\''+c.name+'\')">'+(v!==null?v:'Tap')+'</button>'+
+            '</div>'+
+          '</div><div class="divider"></div>';
+        }
       }).join('');
 
       const stand = [...S.game].map(p => ({...p, t: grand(p.scores)})).sort((a,b) => b.t - a.t).map((p,r) =>
@@ -767,13 +1172,24 @@
           '<span class="font-black text-lg" style="width:3rem;text-align:right">'+p.t+'</span>'+
         '</div>'
       ).join('');
-      
+
       const gameComplete = isGameComplete();
+
+      // Yahtzee bonus section - handle both modes
+      const yahtzeeBonus = isPlayMode
+        ? '<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">'+
+            '<div><span class="font-bold text-yellow-800">Yahtzee Bonus</span><span class="text-yellow-600 text-xs ml-2">+100 each</span></div>'+
+            '<span class="font-black text-xl text-yellow-600">+'+sc.bonus+'</span>'+
+          '</div>'
+        : '<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">'+
+            '<div><span class="font-bold text-yellow-800">Yahtzee Bonus</span><span class="text-yellow-600 text-xs ml-2">+100 each</span></div>'+
+            '<div class="flex items-center gap-2"><span class="font-black text-xl text-yellow-600">+'+sc.bonus+'</span><button class="btn btn-small '+(sc.yahtzee===50?'btn-yellow':'btn-gray-dark')+' font-bold" onclick="addBonus()" '+(sc.yahtzee!==50?'disabled':'')+'>+100</button></div>'+
+          '</div>';
 
       return '<div style="min-height:100vh;background:#f9fafb;padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
           '<button class="btn-text text-white text-lg font-medium" onclick="pauseG()">← Back</button>'+
-          '<h1 class="font-black text-lg">🎲 YAHTZEE</h1>'+
+          '<h1 class="font-black text-lg">'+(isPlayMode?'🎲 YAHTZEE':'📝 SCORING')+'</h1>'+
           '<button class="btn btn-small '+(gameComplete?'btn-green':'btn-orange')+'" onclick="'+(gameComplete?'finishG()':'saveG()')+'">'+(gameComplete?'Finish ✓':'Save')+'</button>'+
         '</div></div>'+
         '<div class="bg-white shadow-md sticky-tabs"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
@@ -782,6 +1198,7 @@
             '<div class="current-turn-indicator"><div class="pulse-dot"></div><span class="text-gray-500 text-sm font-medium">Current Turn</span></div>'+
             '<h2 class="font-black text-2xl" style="color:'+color(cp.id)+'">'+cp.name+'</h2>'+
           '</div>'+
+          diceArea+
           '<div class="card mb-4">'+
             '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'bg-green-400':'glass')+'">'+upTot(sc)+'/63</span></div>'+
             up+
@@ -790,10 +1207,7 @@
           '<div class="card mb-4">'+
             '<div class="lower-gradient text-white px-4 py-3 font-bold">Lower Section</div>'+
             lo+
-            '<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">'+
-              '<div><span class="font-bold text-yellow-800">Yahtzee Bonus</span><span class="text-yellow-600 text-xs ml-2">+100 each</span></div>'+
-              '<div class="flex items-center gap-2"><span class="font-black text-xl text-yellow-600">+'+sc.bonus+'</span><button class="btn btn-small '+(sc.yahtzee===50?'btn-yellow':'btn-gray-dark')+' font-bold" onclick="addBonus()" '+(sc.yahtzee!==50?'disabled':'')+'>+100</button></div>'+
-            '</div>'+
+            yahtzeeBonus+
           '</div>'+
           '<div class="total-gradient text-white rounded-2xl shadow-lg p-5 mb-4"><div class="flex justify-between items-center">'+
             '<div><p style="opacity:0.7" class="text-sm">Grand Total</p><p class="text-4xl font-black">'+grand(sc)+'</p></div>'+
@@ -884,7 +1298,102 @@
       S.start = Date.now();
       S.cur = 0;
       clearSavedGame();
+
+      // Reset dice state for play mode
+      if (S.mode === 'play') {
+        resetDiceForTurn();
+        setupShakeDetection();
+      }
+
       navigateTo('game');
+    }
+
+    // Select score in play mode
+    function selectPlayScore(categoryId, score) {
+      const cp = S.game[S.cur];
+
+      // Handle Yahtzee bonus: if rolling another Yahtzee and first was scored (not 0)
+      if (calcScore(S.dice, 'yahtzee') === 50 && cp.scores.yahtzee === 50) {
+        cp.scores.bonus += 100;
+        showToast('YAHTZEE BONUS! +100');
+      }
+
+      // Set the score
+      cp.scores[categoryId] = score;
+
+      // Save game state
+      saveCurrentGame();
+
+      // Move to next player
+      const nextPlayer = (S.cur + 1) % S.game.length;
+      const nextPlayerName = S.game[nextPlayer].name;
+      S.cur = nextPlayer;
+
+      // Reset dice for next turn
+      resetDiceForTurn();
+
+      R();
+      showToast(nextPlayerName + "'s turn");
+    }
+
+    // Shake detection setup
+    function setupShakeDetection() {
+      const SHAKE_THRESHOLD = 20;
+      const SHAKE_COOLDOWN = 2000; // 2 seconds between shakes to prevent accidental double-rolls
+
+      // Check if DeviceMotionEvent is available
+      if (!('DeviceMotionEvent' in window)) {
+        S.shakeEnabled = false;
+        return;
+      }
+
+      // iOS 13+ requires permission
+      if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        // Request permission on first interaction
+        const requestMotionPermission = async () => {
+          try {
+            const permission = await DeviceMotionEvent.requestPermission();
+            if (permission === 'granted') {
+              S.shakeEnabled = true;
+              addShakeListener();
+              R();
+            }
+          } catch (e) {
+            console.log('Motion permission denied:', e);
+          }
+          // Remove this listener after first attempt
+          document.removeEventListener('click', requestMotionPermission);
+        };
+        document.addEventListener('click', requestMotionPermission, { once: true });
+        showToast('Tap anywhere to enable shake');
+      } else {
+        // Non-iOS or older iOS - just add listener
+        S.shakeEnabled = true;
+        addShakeListener();
+      }
+
+      function addShakeListener() {
+        window.addEventListener('devicemotion', (e) => {
+          if (S.view !== 'game' || S.mode !== 'play') return;
+          if (!S.turnStarted || S.rolling || S.rollCount >= 3) return;
+
+          const acc = e.accelerationIncludingGravity;
+          if (!acc) return;
+
+          const total = Math.sqrt(
+            (acc.x || 0) ** 2 +
+            (acc.y || 0) ** 2 +
+            (acc.z || 0) ** 2
+          );
+
+          const now = Date.now();
+          // Subtract gravity (~9.8) and check threshold
+          if (total > SHAKE_THRESHOLD && now - S.lastShake > SHAKE_COOLDOWN) {
+            S.lastShake = now;
+            rollDice();
+          }
+        });
+      }
     }
     
     function resumeGame() {
@@ -892,6 +1401,17 @@
         S.game = S.savedGame.game;
         S.cur = S.savedGame.cur;
         S.start = S.savedGame.start;
+        // Restore play mode state
+        if (S.savedGame.mode) {
+          S.mode = S.savedGame.mode;
+          S.dice = S.savedGame.dice || [1, 1, 1, 1, 1];
+          S.held = S.savedGame.held || [false, false, false, false, false];
+          S.rollCount = S.savedGame.rollCount || 0;
+          S.turnStarted = S.savedGame.turnStarted || false;
+          if (S.mode === 'play') {
+            setupShakeDetection();
+          }
+        }
         showToast('Game resumed!');
         navigateTo('game');
       }

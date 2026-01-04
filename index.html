@@ -1333,6 +1333,8 @@
       resetDiceForTurn();
 
       R();
+      // Scroll to top to show dice area and current player
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       showToast(nextPlayerName + "'s turn");
     }
 
@@ -1443,16 +1445,18 @@
     function sel(v) {
       S.game[S.cur].scores[S.picker.id] = v;
       S.picker = null;
-      
+
       // Auto-save game state
       saveCurrentGame();
-      
+
       // Auto-advance to next player
       const nextPlayer = (S.cur + 1) % S.game.length;
       const nextPlayerName = S.game[nextPlayer].name;
       S.cur = nextPlayer;
-      
+
       R();
+      // Scroll to top to show current player and scores
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       showToast(nextPlayerName + "'s turn");
     }
 

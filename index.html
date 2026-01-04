@@ -914,14 +914,21 @@
 
     // Handle browser back/forward buttons
     window.addEventListener('popstate', (event) => {
+      const previousView = S.view;
       if (event.state && event.state.view) {
         S.view = event.state.view;
-        R();
       } else {
         // Default to setup if no state
         S.view = 'setup';
-        R();
       }
+
+      // If going from game back to setup, clear game state to prevent cached scores
+      if (previousView === 'game' && S.view === 'setup') {
+        S.game = [];
+        S.cur = 0;
+      }
+
+      R();
     });
 
     function setup() {
@@ -1060,7 +1067,7 @@
       const canSelectScore = isPlayMode && S.rollCount > 0 && !S.rolling;
 
       const tabs = S.game.map((p,i) =>
-        '<button class="player-tab flex-shrink-0 '+(i===S.cur?'player-tab-active':'player-tab-inactive')+'" style="'+(i===S.cur?'background:'+color(p.id):'')+'" onclick="'+(isPlayMode?'':'S.cur='+i+';R()')+'">'+p.name+': '+grand(p.scores)+'</button>'
+        '<button class="player-tab flex-shrink-0 '+(i===S.cur?'player-tab-active':'player-tab-inactive')+'" style="'+(i===S.cur?'background:'+color(p.id):'')+'" onclick="switchPlayer('+i+')">'+p.name+': '+grand(p.scores)+'</button>'
       ).join('');
 
       // Dice area for play mode
@@ -1103,7 +1110,10 @@
           if (v !== null) {
             return '<div class="flex items-center justify-between px-4 py-3">'+
               '<span class="font-medium text-gray-800">'+c.name+'</span>'+
-              '<span class="score-btn score-filled-blue">'+v+'</span>'+
+              '<div class="flex items-center gap-2">'+
+                '<button class="clear-btn" onclick="clr(\''+c.id+'\')">✕</button>'+
+                '<span class="score-btn score-filled-blue">'+v+'</span>'+
+              '</div>'+
             '</div><div class="divider"></div>';
           } else if (canSelect) {
             const btnClass = possible > 0 ? 'score-available' : 'score-zero-only';
@@ -1139,7 +1149,10 @@
           if (v !== null) {
             return '<div class="flex items-center justify-between px-4 py-3">'+
               '<span class="font-medium text-gray-800">'+c.name+'</span>'+
-              '<span class="score-btn score-filled-purple">'+v+'</span>'+
+              '<div class="flex items-center gap-2">'+
+                '<button class="clear-btn" onclick="clr(\''+c.id+'\')">✕</button>'+
+                '<span class="score-btn score-filled-purple">'+v+'</span>'+
+              '</div>'+
             '</div><div class="divider"></div>';
           } else if (canSelect) {
             const btnClass = possible > 0 ? 'score-available' : 'score-zero-only';
@@ -1321,9 +1334,6 @@
       // Set the score
       cp.scores[categoryId] = score;
 
-      // Save game state
-      saveCurrentGame();
-
       // Move to next player
       const nextPlayer = (S.cur + 1) % S.game.length;
       const nextPlayerName = S.game[nextPlayer].name;
@@ -1331,6 +1341,9 @@
 
       // Reset dice for next turn
       resetDiceForTurn();
+
+      // Save game state AFTER moving to next player and resetting dice
+      saveCurrentGame();
 
       R();
       // Scroll to top to show dice area and current player
@@ -1422,6 +1435,9 @@
     function discardSaved() {
       if (confirm('Discard saved game?')) {
         clearSavedGame();
+        // Clear the current game state to prevent cached scores
+        S.game = [];
+        S.cur = 0;
         R();
       }
     }
@@ -1434,9 +1450,23 @@
       }
     }
 
-    function next() { 
-      S.cur = (S.cur + 1) % S.game.length; 
-      R(); 
+    function next() {
+      S.cur = (S.cur + 1) % S.game.length;
+      R();
+    }
+
+    function switchPlayer(index) {
+      if (index === S.cur) return; // Already on this player
+
+      // In play mode, reset dice when switching players
+      if (S.mode === 'play') {
+        resetDiceForTurn();
+      }
+
+      S.cur = index;
+      saveCurrentGame();
+      R();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function openUp(id, v, name) { S.picker = {id, v, name, t: 'upper'}; R(); }
@@ -1446,13 +1476,13 @@
       S.game[S.cur].scores[S.picker.id] = v;
       S.picker = null;
 
-      // Auto-save game state
-      saveCurrentGame();
-
       // Auto-advance to next player
       const nextPlayer = (S.cur + 1) % S.game.length;
       const nextPlayerName = S.game[nextPlayer].name;
       S.cur = nextPlayer;
+
+      // Auto-save game state AFTER advancing to next player
+      saveCurrentGame();
 
       R();
       // Scroll to top to show current player and scores

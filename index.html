@@ -930,6 +930,13 @@
 
     function navigateTo(view) {
       S.view = view;
+
+      // Clear history detail state when navigating to history list
+      if (view === 'history') {
+        S.selectedHistoryGame = null;
+        S.historyDetailPlayer = 0;
+      }
+
       history.pushState({ view: view }, '', '#' + view);
       R();
     }
@@ -948,6 +955,12 @@
       if (previousView === 'game' && S.view === 'setup') {
         S.game = [];
         S.cur = 0;
+      }
+
+      // Clear history detail state when navigating to history list
+      if (S.view === 'history') {
+        S.selectedHistoryGame = null;
+        S.historyDetailPlayer = 0;
       }
 
       R();

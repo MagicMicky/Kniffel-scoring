@@ -720,6 +720,12 @@
     const toggleHold = (index) => {
       if (S.rollCount === 0 || S.rolling) return; // Can't hold before first roll
       S.held[index] = !S.held[index];
+
+      // Brief haptic feedback (like keyboard typing)
+      if (navigator.vibrate) {
+        navigator.vibrate(10);
+      }
+
       R();
     };
 
@@ -733,6 +739,12 @@
 
     const startTurn = () => {
       S.turnStarted = true;
+
+      // Haptic feedback when starting turn (similar to roll)
+      if (navigator.vibrate) {
+        navigator.vibrate([50, 30, 50]);
+      }
+
       R();
     };
 

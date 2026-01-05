@@ -785,7 +785,17 @@
       { id: 'chance', name: 'Chance', type: 'sum', max: 30 },
     ];
 
-    const COLORS = ['#39C6A7','#7AE7D0','#5DD4B8','#34D399','#2DD4BF','#5EEAD4','#6EE7B7','#4ADE80'];
+    // Player colors - diverse palette for up to 8 players with clear differentiation
+    const COLORS = [
+      '#39C6A7',  // 1. Jade (accent) - primary brand
+      '#7AE7D0',  // 2. Sky jade (link) - bright cyan
+      '#F4B24A',  // 3. Amber (warning) - warm yellow
+      '#FB7185',  // 4. Coral (error) - pink/salmon
+      '#34D399',  // 5. Emerald (success) - bright green
+      '#22D3EE',  // 6. Aqua - turquoise
+      '#A78BFA',  // 7. Lavender - purple
+      '#FB923C'   // 8. Peach - orange
+    ];
 
     let S = {
       view: 'setup',

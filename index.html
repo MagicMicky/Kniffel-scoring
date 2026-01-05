@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0B120F">
+  <meta name="theme-color" content="#07110C">
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -14,7 +14,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0B120F 0%, #15211C 50%, #111A16 100%);
+      background: linear-gradient(135deg, #07110C 0%, #12211B 50%, #0E1914 100%);
       min-height: 100vh;
       padding-top: env(safe-area-inset-top);
       padding-bottom: env(safe-area-inset-bottom);
@@ -67,9 +67,9 @@
     .font-black { font-weight: 900; }
     
     .text-white { color: #E9F1EC; }
-    .text-gray-400 { color: #AFC1B6; }
-    .text-gray-500 { color: #AFC1B6; }
-    .text-gray-600 { color: #23352C; }
+    .text-gray-400 { color: #A7C0B2; }
+    .text-gray-500 { color: #A7C0B2; }
+    .text-gray-600 { color: #214033; }
     .text-gray-800 { color: #E9F1EC; }
     .text-purple-200 { color: #E9C5B8; }
     .text-purple-600 { color: #C47B5A; }
@@ -85,7 +85,7 @@
     .text-yellow-600 { color: #C47B5A; }
     .text-yellow-800 { color: #A6634A; }
 
-    .bg-gray-100 { background-color: #15211C; }
+    .bg-gray-100 { background-color: #12211B; }
 
     .glass { background: rgba(35, 53, 44, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(175, 193, 182, 0.15); }
     .glass-dark { background: rgba(35, 53, 44, 0.6); }
@@ -128,13 +128,15 @@
       border-radius: 1rem;
       font-size: 1.25rem;
       width: 100%;
-      box-shadow: 0 4px 12px rgba(196, 123, 90, 0.3);
+      box-shadow: 0 4px 12px rgba(196, 123, 90, 0.35), 0 2px 4px rgba(11, 17, 12, 0.2);
     }
+    .btn-primary:hover { box-shadow: 0 6px 16px rgba(196, 123, 90, 0.4), 0 3px 6px rgba(11, 17, 12, 0.25); }
+    .btn-primary:focus { box-shadow: 0 0 0 2px rgba(196, 123, 90, 0.3), 0 0 12px rgba(196, 123, 90, 0.25), 0 4px 12px rgba(196, 123, 90, 0.35); }
     
     /* Resume game button */
     .btn-resume {
       background: linear-gradient(to right, #34D399, #10B981);
-      color: #0B120F;
+      color: #07110C;
       font-weight: 900;
       padding: 1.25rem;
       border-radius: 1rem;
@@ -151,7 +153,7 @@
       padding: 1rem;
       border-radius: 0.75rem;
       width: 100%;
-      border: 1px solid #23352C;
+      border: 1px solid #214033;
     }
     
     /* Small button base */
@@ -165,11 +167,11 @@
     /* Colored buttons - used in modals */
     .btn-blue {
       background-color: #34D399;
-      color: #0B120F;
+      color: #07110C;
     }
     .btn-green {
       background-color: #34D399;
-      color: #0B120F;
+      color: #07110C;
     }
     .btn-purple {
       background-color: #C47B5A;
@@ -181,42 +183,42 @@
     }
     .btn-yellow {
       background-color: #E8A87C;
-      color: #0B120F;
+      color: #07110C;
     }
     .btn-gray {
-      background-color: #15211C;
-      color: #AFC1B6;
-      border: 1px solid #23352C;
+      background-color: #12211B;
+      color: #A7C0B2;
+      border: 1px solid #214033;
     }
     .btn-gray-dark {
-      background-color: #111A16;
-      color: #AFC1B6;
-      border: 1px solid #23352C;
+      background-color: #0E1914;
+      color: #A7C0B2;
+      border: 1px solid #214033;
     }
     
     .input {
-      border: 2px solid #23352C;
+      border: 2px solid #214033;
       border-radius: 0.75rem;
       padding: 0.75rem 1rem;
       font-size: 1rem;
       width: 100%;
       font-family: inherit;
-      background: #15211C;
+      background: #12211B;
       color: #E9F1EC;
     }
-    .input:focus { outline: none; border-color: #C47B5A; box-shadow: 0 0 0 3px rgba(196, 123, 90, 0.1); }
+    .input:focus { outline: none; border-color: #C47B5A; box-shadow: 0 0 0 2px rgba(196, 123, 90, 0.3), 0 0 12px rgba(196, 123, 90, 0.2); }
     
     .card {
-      background: #111A16;
+      background: #0E1914;
       border-radius: 1rem;
-      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 15px -3px rgba(11, 17, 12, 0.4), 0 4px 6px -2px rgba(33, 64, 51, 0.1);
       overflow: hidden;
-      border: 1px solid #23352C;
+      border: 1px solid #214033;
     }
     
     .header-gradient { background: linear-gradient(to right, #C47B5A, #A6634A); }
     .upper-gradient { background: linear-gradient(to right, #34D399, #10B981); }
-    .lower-gradient { background: linear-gradient(to right, #23352C, #15211C); }
+    .lower-gradient { background: linear-gradient(to right, #214033, #12211B); }
     .total-gradient { background: linear-gradient(to right, #C47B5A, #A6634A); }
     
     .modal-overlay { 
@@ -230,14 +232,14 @@
       padding: 1rem; 
     }
     .modal {
-      background: #15211C;
+      background: #12211B;
       border-radius: 1rem;
       padding: 1.25rem;
       width: 100%;
       max-width: 24rem;
       max-height: 80vh;
       overflow: auto;
-      border: 1px solid #23352C;
+      border: 1px solid #214033;
     }
     
     .color-dot { width: 1rem; height: 1rem; border-radius: 9999px; flex-shrink: 0; }
@@ -269,18 +271,18 @@
     .score-btn:active { transform: scale(0.95); }
     .score-filled-blue { background-color: rgba(52, 211, 153, 0.2); color: #34D399; border: 1px solid #34D399; }
     .score-filled-purple { background-color: rgba(196, 123, 90, 0.2); color: #C47B5A; border: 1px solid #C47B5A; }
-    .score-empty { background-color: #15211C; color: #AFC1B6; border: 2px dashed #23352C; }
+    .score-empty { background-color: #12211B; color: #A7C0B2; border: 2px dashed #214033; }
     
     .picker-btn {
-      background-color: #15211C;
-      border: 1px solid #23352C;
+      background-color: #12211B;
+      border: 1px solid #214033;
       border-radius: 0.75rem;
       padding: 0.75rem;
       cursor: pointer;
       transition: all 0.15s;
       font-family: inherit;
     }
-    .picker-btn:active { background-color: #111A16; transform: scale(0.95); }
+    .picker-btn:active { background-color: #0E1914; transform: scale(0.95); }
     .picker-btn-green {
       background-color: rgba(52, 211, 153, 0.15);
       border: 2px solid #34D399;
@@ -323,7 +325,7 @@
     }
     .player-tab:active { transform: scale(0.95); }
     .player-tab-active { color: #E9F1EC; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
-    .player-tab-inactive { background-color: #15211C; color: #AFC1B6; border: 1px solid #23352C; }
+    .player-tab-inactive { background-color: #12211B; color: #A7C0B2; border: 1px solid #214033; }
     
     .standing-bar { 
       height: 2.5rem; 
@@ -337,7 +339,7 @@
       transition: width 0.5s; 
     }
     
-    .divider { height: 1px; background-color: #23352C; }
+    .divider { height: 1px; background-color: #214033; }
     
     .sticky { position: sticky; top: 0; z-index: 20; }
     .sticky-tabs { position: sticky; top: 2.75rem; z-index: 10; }
@@ -385,13 +387,13 @@
       bottom: 2rem;
       left: 50%;
       transform: translateX(-50%);
-      background: #15211C;
+      background: #12211B;
       color: #E9F1EC;
       padding: 0.75rem 1.5rem;
       border-radius: 0.75rem;
       font-weight: 600;
       z-index: 100;
-      border: 1px solid #23352C;
+      border: 1px solid #214033;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       animation: toast-in 0.3s ease, toast-out 0.3s ease 1.7s forwards;
     }
@@ -449,14 +451,14 @@
       border-radius: 0.75rem;
       padding: 0.25rem;
       margin-bottom: 1rem;
-      border: 1px solid #23352C;
+      border: 1px solid #214033;
     }
     .mode-btn {
       flex: 1;
       padding: 0.75rem;
       border: none;
       background: transparent;
-      color: #AFC1B6;
+      color: #A7C0B2;
       font-weight: 700;
       font-size: 0.875rem;
       cursor: pointer;
@@ -472,11 +474,11 @@
 
     /* Dice styles */
     .dice-area {
-      background: linear-gradient(135deg, #15211C 0%, #23352C 100%);
+      background: linear-gradient(135deg, #12211B 0%, #214033 100%);
       border-radius: 1rem;
       padding: 1.25rem;
       margin-bottom: 1rem;
-      border: 1px solid #23352C;
+      border: 1px solid #214033;
     }
     .dice-container {
       display: flex;
@@ -531,7 +533,7 @@
       width: 100%;
       padding: 1rem;
       background: linear-gradient(to right, #34D399, #10B981);
-      color: #0B120F;
+      color: #07110C;
       border: none;
       border-radius: 0.75rem;
       font-size: 1.125rem;
@@ -544,8 +546,8 @@
       transform: scale(0.98);
     }
     .roll-btn:disabled {
-      background: #23352C;
-      color: #AFC1B6;
+      background: #214033;
+      color: #A7C0B2;
       cursor: not-allowed;
       transform: none;
     }
@@ -1072,12 +1074,12 @@
       const st = res.length === 0
         ? '<p class="text-center text-gray-400 py-5">No games yet</p>'
         : '<div class="grid grid-cols-2 gap-3 mb-4">'+
-            '<div style="background:#15211C;border:1px solid #23352C" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-blue-600">'+res.length+'</div><div class="text-xs text-gray-500">Games</div></div>'+
-            '<div style="background:#15211C;border:1px solid #23352C" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-yellow-600">'+wins+'</div><div class="text-xs text-gray-500">Wins ('+(res.length?Math.round(wins/res.length*100):0)+'%)</div></div>'+
-            '<div style="background:#15211C;border:1px solid #23352C" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-green-600">'+hi+'</div><div class="text-xs text-gray-500">High Score</div></div>'+
-            '<div style="background:#15211C;border:1px solid #23352C" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-purple-600">'+avg+'</div><div class="text-xs text-gray-500">Average</div></div>'+
+            '<div style="background:#12211B;border:1px solid #214033" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-blue-600">'+res.length+'</div><div class="text-xs text-gray-500">Games</div></div>'+
+            '<div style="background:#12211B;border:1px solid #214033" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-yellow-600">'+wins+'</div><div class="text-xs text-gray-500">Wins ('+(res.length?Math.round(wins/res.length*100):0)+'%)</div></div>'+
+            '<div style="background:#12211B;border:1px solid #214033" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-green-600">'+hi+'</div><div class="text-xs text-gray-500">High Score</div></div>'+
+            '<div style="background:#12211B;border:1px solid #214033" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-purple-600">'+avg+'</div><div class="text-xs text-gray-500">Average</div></div>'+
           '</div>'+
-          '<div style="background:#15211C;border:1px solid #23352C" class="rounded-xl p-4 text-center mb-4"><div class="text-3xl font-black text-red-500">🎲 '+ytz+'</div><div class="text-xs text-gray-500">Yahtzees</div></div>';
+          '<div style="background:#12211B;border:1px solid #214033" class="rounded-xl p-4 text-center mb-4"><div class="text-3xl font-black text-red-500">🎲 '+ytz+'</div><div class="text-xs text-gray-500">Yahtzees</div></div>';
 
       return '<div class="modal-overlay" onclick="S.stats=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
         '<h2 class="text-2xl font-black text-white mb-1">'+p.name+'</h2><p class="text-gray-500 text-sm mb-4">Statistics</p>'+st+
@@ -1172,13 +1174,13 @@
         '</div>'
       ).join('');
 
-      return '<div style="min-height:100vh;background:#0B120F;padding-bottom:6rem">'+
+      return '<div style="min-height:100vh;background:#07110C;padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
           '<button class="btn-text text-white text-lg font-medium" onclick="closeHistoryDetail()">← Back</button>'+
           '<h1 class="font-black text-lg">📖 GAME REVIEW</h1>'+
           '<div class="text-xs" style="opacity:0.8">Read Only</div>'+
         '</div></div>'+
-        '<div class="sticky-tabs" style="background:#111A16;box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid #23352C"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
+        '<div class="sticky-tabs" style="background:#0E1914;box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid #214033"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
         '<div class="p-3" style="max-width:28rem;margin:0 auto">'+
           '<div class="card p-4 mb-4" style="border-left:4px solid '+color(cp.pid)+'">'+
             '<h2 class="font-black text-2xl" style="color:'+color(cp.pid)+'">'+cp.name+'</h2>'+
@@ -1188,14 +1190,14 @@
             '<p class="text-white text-sm font-medium">'+new Date(game.date).toLocaleDateString()+' • '+new Date(game.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+(game.dur?' • '+game.dur+' minutes':'')+'</p>'+
           '</div>'+
           '<div class="card mb-4">'+
-            '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:#34D399;color:#0B120F':'glass')+'">'+upTot(sc)+'/63</span></div>'+
+            '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:#34D399;color:#07110C':'glass')+'">'+upTot(sc)+'/63</span></div>'+
             up+
-            '<div class="flex items-center justify-between px-4 py-3" style="background:#15211C;border-top:1px solid #23352C"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
+            '<div class="flex items-center justify-between px-4 py-3" style="background:#12211B;border-top:1px solid #214033"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
           '</div>'+
           '<div class="card mb-4">'+
             '<div class="lower-gradient text-white px-4 py-3 font-bold">Lower Section</div>'+
             lo+
-            '<div class="flex items-center justify-between px-4 py-3" style="background:#15211C;border-top:1px solid #23352C">'+
+            '<div class="flex items-center justify-between px-4 py-3" style="background:#12211B;border-top:1px solid #214033">'+
               '<div><span class="font-bold text-yellow-600">Yahtzee Bonus</span><span class="text-yellow-600 text-xs ml-2">+100 each</span></div>'+
               '<span class="font-black text-xl text-yellow-600">+'+(sc.bonus || 0)+'</span>'+
             '</div>'+
@@ -1362,13 +1364,13 @@
             '<div class="flex items-center gap-2"><span class="font-black text-xl text-yellow-600">+'+sc.bonus+'</span><button class="btn btn-small '+(sc.yahtzee===50?'btn-yellow':'btn-gray-dark')+' font-bold" onclick="addBonus()" '+(sc.yahtzee!==50?'disabled':'')+'>+100</button></div>'+
           '</div>';
 
-      return '<div style="min-height:100vh;background:#0B120F;padding-bottom:6rem">'+
+      return '<div style="min-height:100vh;background:#07110C;padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
           '<button class="btn-text text-white text-lg font-medium" onclick="pauseG()">← Back</button>'+
           '<h1 class="font-black text-lg">'+(isPlayMode?'🎲 YAHTZEE':'📝 SCORING')+'</h1>'+
           '<button class="btn btn-small '+(gameComplete?'btn-green':'btn-orange')+'" onclick="'+(gameComplete?'finishG()':'saveG()')+'">'+(gameComplete?'Finish ✓':'Save')+'</button>'+
         '</div></div>'+
-        '<div class="sticky-tabs" style="background:#111A16;box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid #23352C"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
+        '<div class="sticky-tabs" style="background:#0E1914;box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid #214033"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
         '<div class="p-3" style="max-width:28rem;margin:0 auto">'+
           '<div class="card p-4 mb-4" style="border-left:4px solid '+color(cp.id)+'">'+
             '<div class="current-turn-indicator"><div class="pulse-dot"></div><span class="text-gray-500 text-sm font-medium">Current Turn</span></div>'+
@@ -1376,9 +1378,9 @@
           '</div>'+
           diceArea+
           '<div class="card mb-4">'+
-            '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:#34D399;color:#0B120F':'glass')+'">'+upTot(sc)+'/63</span></div>'+
+            '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:#34D399;color:#07110C':'glass')+'">'+upTot(sc)+'/63</span></div>'+
             up+
-            '<div class="flex items-center justify-between px-4 py-3" style="background:#15211C;border-top:1px solid #23352C"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
+            '<div class="flex items-center justify-between px-4 py-3" style="background:#12211B;border-top:1px solid #214033"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
           '</div>'+
           '<div class="card mb-4">'+
             '<div class="lower-gradient text-white px-4 py-3 font-bold">Lower Section</div>'+
@@ -1757,7 +1759,7 @@
     function showUpdatePrompt() {
       const banner = document.createElement('div');
       banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#C47B5A;color:#E9F1EC;padding:1rem;text-align:center;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.3);border-bottom:1px solid #A6634A;';
-      banner.innerHTML = '<div style="max-width:28rem;margin:0 auto;"><strong>🎉 Update Available!</strong><br><small>A new version is ready. Your data is safe.</small><br><button style="margin-top:0.5rem;background:#E9F1EC;color:#0B120F;border:none;padding:0.5rem 1.5rem;border-radius:0.5rem;font-weight:bold;cursor:pointer;" onclick="window.location.reload()">Update Now</button> <button style="margin-top:0.5rem;background:transparent;color:#E9F1EC;border:1px solid #E9F1EC;padding:0.5rem 1rem;border-radius:0.5rem;cursor:pointer;" onclick="this.parentElement.parentElement.remove()">Later</button></div>';
+      banner.innerHTML = '<div style="max-width:28rem;margin:0 auto;"><strong>🎉 Update Available!</strong><br><small>A new version is ready. Your data is safe.</small><br><button style="margin-top:0.5rem;background:#E9F1EC;color:#07110C;border:none;padding:0.5rem 1.5rem;border-radius:0.5rem;font-weight:bold;cursor:pointer;" onclick="window.location.reload()">Update Now</button> <button style="margin-top:0.5rem;background:transparent;color:#E9F1EC;border:1px solid #E9F1EC;padding:0.5rem 1rem;border-radius:0.5rem;cursor:pointer;" onclick="this.parentElement.parentElement.remove()">Later</button></div>';
       document.body.appendChild(banner);
     }
   </script>

@@ -1067,18 +1067,18 @@
       const avg = res.length ? Math.round(res.reduce((a,r) => a + r.total, 0) / res.length) : 0;
       const ytz = res.reduce((a,r) => a + (r.scores.yahtzee === 50 ? 1 : 0) + (r.scores.bonus / 100), 0);
 
-      const st = res.length === 0 
+      const st = res.length === 0
         ? '<p class="text-center text-gray-400 py-5">No games yet</p>'
         : '<div class="grid grid-cols-2 gap-3 mb-4">'+
-            '<div class="bg-blue-50 rounded-xl p-4 text-center"><div class="text-3xl font-black text-blue-600">'+res.length+'</div><div class="text-xs text-gray-500">Games</div></div>'+
-            '<div class="bg-yellow-50 rounded-xl p-4 text-center"><div class="text-3xl font-black text-yellow-600">'+wins+'</div><div class="text-xs text-gray-500">Wins ('+(res.length?Math.round(wins/res.length*100):0)+'%)</div></div>'+
-            '<div class="bg-green-50 rounded-xl p-4 text-center"><div class="text-3xl font-black text-green-600">'+hi+'</div><div class="text-xs text-gray-500">High Score</div></div>'+
-            '<div class="bg-purple-50 rounded-xl p-4 text-center"><div class="text-3xl font-black text-purple-600">'+avg+'</div><div class="text-xs text-gray-500">Average</div></div>'+
+            '<div style="background:#15211C;border:1px solid #23352C" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-blue-600">'+res.length+'</div><div class="text-xs text-gray-500">Games</div></div>'+
+            '<div style="background:#15211C;border:1px solid #23352C" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-yellow-600">'+wins+'</div><div class="text-xs text-gray-500">Wins ('+(res.length?Math.round(wins/res.length*100):0)+'%)</div></div>'+
+            '<div style="background:#15211C;border:1px solid #23352C" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-green-600">'+hi+'</div><div class="text-xs text-gray-500">High Score</div></div>'+
+            '<div style="background:#15211C;border:1px solid #23352C" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-purple-600">'+avg+'</div><div class="text-xs text-gray-500">Average</div></div>'+
           '</div>'+
-          '<div class="bg-red-50 rounded-xl p-4 text-center mb-4"><div class="text-3xl font-black text-red-500">🎲 '+ytz+'</div><div class="text-xs text-gray-500">Yahtzees</div></div>';
+          '<div style="background:#15211C;border:1px solid #23352C" class="rounded-xl p-4 text-center mb-4"><div class="text-3xl font-black text-red-500">🎲 '+ytz+'</div><div class="text-xs text-gray-500">Yahtzees</div></div>';
 
       return '<div class="modal-overlay" onclick="S.stats=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
-        '<h2 class="text-2xl font-black text-gray-800 mb-1">'+p.name+'</h2><p class="text-gray-500 text-sm mb-4">Statistics</p>'+st+
+        '<h2 class="text-2xl font-black text-white mb-1">'+p.name+'</h2><p class="text-gray-500 text-sm mb-4">Statistics</p>'+st+
         '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.stats=null;R()">Close</button>'+
       '</div></div>';
     }
@@ -1170,7 +1170,7 @@
         '</div>'
       ).join('');
 
-      return '<div style="min-height:100vh;background:#f9fafb;padding-bottom:6rem">'+
+      return '<div style="min-height:100vh;background:#0B120F;padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
           '<button class="btn-text text-white text-lg font-medium" onclick="closeHistoryDetail()">← Back</button>'+
           '<h1 class="font-black text-lg">📖 GAME REVIEW</h1>'+
@@ -1188,13 +1188,13 @@
           '<div class="card mb-4">'+
             '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:#34D399;color:#0B120F':'glass')+'">'+upTot(sc)+'/63</span></div>'+
             up+
-            '<div class="flex items-center justify-between px-4 py-3 bg-blue-50"><span class="font-bold text-blue-800">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
+            '<div class="flex items-center justify-between px-4 py-3" style="background:#15211C;border-top:1px solid #23352C"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
           '</div>'+
           '<div class="card mb-4">'+
             '<div class="lower-gradient text-white px-4 py-3 font-bold">Lower Section</div>'+
             lo+
-            '<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">'+
-              '<div><span class="font-bold text-yellow-800">Yahtzee Bonus</span><span class="text-yellow-600 text-xs ml-2">+100 each</span></div>'+
+            '<div class="flex items-center justify-between px-4 py-3" style="background:#15211C;border-top:1px solid #23352C">'+
+              '<div><span class="font-bold text-yellow-600">Yahtzee Bonus</span><span class="text-yellow-600 text-xs ml-2">+100 each</span></div>'+
               '<span class="font-black text-xl text-yellow-600">+'+(sc.bonus || 0)+'</span>'+
             '</div>'+
           '</div>'+
@@ -1360,7 +1360,7 @@
             '<div class="flex items-center gap-2"><span class="font-black text-xl text-yellow-600">+'+sc.bonus+'</span><button class="btn btn-small '+(sc.yahtzee===50?'btn-yellow':'btn-gray-dark')+' font-bold" onclick="addBonus()" '+(sc.yahtzee!==50?'disabled':'')+'>+100</button></div>'+
           '</div>';
 
-      return '<div style="min-height:100vh;background:#f9fafb;padding-bottom:6rem">'+
+      return '<div style="min-height:100vh;background:#0B120F;padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
           '<button class="btn-text text-white text-lg font-medium" onclick="pauseG()">← Back</button>'+
           '<h1 class="font-black text-lg">'+(isPlayMode?'🎲 YAHTZEE':'📝 SCORING')+'</h1>'+
@@ -1376,7 +1376,7 @@
           '<div class="card mb-4">'+
             '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:#34D399;color:#0B120F':'glass')+'">'+upTot(sc)+'/63</span></div>'+
             up+
-            '<div class="flex items-center justify-between px-4 py-3 bg-blue-50"><span class="font-bold text-blue-800">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
+            '<div class="flex items-center justify-between px-4 py-3" style="background:#15211C;border-top:1px solid #23352C"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
           '</div>'+
           '<div class="card mb-4">'+
             '<div class="lower-gradient text-white px-4 py-3 font-bold">Lower Section</div>'+

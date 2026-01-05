@@ -525,6 +525,34 @@
     .animate-bounce {
       animation: bounce 1s ease-in-out infinite;
     }
+
+    .reveal-slide-up {
+      animation: slide-up 0.3s ease-out;
+    }
+
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
     
     .divider { height: 1px; background-color: var(--divider); opacity: 0.8; }
     
@@ -1151,8 +1179,11 @@
       }
       else if (S.view === 'endScreen') {
         app.innerHTML = endScreenView();
-        // Start fireworks after render
-        setTimeout(() => startFireworks(), 100);
+        // Start animations after render
+        setTimeout(() => {
+          startFireworks();
+          animateReveal();
+        }, 100);
       }
       else app.innerHTML = gameView();
 
@@ -1620,7 +1651,21 @@
           '</div></div>'+
           '<div class="card p-4"><h3 class="font-bold mb-3 text-gray-800">🏆 Standings</h3><div class="space-y-2">'+stand+'</div></div>'+
         '</div>'+
-      '</div>'+(S.picker?picker():'');
+      '</div>'+(S.picker?picker():'')+(S.finishModal?finishConfirmModal():'');
+    }
+
+    function finishConfirmModal() {
+      return '<div class="modal-overlay" onclick="event.stopPropagation()"><div class="modal" onclick="event.stopPropagation()">'+
+        '<div class="text-center mb-4">'+
+          '<div class="text-5xl mb-3">🎉</div>'+
+          '<h3 class="text-2xl font-black text-gray-800 mb-2">Game Complete!</h3>'+
+          '<p class="text-gray-600">All scores have been entered.</p>'+
+        '</div>'+
+        '<div class="flex flex-col gap-3">'+
+          '<button class="btn btn-green font-bold py-4 px-4 rounded-xl w-full text-lg" onclick="confirmFinish()">🏆 Reveal Winners!</button>'+
+          '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.finishModal=false;R()">Keep Editing</button>'+
+        '</div>'+
+      '</div></div>';
     }
 
     function picker() {
@@ -1904,16 +1949,29 @@
       const maxScore = players[0].total;
       const winners = players.filter(p => p.total === maxScore);
 
-      // Winner announcement
-      const winnerText = winners.length === 1
-        ? `<div class="text-4xl font-black mb-2" style="color:${color(winners[0].pid)}">${winners[0].name}</div><div class="text-xl text-gray-600">is the Champion!</div>`
-        : `<div class="text-3xl font-black mb-2 text-yellow-600">It's a Tie!</div><div class="text-lg text-gray-600">${winners.map(w => w.name).join(' & ')}</div>`;
+      // Reverse for bottom-up reveal
+      const playersReversed = [...players].reverse();
 
-      // Final standings
-      const standings = players.map((p, idx) => {
-        const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : (idx + 1);
+      // Determine what to show
+      const isRevealing = !S.revealComplete;
+      const visibleCount = S.revealComplete ? players.length : Math.max(0, S.revealIndex + 1);
+
+      // Winner announcement - only show when complete
+      const winnerSection = S.revealComplete ? (winners.length === 1
+        ? `<div class="text-4xl font-black mb-2" style="color:${color(winners[0].pid)}">${winners[0].name}</div><div class="text-xl text-gray-600">is the Champion!</div>`
+        : `<div class="text-3xl font-black mb-2 text-yellow-600">It's a Tie!</div><div class="text-lg text-gray-600">${winners.map(w => w.name).join(' & ')}</div>`)
+        : `<div class="text-2xl text-gray-400 animate-pulse">Revealing...</div>`;
+
+      // Build standings - show from last place up
+      const standings = playersReversed.map((p, revIdx) => {
+        const actualIdx = players.length - 1 - revIdx; // Convert back to actual position
+        const medal = actualIdx === 0 ? '🥇' : actualIdx === 1 ? '🥈' : actualIdx === 2 ? '🥉' : (actualIdx + 1);
         const isWinner = p.total === maxScore;
-        return `<div class="flex items-center gap-3 mb-3 ${isWinner ? 'winner-row' : ''}">
+        const isVisible = revIdx < visibleCount;
+
+        if (!isVisible) return '';
+
+        return `<div class="flex items-center gap-3 mb-3 ${isWinner ? 'winner-row' : ''} reveal-slide-up">
           <span class="text-2xl" style="width:2.5rem;text-align:center">${medal}</span>
           <div class="flex-1 rounded-xl bg-gray-100 overflow-hidden" style="height:3.5rem">
             <div class="standing-bar-end" style="background:${color(p.pid)};width:${Math.max(30, (p.total / maxScore) * 100)}%">
@@ -1922,29 +1980,30 @@
           </div>
           <span class="font-black text-2xl" style="width:4rem;text-align:right;color:${color(p.pid)}">${p.total}</span>
         </div>`;
-      }).join('');
+      }).reverse().join(''); // Reverse back to show winners at top
 
       // Game stats
       const duration = S.finishedGame.dur ? `${S.finishedGame.dur} min` : 'N/A';
       const avgScore = Math.round(players.reduce((sum, p) => sum + p.total, 0) / players.length);
 
-      return `<div style="min-height:100vh;background:var(--bg);position:relative;overflow:hidden">
+      return `<div style="min-height:100vh;background:var(--bg);position:relative;overflow:hidden" onclick="${isRevealing ? 'skipReveal()' : ''}">
         <canvas id="fireworks-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1"></canvas>
 
         <div style="position:relative;z-index:2;padding-bottom:2rem">
           <div class="header-gradient text-white p-6 text-center" style="padding-top:3rem;padding-bottom:3rem">
             <div class="text-6xl mb-4 animate-bounce">🎉</div>
             <h1 class="font-black text-2xl mb-4">GAME COMPLETE!</h1>
-            ${winnerText}
+            ${winnerSection}
+            ${isRevealing ? '<p class="text-sm text-white mt-3" style="opacity:0.7">Tap to skip</p>' : ''}
           </div>
 
           <div class="p-4" style="max-width:28rem;margin:0 auto">
             <div class="card p-6 mb-4" style="background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%)">
               <h2 class="font-bold text-lg mb-4 text-center" style="color:var(--accent)">📊 FINAL STANDINGS</h2>
-              ${standings}
+              ${standings || '<div class="text-center text-gray-400">Preparing results...</div>'}
             </div>
 
-            <div class="card p-4 mb-4">
+            ${S.revealComplete ? `<div class="card p-4 mb-4">
               <h3 class="font-bold mb-3" style="color:var(--accent)">📈 Game Stats</h3>
               <div class="flex justify-around text-center">
                 <div>
@@ -1966,12 +2025,50 @@
               </div>
             </div>
 
-            <button class="btn btn-primary w-full" style="padding:1rem;font-size:1.125rem" onclick="saveAndExit()">
+            <button class="btn btn-primary w-full" style="padding:1rem;font-size:1.125rem" onclick="event.stopPropagation();saveAndExit()">
               Continue to Home 🏠
-            </button>
+            </button>` : ''}
           </div>
         </div>
       </div>`;
+    }
+
+    function skipReveal() {
+      if (S.revealComplete) return;
+      S.revealComplete = true;
+      S.revealIndex = S.finishedGame.players.length - 1;
+      R();
+    }
+
+    function animateReveal() {
+      if (!S.finishedGame || S.revealComplete) return;
+
+      const totalPlayers = S.finishedGame.players.length;
+      const delayPerPlayer = Math.min(400, 2000 / totalPlayers); // Max 2 seconds total
+
+      function revealNext() {
+        if (S.revealComplete || S.view !== 'endScreen') return;
+
+        S.revealIndex++;
+
+        if (S.revealIndex >= totalPlayers - 1) {
+          // Final reveal - show winner
+          S.revealComplete = true;
+          // Extra haptic for winner reveal
+          if (navigator.vibrate) {
+            navigator.vibrate([200, 100, 200]);
+          }
+        }
+
+        R();
+
+        if (!S.revealComplete) {
+          setTimeout(revealNext, delayPerPlayer);
+        }
+      }
+
+      // Start the reveal sequence
+      setTimeout(revealNext, 500); // Initial delay
     }
 
     function startFireworks() {
@@ -2086,6 +2183,17 @@
     }
     
     function finishG() {
+      // Show confirmation modal
+      S.finishModal = true;
+      R();
+    }
+
+    function confirmFinish() {
+      // Haptic feedback - vibrate for celebration
+      if (navigator.vibrate) {
+        navigator.vibrate([100, 50, 100, 50, 200]); // Short celebration pattern
+      }
+
       // Create game record with final scores
       S.finishedGame = {
         id: Date.now(),
@@ -2093,7 +2201,13 @@
         dur: S.start ? Math.round((Date.now() - S.start) / 60000) : null,
         players: S.game.map(p => ({pid: p.id, name: p.name, scores: {...p.scores}, total: grand(p.scores)}))
       };
-      // Navigate to end screen (don't save to history yet)
+
+      // Initialize reveal state
+      S.revealIndex = -1; // Start before first player
+      S.revealComplete = false;
+      S.finishModal = false;
+
+      // Navigate to end screen
       navigateTo('endScreen');
     }
 

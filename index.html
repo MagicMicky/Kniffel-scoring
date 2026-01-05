@@ -1423,14 +1423,22 @@
         '</div><div class="divider"></div>';
       }).join('');
 
-      // Standings
-      const stand = [...players].sort((a, b) => b.total - a.total).map((p, r) =>
-        '<div class="flex items-center gap-3">'+
-          '<span class="text-xl" style="width:2rem;text-align:center">'+(r===0?'🥇':r===1?'🥈':r===2?'🥉':r+1)+'</span>'+
-          '<div class="flex-1 rounded-xl bg-gray-100" style="height:2.5rem"><div class="standing-bar" style="background:'+color(p.pid)+';width:'+Math.max(30,p.total/4)+'%">'+p.name+'</div></div>'+
-          '<span class="font-black text-lg" style="width:3rem;text-align:right">'+p.total+'</span>'+
-        '</div>'
-      ).join('');
+      // Standings - match end screen format
+      const sortedPlayers = [...players].sort((a, b) => b.total - a.total);
+      const maxScore = sortedPlayers[0].total;
+      const stand = sortedPlayers.map((p, idx) => {
+        const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : (idx + 1);
+        const isLast = idx === sortedPlayers.length - 1;
+        return '<div class="flex items-center gap-3" style="margin-bottom:'+( isLast ? '0' : '0.875rem')+'">'+
+          '<span class="text-2xl" style="width:2.5rem;text-align:center">'+medal+'</span>'+
+          '<div class="flex-1 rounded-xl bg-gray-100 overflow-hidden" style="height:3.5rem">'+
+            '<div class="standing-bar-end" style="background:'+color(p.pid)+';width:'+Math.max(30, (p.total / maxScore) * 100)+'%">'+
+              '<span class="font-bold text-white px-3">'+p.name+'</span>'+
+            '</div>'+
+          '</div>'+
+          '<span class="font-black text-2xl" style="width:4.5rem;text-align:right;padding-right:0.5rem;color:'+color(p.pid)+'">'+p.total+'</span>'+
+        '</div>';
+      }).join('');
 
       return '<div style="min-height:100vh;background:var(--bg);padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
@@ -1464,7 +1472,7 @@
             '<div><p style="opacity:0.7" class="text-sm">Grand Total</p><p class="text-4xl font-black">'+cp.total+'</p></div>'+
             '<div class="text-sm" style="text-align:right;opacity:0.7"><p>Upper: '+upTot(sc)+' + '+upBonus(sc)+'</p><p>Lower: '+loTot(sc)+'</p></div>'+
           '</div></div>'+
-          '<div class="card p-4"><h3 class="font-bold mb-3 text-gray-800">🏆 Final Standings</h3><div class="space-y-2">'+stand+'</div></div>'+
+          '<div class="card p-4"><h3 class="font-bold mb-4 text-gray-800">📊 Final Standings</h3>'+stand+'</div>'+
         '</div>'+
       '</div>';
     }

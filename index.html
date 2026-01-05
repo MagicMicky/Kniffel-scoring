@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#07110C">
+  <meta name="theme-color" content="#0D1A14">
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -14,7 +14,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #07110C 0%, #12211B 50%, #0E1914 100%);
+      background: linear-gradient(135deg, #0D1A14 0%, #182C24 50%, #13231C 100%);
       min-height: 100vh;
       padding-top: env(safe-area-inset-top);
       padding-bottom: env(safe-area-inset-bottom);
@@ -66,26 +66,26 @@
     .font-bold { font-weight: 700; }
     .font-black { font-weight: 900; }
     
-    .text-white { color: #E9F1EC; }
-    .text-gray-400 { color: #A7C0B2; }
-    .text-gray-500 { color: #A7C0B2; }
-    .text-gray-600 { color: #214033; }
-    .text-gray-800 { color: #E9F1EC; }
-    .text-purple-200 { color: #E9C5B8; }
-    .text-purple-600 { color: #C47B5A; }
-    .text-purple-700 { color: #A6634A; }
-    .text-blue-600 { color: #34D399; }
-    .text-blue-700 { color: #10B981; }
-    .text-blue-800 { color: #059669; }
-    .text-green-600 { color: #34D399; }
-    .text-green-700 { color: #10B981; }
+    .text-white { color: #E6F3ED; }
+    .text-gray-400 { color: #A9C5B9; }
+    .text-gray-500 { color: #A9C5B9; }
+    .text-gray-600 { color: #2A4A3A; }
+    .text-gray-800 { color: #E6F3ED; }
+    .text-purple-200 { color: #B8F0E3; }
+    .text-purple-600 { color: #39C6A7; }
+    .text-purple-700 { color: #2DA589; }
+    .text-blue-600 { color: #7AE7D0; }
+    .text-blue-700 { color: #5DD4B8; }
+    .text-blue-800 { color: #39C6A7; }
+    .text-green-600 { color: #7AE7D0; }
+    .text-green-700 { color: #5DD4B8; }
     .text-red-400 { color: #f87171; }
     .text-red-500 { color: #ef4444; }
-    .text-yellow-400 { color: #E8A87C; }
-    .text-yellow-600 { color: #C47B5A; }
-    .text-yellow-800 { color: #A6634A; }
+    .text-yellow-400 { color: #5DD4B8; }
+    .text-yellow-600 { color: #39C6A7; }
+    .text-yellow-800 { color: #2DA589; }
 
-    .bg-gray-100 { background-color: #12211B; }
+    .bg-gray-100 { background-color: #182C24; }
 
     .glass { background: rgba(35, 53, 44, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(175, 193, 182, 0.15); }
     .glass-dark { background: rgba(35, 53, 44, 0.6); }
@@ -121,22 +121,22 @@
     
     /* Primary action button */
     .btn-primary {
-      background: linear-gradient(to right, #C47B5A, #A6634A);
-      color: #E9F1EC;
+      background: linear-gradient(to right, #39C6A7, #2DA589);
+      color: #E6F3ED;
       font-weight: 900;
       padding: 1.25rem;
       border-radius: 1rem;
       font-size: 1.25rem;
       width: 100%;
-      box-shadow: 0 4px 12px rgba(196, 123, 90, 0.35), 0 2px 4px rgba(11, 17, 12, 0.2);
+      box-shadow: 0 4px 12px rgba(57, 198, 167, 0.35), 0 2px 4px rgba(11, 17, 12, 0.2);
     }
-    .btn-primary:hover { box-shadow: 0 6px 16px rgba(196, 123, 90, 0.4), 0 3px 6px rgba(11, 17, 12, 0.25); }
-    .btn-primary:focus { box-shadow: 0 0 0 2px rgba(196, 123, 90, 0.3), 0 0 12px rgba(196, 123, 90, 0.25), 0 4px 12px rgba(196, 123, 90, 0.35); }
+    .btn-primary:hover { box-shadow: 0 6px 16px rgba(57, 198, 167, 0.4), 0 3px 6px rgba(11, 17, 12, 0.25); }
+    .btn-primary:focus { box-shadow: 0 0 0 2px rgba(57, 198, 167, 0.3), 0 0 12px rgba(57, 198, 167, 0.25), 0 4px 12px rgba(57, 198, 167, 0.35); }
     
     /* Resume game button */
     .btn-resume {
-      background: linear-gradient(to right, #34D399, #10B981);
-      color: #07110C;
+      background: linear-gradient(to right, #7AE7D0, #5DD4B8);
+      color: #0D1A14;
       font-weight: 900;
       padding: 1.25rem;
       border-radius: 1rem;
@@ -148,12 +148,12 @@
     /* Secondary button */
     .btn-secondary {
       background: rgba(35, 53, 44, 0.3);
-      color: #E9F1EC;
+      color: #E6F3ED;
       font-weight: 700;
       padding: 1rem;
       border-radius: 0.75rem;
       width: 100%;
-      border: 1px solid #214033;
+      border: 1px solid #2A4A3A;
     }
     
     /* Small button base */
@@ -166,60 +166,60 @@
     
     /* Colored buttons - used in modals */
     .btn-blue {
-      background-color: #34D399;
-      color: #07110C;
+      background-color: #7AE7D0;
+      color: #0D1A14;
     }
     .btn-green {
-      background-color: #34D399;
-      color: #07110C;
+      background-color: #7AE7D0;
+      color: #0D1A14;
     }
     .btn-purple {
-      background-color: #C47B5A;
-      color: #E9F1EC;
+      background-color: #39C6A7;
+      color: #E6F3ED;
     }
     .btn-orange {
-      background-color: #C47B5A;
-      color: #E9F1EC;
+      background-color: #39C6A7;
+      color: #E6F3ED;
     }
     .btn-yellow {
-      background-color: #E8A87C;
-      color: #07110C;
+      background-color: #5DD4B8;
+      color: #0D1A14;
     }
     .btn-gray {
-      background-color: #12211B;
-      color: #A7C0B2;
-      border: 1px solid #214033;
+      background-color: #182C24;
+      color: #A9C5B9;
+      border: 1px solid #2A4A3A;
     }
     .btn-gray-dark {
-      background-color: #0E1914;
-      color: #A7C0B2;
-      border: 1px solid #214033;
+      background-color: #13231C;
+      color: #A9C5B9;
+      border: 1px solid #2A4A3A;
     }
     
     .input {
-      border: 2px solid #214033;
+      border: 2px solid #2A4A3A;
       border-radius: 0.75rem;
       padding: 0.75rem 1rem;
       font-size: 1rem;
       width: 100%;
       font-family: inherit;
-      background: #12211B;
-      color: #E9F1EC;
+      background: #182C24;
+      color: #E6F3ED;
     }
-    .input:focus { outline: none; border-color: #C47B5A; box-shadow: 0 0 0 2px rgba(196, 123, 90, 0.3), 0 0 12px rgba(196, 123, 90, 0.2); }
+    .input:focus { outline: none; border-color: #39C6A7; box-shadow: 0 0 0 2px rgba(57, 198, 167, 0.3), 0 0 12px rgba(57, 198, 167, 0.2); }
     
     .card {
-      background: #0E1914;
+      background: #13231C;
       border-radius: 1rem;
       box-shadow: 0 10px 15px -3px rgba(11, 17, 12, 0.4), 0 4px 6px -2px rgba(33, 64, 51, 0.1);
       overflow: hidden;
-      border: 1px solid #214033;
+      border: 1px solid #2A4A3A;
     }
     
-    .header-gradient { background: linear-gradient(to right, #C47B5A, #A6634A); }
-    .upper-gradient { background: linear-gradient(to right, #34D399, #10B981); }
-    .lower-gradient { background: linear-gradient(to right, #214033, #12211B); }
-    .total-gradient { background: linear-gradient(to right, #C47B5A, #A6634A); }
+    .header-gradient { background: linear-gradient(to right, #39C6A7, #2DA589); }
+    .upper-gradient { background: linear-gradient(to right, #7AE7D0, #5DD4B8); }
+    .lower-gradient { background: linear-gradient(to right, #2A4A3A, #182C24); }
+    .total-gradient { background: linear-gradient(to right, #39C6A7, #2DA589); }
     
     .modal-overlay { 
       position: fixed; 
@@ -232,14 +232,14 @@
       padding: 1rem; 
     }
     .modal {
-      background: #12211B;
+      background: #182C24;
       border-radius: 1rem;
       padding: 1.25rem;
       width: 100%;
       max-width: 24rem;
       max-height: 80vh;
       overflow: auto;
-      border: 1px solid #214033;
+      border: 1px solid #2A4A3A;
     }
     
     .color-dot { width: 1rem; height: 1rem; border-radius: 9999px; flex-shrink: 0; }
@@ -249,13 +249,13 @@
       width: 1.25rem;
       height: 1.25rem;
       border-radius: 9999px;
-      border: 2px solid #E9F1EC;
+      border: 2px solid #E6F3ED;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
-    .checkbox-inner { width: 0.75rem; height: 0.75rem; border-radius: 9999px; background: #E9F1EC; }
+    .checkbox-inner { width: 0.75rem; height: 0.75rem; border-radius: 9999px; background: #E6F3ED; }
     
     .score-btn {
       min-width: 4rem;
@@ -269,23 +269,23 @@
       font-family: inherit;
     }
     .score-btn:active { transform: scale(0.95); }
-    .score-filled-blue { background-color: rgba(52, 211, 153, 0.2); color: #34D399; border: 1px solid #34D399; }
-    .score-filled-purple { background-color: rgba(196, 123, 90, 0.2); color: #C47B5A; border: 1px solid #C47B5A; }
-    .score-empty { background-color: #12211B; color: #A7C0B2; border: 2px dashed #214033; }
+    .score-filled-blue { background-color: rgba(52, 211, 153, 0.2); color: #7AE7D0; border: 1px solid #7AE7D0; }
+    .score-filled-purple { background-color: rgba(57, 198, 167, 0.2); color: #39C6A7; border: 1px solid #39C6A7; }
+    .score-empty { background-color: #182C24; color: #A9C5B9; border: 2px dashed #2A4A3A; }
     
     .picker-btn {
-      background-color: #12211B;
-      border: 1px solid #214033;
+      background-color: #182C24;
+      border: 1px solid #2A4A3A;
       border-radius: 0.75rem;
       padding: 0.75rem;
       cursor: pointer;
       transition: all 0.15s;
       font-family: inherit;
     }
-    .picker-btn:active { background-color: #0E1914; transform: scale(0.95); }
+    .picker-btn:active { background-color: #13231C; transform: scale(0.95); }
     .picker-btn-green {
       background-color: rgba(52, 211, 153, 0.15);
-      border: 2px solid #34D399;
+      border: 2px solid #7AE7D0;
       border-radius: 0.75rem;
       cursor: pointer;
       transition: all 0.15s;
@@ -302,15 +302,15 @@
     }
     .picker-btn-red:active { background-color: rgba(239, 68, 68, 0.25); transform: scale(0.95); }
     .picker-btn-purple {
-      background-color: rgba(196, 123, 90, 0.15);
-      border: 1px solid #C47B5A;
+      background-color: rgba(57, 198, 167, 0.15);
+      border: 1px solid #39C6A7;
       border-radius: 0.5rem;
       padding: 0.5rem;
       cursor: pointer;
       transition: all 0.15s;
       font-family: inherit;
     }
-    .picker-btn-purple:active { background-color: rgba(196, 123, 90, 0.25); transform: scale(0.95); }
+    .picker-btn-purple:active { background-color: rgba(57, 198, 167, 0.25); transform: scale(0.95); }
     
     .player-tab {
       padding: 0.5rem 1rem;
@@ -324,8 +324,8 @@
       font-family: inherit;
     }
     .player-tab:active { transform: scale(0.95); }
-    .player-tab-active { color: #E9F1EC; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
-    .player-tab-inactive { background-color: #12211B; color: #A7C0B2; border: 1px solid #214033; }
+    .player-tab-active { color: #E6F3ED; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
+    .player-tab-inactive { background-color: #182C24; color: #A9C5B9; border: 1px solid #2A4A3A; }
     
     .standing-bar { 
       height: 2.5rem; 
@@ -339,7 +339,7 @@
       transition: width 0.5s; 
     }
     
-    .divider { height: 1px; background-color: #214033; }
+    .divider { height: 1px; background-color: #2A4A3A; }
     
     .sticky { position: sticky; top: 0; z-index: 20; }
     .sticky-tabs { position: sticky; top: 2.75rem; z-index: 10; }
@@ -360,7 +360,7 @@
     .order-btn {
       background: transparent;
       border: none;
-      color: #E9F1EC;
+      color: #E6F3ED;
       font-size: 0.875rem;
       cursor: pointer;
       padding: 0.25rem 0.5rem;
@@ -387,13 +387,13 @@
       bottom: 2rem;
       left: 50%;
       transform: translateX(-50%);
-      background: #12211B;
-      color: #E9F1EC;
+      background: #182C24;
+      color: #E6F3ED;
       padding: 0.75rem 1.5rem;
       border-radius: 0.75rem;
       font-weight: 600;
       z-index: 100;
-      border: 1px solid #214033;
+      border: 1px solid #2A4A3A;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       animation: toast-in 0.3s ease, toast-out 0.3s ease 1.7s forwards;
     }
@@ -417,7 +417,7 @@
       width: 0.5rem;
       height: 0.5rem;
       border-radius: 50%;
-      background: #34D399;
+      background: #7AE7D0;
       animation: pulse 1.5s infinite;
     }
     @keyframes pulse {
@@ -451,14 +451,14 @@
       border-radius: 0.75rem;
       padding: 0.25rem;
       margin-bottom: 1rem;
-      border: 1px solid #214033;
+      border: 1px solid #2A4A3A;
     }
     .mode-btn {
       flex: 1;
       padding: 0.75rem;
       border: none;
       background: transparent;
-      color: #A7C0B2;
+      color: #A9C5B9;
       font-weight: 700;
       font-size: 0.875rem;
       cursor: pointer;
@@ -467,18 +467,18 @@
       font-family: inherit;
     }
     .mode-btn.active {
-      background: #C47B5A;
-      color: #E9F1EC;
-      box-shadow: 0 2px 8px rgba(196, 123, 90, 0.3);
+      background: #39C6A7;
+      color: #E6F3ED;
+      box-shadow: 0 2px 8px rgba(57, 198, 167, 0.3);
     }
 
     /* Dice styles */
     .dice-area {
-      background: linear-gradient(135deg, #12211B 0%, #214033 100%);
+      background: linear-gradient(135deg, #182C24 0%, #2A4A3A 100%);
       border-radius: 1rem;
       padding: 1.25rem;
       margin-bottom: 1rem;
-      border: 1px solid #214033;
+      border: 1px solid #2A4A3A;
     }
     .dice-container {
       display: flex;
@@ -506,9 +506,9 @@
       transform: scale(0.95);
     }
     .die.held {
-      background: #E9C5B8;
-      border: 3px solid #C47B5A;
-      box-shadow: 0 0 12px rgba(196, 123, 90, 0.5);
+      background: #B8F0E3;
+      border: 3px solid #39C6A7;
+      box-shadow: 0 0 12px rgba(57, 198, 167, 0.5);
     }
     .die.held::after {
       content: 'HOLD';
@@ -518,7 +518,7 @@
       transform: translateX(-50%);
       font-size: 0.625rem;
       font-weight: 700;
-      color: #C47B5A;
+      color: #39C6A7;
       white-space: nowrap;
     }
     .die.rolling {
@@ -532,8 +532,8 @@
     .roll-btn {
       width: 100%;
       padding: 1rem;
-      background: linear-gradient(to right, #34D399, #10B981);
-      color: #07110C;
+      background: linear-gradient(to right, #7AE7D0, #5DD4B8);
+      color: #0D1A14;
       border: none;
       border-radius: 0.75rem;
       font-size: 1.125rem;
@@ -546,8 +546,8 @@
       transform: scale(0.98);
     }
     .roll-btn:disabled {
-      background: #214033;
-      color: #A7C0B2;
+      background: #2A4A3A;
+      color: #A9C5B9;
       cursor: not-allowed;
       transform: none;
     }
@@ -556,7 +556,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 0.75rem;
-      color: #E9F1EC;
+      color: #E6F3ED;
     }
     .roll-count {
       font-weight: 700;
@@ -570,10 +570,10 @@
     /* Score suggestion styles */
     .score-suggestion {
       background: rgba(52, 211, 153, 0.2);
-      border: 2px solid #34D399;
+      border: 2px solid #7AE7D0;
     }
     .score-suggestion-text {
-      color: #34D399;
+      color: #7AE7D0;
       font-weight: 700;
       font-size: 0.75rem;
     }
@@ -599,8 +599,8 @@
     }
     .score-available {
       background: rgba(52, 211, 153, 0.2);
-      color: #34D399;
-      border: 2px solid #34D399;
+      color: #7AE7D0;
+      border: 2px solid #7AE7D0;
     }
     .score-zero-only {
       background: rgba(239, 68, 68, 0.15);
@@ -635,7 +635,7 @@
       { id: 'chance', name: 'Chance', type: 'sum', max: 30 },
     ];
 
-    const COLORS = ['#C47B5A','#34D399','#E8A87C','#8FBC8F','#5F9EA0','#D4A574','#CC7A4D','#6B9B7C'];
+    const COLORS = ['#39C6A7','#7AE7D0','#5DD4B8','#34D399','#2DD4BF','#5EEAD4','#6EE7B7','#4ADE80'];
 
     let S = {
       view: 'setup',
@@ -1074,12 +1074,12 @@
       const st = res.length === 0
         ? '<p class="text-center text-gray-400 py-5">No games yet</p>'
         : '<div class="grid grid-cols-2 gap-3 mb-4">'+
-            '<div style="background:#12211B;border:1px solid #214033" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-blue-600">'+res.length+'</div><div class="text-xs text-gray-500">Games</div></div>'+
-            '<div style="background:#12211B;border:1px solid #214033" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-yellow-600">'+wins+'</div><div class="text-xs text-gray-500">Wins ('+(res.length?Math.round(wins/res.length*100):0)+'%)</div></div>'+
-            '<div style="background:#12211B;border:1px solid #214033" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-green-600">'+hi+'</div><div class="text-xs text-gray-500">High Score</div></div>'+
-            '<div style="background:#12211B;border:1px solid #214033" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-purple-600">'+avg+'</div><div class="text-xs text-gray-500">Average</div></div>'+
+            '<div style="background:#182C24;border:1px solid #2A4A3A" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-blue-600">'+res.length+'</div><div class="text-xs text-gray-500">Games</div></div>'+
+            '<div style="background:#182C24;border:1px solid #2A4A3A" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-yellow-600">'+wins+'</div><div class="text-xs text-gray-500">Wins ('+(res.length?Math.round(wins/res.length*100):0)+'%)</div></div>'+
+            '<div style="background:#182C24;border:1px solid #2A4A3A" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-green-600">'+hi+'</div><div class="text-xs text-gray-500">High Score</div></div>'+
+            '<div style="background:#182C24;border:1px solid #2A4A3A" class="rounded-xl p-4 text-center"><div class="text-3xl font-black text-purple-600">'+avg+'</div><div class="text-xs text-gray-500">Average</div></div>'+
           '</div>'+
-          '<div style="background:#12211B;border:1px solid #214033" class="rounded-xl p-4 text-center mb-4"><div class="text-3xl font-black text-red-500">🎲 '+ytz+'</div><div class="text-xs text-gray-500">Yahtzees</div></div>';
+          '<div style="background:#182C24;border:1px solid #2A4A3A" class="rounded-xl p-4 text-center mb-4"><div class="text-3xl font-black text-red-500">🎲 '+ytz+'</div><div class="text-xs text-gray-500">Yahtzees</div></div>';
 
       return '<div class="modal-overlay" onclick="S.stats=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
         '<h2 class="text-2xl font-black text-white mb-1">'+p.name+'</h2><p class="text-gray-500 text-sm mb-4">Statistics</p>'+st+
@@ -1174,13 +1174,13 @@
         '</div>'
       ).join('');
 
-      return '<div style="min-height:100vh;background:#07110C;padding-bottom:6rem">'+
+      return '<div style="min-height:100vh;background:#0D1A14;padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
           '<button class="btn-text text-white text-lg font-medium" onclick="closeHistoryDetail()">← Back</button>'+
           '<h1 class="font-black text-lg">📖 GAME REVIEW</h1>'+
           '<div class="text-xs" style="opacity:0.8">Read Only</div>'+
         '</div></div>'+
-        '<div class="sticky-tabs" style="background:#0E1914;box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid #214033"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
+        '<div class="sticky-tabs" style="background:#13231C;box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid #2A4A3A"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
         '<div class="p-3" style="max-width:28rem;margin:0 auto">'+
           '<div class="card p-4 mb-4" style="border-left:4px solid '+color(cp.pid)+'">'+
             '<h2 class="font-black text-2xl" style="color:'+color(cp.pid)+'">'+cp.name+'</h2>'+
@@ -1190,14 +1190,14 @@
             '<p class="text-white text-sm font-medium">'+new Date(game.date).toLocaleDateString()+' • '+new Date(game.date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+(game.dur?' • '+game.dur+' minutes':'')+'</p>'+
           '</div>'+
           '<div class="card mb-4">'+
-            '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:#34D399;color:#07110C':'glass')+'">'+upTot(sc)+'/63</span></div>'+
+            '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:#7AE7D0;color:#0D1A14':'glass')+'">'+upTot(sc)+'/63</span></div>'+
             up+
-            '<div class="flex items-center justify-between px-4 py-3" style="background:#12211B;border-top:1px solid #214033"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
+            '<div class="flex items-center justify-between px-4 py-3" style="background:#182C24;border-top:1px solid #2A4A3A"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
           '</div>'+
           '<div class="card mb-4">'+
             '<div class="lower-gradient text-white px-4 py-3 font-bold">Lower Section</div>'+
             lo+
-            '<div class="flex items-center justify-between px-4 py-3" style="background:#12211B;border-top:1px solid #214033">'+
+            '<div class="flex items-center justify-between px-4 py-3" style="background:#182C24;border-top:1px solid #2A4A3A">'+
               '<div><span class="font-bold text-yellow-600">Yahtzee Bonus</span><span class="text-yellow-600 text-xs ml-2">+100 each</span></div>'+
               '<span class="font-black text-xl text-yellow-600">+'+(sc.bonus || 0)+'</span>'+
             '</div>'+
@@ -1364,13 +1364,13 @@
             '<div class="flex items-center gap-2"><span class="font-black text-xl text-yellow-600">+'+sc.bonus+'</span><button class="btn btn-small '+(sc.yahtzee===50?'btn-yellow':'btn-gray-dark')+' font-bold" onclick="addBonus()" '+(sc.yahtzee!==50?'disabled':'')+'>+100</button></div>'+
           '</div>';
 
-      return '<div style="min-height:100vh;background:#07110C;padding-bottom:6rem">'+
+      return '<div style="min-height:100vh;background:#0D1A14;padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
           '<button class="btn-text text-white text-lg font-medium" onclick="pauseG()">← Back</button>'+
           '<h1 class="font-black text-lg">'+(isPlayMode?'🎲 YAHTZEE':'📝 SCORING')+'</h1>'+
           '<button class="btn btn-small '+(gameComplete?'btn-green':'btn-orange')+'" onclick="'+(gameComplete?'finishG()':'saveG()')+'">'+(gameComplete?'Finish ✓':'Save')+'</button>'+
         '</div></div>'+
-        '<div class="sticky-tabs" style="background:#0E1914;box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid #214033"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
+        '<div class="sticky-tabs" style="background:#13231C;box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid #2A4A3A"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
         '<div class="p-3" style="max-width:28rem;margin:0 auto">'+
           '<div class="card p-4 mb-4" style="border-left:4px solid '+color(cp.id)+'">'+
             '<div class="current-turn-indicator"><div class="pulse-dot"></div><span class="text-gray-500 text-sm font-medium">Current Turn</span></div>'+
@@ -1378,9 +1378,9 @@
           '</div>'+
           diceArea+
           '<div class="card mb-4">'+
-            '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:#34D399;color:#07110C':'glass')+'">'+upTot(sc)+'/63</span></div>'+
+            '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:#7AE7D0;color:#0D1A14':'glass')+'">'+upTot(sc)+'/63</span></div>'+
             up+
-            '<div class="flex items-center justify-between px-4 py-3" style="background:#12211B;border-top:1px solid #214033"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
+            '<div class="flex items-center justify-between px-4 py-3" style="background:#182C24;border-top:1px solid #2A4A3A"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
           '</div>'+
           '<div class="card mb-4">'+
             '<div class="lower-gradient text-white px-4 py-3 font-bold">Lower Section</div>'+
@@ -1758,8 +1758,8 @@
 
     function showUpdatePrompt() {
       const banner = document.createElement('div');
-      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#C47B5A;color:#E9F1EC;padding:1rem;text-align:center;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.3);border-bottom:1px solid #A6634A;';
-      banner.innerHTML = '<div style="max-width:28rem;margin:0 auto;"><strong>🎉 Update Available!</strong><br><small>A new version is ready. Your data is safe.</small><br><button style="margin-top:0.5rem;background:#E9F1EC;color:#07110C;border:none;padding:0.5rem 1.5rem;border-radius:0.5rem;font-weight:bold;cursor:pointer;" onclick="window.location.reload()">Update Now</button> <button style="margin-top:0.5rem;background:transparent;color:#E9F1EC;border:1px solid #E9F1EC;padding:0.5rem 1rem;border-radius:0.5rem;cursor:pointer;" onclick="this.parentElement.parentElement.remove()">Later</button></div>';
+      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#39C6A7;color:#E6F3ED;padding:1rem;text-align:center;z-index:1000;box-shadow:0 2px 8px rgba(0,0,0,0.3);border-bottom:1px solid #2DA589;';
+      banner.innerHTML = '<div style="max-width:28rem;margin:0 auto;"><strong>🎉 Update Available!</strong><br><small>A new version is ready. Your data is safe.</small><br><button style="margin-top:0.5rem;background:#E6F3ED;color:#0D1A14;border:none;padding:0.5rem 1.5rem;border-radius:0.5rem;font-weight:bold;cursor:pointer;" onclick="window.location.reload()">Update Now</button> <button style="margin-top:0.5rem;background:transparent;color:#E6F3ED;border:1px solid #E6F3ED;padding:0.5rem 1rem;border-radius:0.5rem;cursor:pointer;" onclick="this.parentElement.parentElement.remove()">Later</button></div>';
       document.body.appendChild(banner);
     }
   </script>

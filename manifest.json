@@ -4,8 +4,8 @@
   "description": "Yahtzee/Kniffel scoring app",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#07110C",
-  "theme_color": "#07110C",
+  "background_color": "#0D1A14",
+  "theme_color": "#0D1A14",
   "orientation": "portrait",
   "icons": [
     {

@@ -155,13 +155,20 @@
     .text-yellow-600 { color: #39C6A7; }
     .text-yellow-800 { color: #2DA589; }
 
-    .bg-gray-100 { background-color: #182C24; }
+    .bg-gray-100 { background-color: var(--surface2); }
 
-    .glass { background: rgba(35, 53, 44, 0.4); backdrop-filter: blur(10px); border: 1px solid rgba(175, 193, 182, 0.15); }
-    .glass-dark { background: rgba(35, 53, 44, 0.6); }
-    
-    .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-    .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    .glass {
+      background: rgba(24, 44, 36, 0.5);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(169, 197, 185, 0.15);
+    }
+    .glass-dark {
+      background: rgba(24, 44, 36, 0.7);
+      backdrop-filter: blur(12px);
+    }
+
+    .shadow-md { box-shadow: var(--shadowMd); }
+    .shadow-lg { box-shadow: var(--shadowLg); }
     
     /* Base button - NO background defined here */
     .btn { 
@@ -211,76 +218,98 @@
     
     /* Resume game button */
     .btn-resume {
-      background: linear-gradient(to right, #7AE7D0, #5DD4B8);
-      color: #0D1A14;
+      background: var(--link);
+      color: var(--onLink);
       font-weight: 900;
       padding: 1.25rem;
-      border-radius: 1rem;
+      border-radius: var(--rMd);
       font-size: 1.25rem;
       width: 100%;
-      box-shadow: 0 4px 12px rgba(52, 211, 153, 0.3);
+      box-shadow: var(--shadowSm);
+      border: none;
     }
-    
+    .btn-resume:hover {
+      box-shadow: 0 8px 24px rgba(122, 231, 208, 0.4);
+      transform: translateY(-1px);
+    }
+
     /* Secondary button */
     .btn-secondary {
-      background: rgba(35, 53, 44, 0.3);
-      color: #E6F3ED;
+      background: var(--surface2);
+      color: var(--text);
       font-weight: 700;
       padding: 1rem;
-      border-radius: 0.75rem;
+      border-radius: var(--rMd);
       width: 100%;
-      border: 1px solid #2A4A3A;
+      border: 1px solid var(--border);
     }
-    
+    .btn-secondary:hover {
+      background: var(--surface2Hover);
+      border-color: var(--borderAccent);
+    }
+    .btn-secondary:active {
+      background: var(--surface2Pressed);
+    }
+
     /* Small button base */
-    .btn-small { 
-      padding: 0.5rem 0.75rem; 
-      font-size: 0.875rem; 
-      border-radius: 0.5rem; 
-      font-weight: 600; 
+    .btn-small {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      border-radius: var(--rSm);
+      font-weight: 600;
     }
-    
+
     /* Colored buttons - used in modals */
     .btn-blue {
-      background-color: #7AE7D0;
-      color: #0D1A14;
+      background-color: var(--link);
+      color: var(--onLink);
     }
     .btn-green {
-      background-color: #7AE7D0;
-      color: #0D1A14;
+      background-color: var(--success);
+      color: var(--onLink);
     }
     .btn-purple {
-      background-color: #39C6A7;
-      color: #E6F3ED;
+      background-color: var(--accent);
+      color: var(--onAccent);
     }
     .btn-orange {
-      background-color: #39C6A7;
-      color: #E6F3ED;
+      background-color: var(--warning);
+      color: var(--onLink);
     }
     .btn-yellow {
-      background-color: #5DD4B8;
-      color: #0D1A14;
+      background-color: var(--warning);
+      color: var(--onLink);
     }
     .btn-gray {
-      background-color: #182C24;
-      color: #A9C5B9;
-      border: 1px solid #2A4A3A;
+      background-color: var(--surface2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-gray:hover {
+      background-color: var(--surface2Hover);
     }
     .btn-gray-dark {
-      background-color: #13231C;
-      color: #A9C5B9;
-      border: 1px solid #2A4A3A;
+      background-color: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-gray-dark:hover {
+      background-color: var(--surfaceHover);
     }
     
     .input {
-      border: 2px solid #2A4A3A;
-      border-radius: 0.75rem;
+      border: 2px solid var(--border);
+      border-radius: var(--rMd);
       padding: 0.75rem 1rem;
       font-size: 1rem;
       width: 100%;
       font-family: inherit;
-      background: #182C24;
-      color: #E6F3ED;
+      background: var(--surface2);
+      color: var(--text);
+      transition: all 0.2s;
+    }
+    .input:hover {
+      border-color: var(--borderAccent);
     }
     .input:focus {
       outline: none;
@@ -296,15 +325,16 @@
       border: 1px solid var(--border);
     }
     
-    .header-gradient { background: linear-gradient(to right, #39C6A7, #2DA589); }
-    .upper-gradient { background: linear-gradient(to right, #7AE7D0, #5DD4B8); }
-    .lower-gradient { background: linear-gradient(to right, #2A4A3A, #182C24); }
-    .total-gradient { background: linear-gradient(to right, #39C6A7, #2DA589); }
-    
-    .modal-overlay { 
-      position: fixed; 
-      inset: 0; 
-      background: rgba(0,0,0,0.5); 
+    .header-gradient { background: linear-gradient(to right, var(--accent), #2DA589); }
+    .upper-gradient { background: linear-gradient(to right, var(--link), #5DD4B8); }
+    .lower-gradient { background: linear-gradient(to right, var(--border), var(--surface2)); }
+    .total-gradient { background: linear-gradient(to right, var(--accent), #2DA589); }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--scrim);
+      backdrop-filter: blur(4px); 
       display: flex; 
       align-items: center; 
       justify-content: center; 
@@ -312,14 +342,15 @@
       padding: 1rem; 
     }
     .modal {
-      background: #182C24;
-      border-radius: 1rem;
+      background: var(--surface2);
+      border-radius: var(--rLg);
       padding: 1.25rem;
       width: 100%;
       max-width: 24rem;
       max-height: 80vh;
       overflow: auto;
-      border: 1px solid #2A4A3A;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadowLg);
     }
     
     .color-dot { width: 1rem; height: 1rem; border-radius: 9999px; flex-shrink: 0; }
@@ -340,7 +371,7 @@
     .score-btn {
       min-width: 4rem;
       padding: 0.5rem 1rem;
-      border-radius: 0.75rem;
+      border-radius: var(--rMd);
       font-weight: 700;
       font-size: 1.125rem;
       border: none;
@@ -349,52 +380,73 @@
       font-family: inherit;
     }
     .score-btn:active { transform: scale(0.95); }
-    .score-filled-blue { background-color: rgba(52, 211, 153, 0.2); color: #7AE7D0; border: 1px solid #7AE7D0; }
-    .score-filled-purple { background-color: rgba(57, 198, 167, 0.2); color: #39C6A7; border: 1px solid #39C6A7; }
-    .score-empty { background-color: #182C24; color: #A9C5B9; border: 2px dashed #2A4A3A; }
-    
+    .score-btn:hover { opacity: 0.9; }
+    .score-filled-blue {
+      background-color: rgba(122, 231, 208, 0.15);
+      color: var(--link);
+      border: 1px solid var(--link);
+    }
+    .score-filled-purple {
+      background-color: var(--accentSubtle);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .score-empty {
+      background-color: var(--surface2);
+      color: var(--muted);
+      border: 2px dashed var(--border);
+    }
+    .score-empty:hover {
+      background-color: var(--surface2Hover);
+      border-color: var(--borderAccent);
+    }
+
     .picker-btn {
-      background-color: #182C24;
-      border: 1px solid #2A4A3A;
-      border-radius: 0.75rem;
+      background-color: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--rMd);
       padding: 0.75rem;
       cursor: pointer;
       transition: all 0.15s;
       font-family: inherit;
     }
-    .picker-btn:active { background-color: #13231C; transform: scale(0.95); }
+    .picker-btn:hover { background-color: var(--surface2Hover); }
+    .picker-btn:active { background-color: var(--surface2Pressed); transform: scale(0.95); }
     .picker-btn-green {
-      background-color: rgba(52, 211, 153, 0.15);
-      border: 2px solid #7AE7D0;
-      border-radius: 0.75rem;
+      background-color: rgba(122, 231, 208, 0.12);
+      border: 2px solid var(--link);
+      border-radius: var(--rMd);
       cursor: pointer;
       transition: all 0.15s;
       font-family: inherit;
     }
-    .picker-btn-green:active { background-color: rgba(52, 211, 153, 0.25); transform: scale(0.95); }
+    .picker-btn-green:hover { background-color: rgba(122, 231, 208, 0.2); }
+    .picker-btn-green:active { background-color: rgba(122, 231, 208, 0.3); transform: scale(0.95); }
     .picker-btn-red {
-      background-color: rgba(239, 68, 68, 0.15);
-      border: 2px solid #ef4444;
-      border-radius: 0.75rem;
+      background-color: rgba(251, 113, 133, 0.12);
+      border: 2px solid var(--error);
+      border-radius: var(--rMd);
       cursor: pointer;
       transition: all 0.15s;
       font-family: inherit;
     }
-    .picker-btn-red:active { background-color: rgba(239, 68, 68, 0.25); transform: scale(0.95); }
+    .picker-btn-red:hover { background-color: rgba(251, 113, 133, 0.2); }
+    .picker-btn-red:active { background-color: rgba(251, 113, 133, 0.3); transform: scale(0.95); }
     .picker-btn-purple {
-      background-color: rgba(57, 198, 167, 0.15);
-      border: 1px solid #39C6A7;
-      border-radius: 0.5rem;
+      background-color: var(--accentSubtle);
+      border: 1px solid var(--accent);
+      border-radius: var(--rSm);
       padding: 0.5rem;
       cursor: pointer;
       transition: all 0.15s;
       font-family: inherit;
     }
-    .picker-btn-purple:active { background-color: rgba(57, 198, 167, 0.25); transform: scale(0.95); }
-    
+    .picker-btn-purple:hover { background-color: rgba(57, 198, 167, 0.2); }
+    .picker-btn-purple:active { background-color: rgba(57, 198, 167, 0.3); transform: scale(0.95); }
+
     .player-tab {
       padding: 0.5rem 1rem;
-      border-radius: 9999px;
+      border-radius: var(--rPill);
       font-size: 0.875rem;
       font-weight: 700;
       white-space: nowrap;
@@ -404,8 +456,20 @@
       font-family: inherit;
     }
     .player-tab:active { transform: scale(0.95); }
-    .player-tab-active { color: #E6F3ED; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
-    .player-tab-inactive { background-color: #182C24; color: #A9C5B9; border: 1px solid #2A4A3A; }
+    .player-tab:hover { opacity: 0.9; }
+    .player-tab-active {
+      color: var(--text);
+      box-shadow: var(--shadowSm);
+    }
+    .player-tab-inactive {
+      background-color: var(--surface2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .player-tab-inactive:hover {
+      background-color: var(--surface2Hover);
+      border-color: var(--borderAccent);
+    }
     
     .standing-bar { 
       height: 2.5rem; 
@@ -419,7 +483,7 @@
       transition: width 0.5s; 
     }
     
-    .divider { height: 1px; background-color: #2A4A3A; }
+    .divider { height: 1px; background-color: var(--divider); opacity: 0.8; }
     
     .sticky { position: sticky; top: 0; z-index: 20; }
     .sticky-tabs { position: sticky; top: 2.75rem; z-index: 10; }
@@ -467,14 +531,14 @@
       bottom: 2rem;
       left: 50%;
       transform: translateX(-50%);
-      background: #182C24;
-      color: #E6F3ED;
+      background: var(--tooltipBg);
+      color: var(--tooltipText);
       padding: 0.75rem 1.5rem;
-      border-radius: 0.75rem;
+      border-radius: var(--rMd);
       font-weight: 600;
       z-index: 100;
-      border: 1px solid #2A4A3A;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadowLg);
       animation: toast-in 0.3s ease, toast-out 0.3s ease 1.7s forwards;
     }
     @keyframes toast-in {
@@ -527,29 +591,33 @@
     /* Mode toggle styles */
     .mode-toggle {
       display: flex;
-      background: rgba(35, 53, 44, 0.3);
-      border-radius: 0.75rem;
+      background: var(--surface2);
+      border-radius: var(--rMd);
       padding: 0.25rem;
       margin-bottom: 1rem;
-      border: 1px solid #2A4A3A;
+      border: 1px solid var(--border);
     }
     .mode-btn {
       flex: 1;
       padding: 0.75rem;
       border: none;
       background: transparent;
-      color: #A9C5B9;
+      color: var(--muted);
       font-weight: 700;
       font-size: 0.875rem;
       cursor: pointer;
-      border-radius: 0.5rem;
+      border-radius: var(--rSm);
       transition: all 0.2s;
       font-family: inherit;
     }
+    .mode-btn:hover:not(.active) {
+      background: var(--surfaceHover);
+      color: var(--text);
+    }
     .mode-btn.active {
-      background: #39C6A7;
-      color: #E6F3ED;
-      box-shadow: 0 2px 8px rgba(57, 198, 167, 0.3);
+      background: var(--accent);
+      color: var(--onAccent);
+      box-shadow: var(--shadowSm);
     }
 
     /* Dice styles */

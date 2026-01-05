@@ -473,16 +473,57 @@
       border-color: var(--borderAccent);
     }
     
-    .standing-bar { 
-      height: 2.5rem; 
-      border-radius: 0.75rem; 
-      display: flex; 
-      align-items: center; 
-      padding: 0 0.75rem; 
-      color: white; 
-      font-weight: 700; 
-      font-size: 0.875rem; 
-      transition: width 0.5s; 
+    .standing-bar {
+      height: 2.5rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      padding: 0 0.75rem;
+      color: white;
+      font-weight: 700;
+      font-size: 0.875rem;
+      transition: width 0.5s;
+    }
+
+    .standing-bar-end {
+      height: 3.5rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      padding: 0 0.75rem;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: width 1s ease-out;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+
+    .winner-row {
+      animation: pulse-winner 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-winner {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.02);
+        opacity: 0.95;
+      }
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .animate-bounce {
+      animation: bounce 1s ease-in-out infinite;
     }
     
     .divider { height: 1px; background-color: var(--divider); opacity: 0.8; }
@@ -1107,6 +1148,11 @@
         } else {
           app.innerHTML = hist();
         }
+      }
+      else if (S.view === 'endScreen') {
+        app.innerHTML = endScreenView();
+        // Start fireworks after render
+        setTimeout(() => startFireworks(), 100);
       }
       else app.innerHTML = gameView();
 
@@ -1848,6 +1894,176 @@
       R(); 
     }
 
+    function endScreenView() {
+      if (!S.finishedGame) {
+        navigateTo('setup');
+        return '';
+      }
+
+      const players = S.finishedGame.players.sort((a, b) => b.total - a.total);
+      const maxScore = players[0].total;
+      const winners = players.filter(p => p.total === maxScore);
+
+      // Winner announcement
+      const winnerText = winners.length === 1
+        ? `<div class="text-4xl font-black mb-2" style="color:${color(winners[0].pid)}">${winners[0].name}</div><div class="text-xl text-gray-600">is the Champion!</div>`
+        : `<div class="text-3xl font-black mb-2 text-yellow-600">It's a Tie!</div><div class="text-lg text-gray-600">${winners.map(w => w.name).join(' & ')}</div>`;
+
+      // Final standings
+      const standings = players.map((p, idx) => {
+        const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : (idx + 1);
+        const isWinner = p.total === maxScore;
+        return `<div class="flex items-center gap-3 mb-3 ${isWinner ? 'winner-row' : ''}">
+          <span class="text-2xl" style="width:2.5rem;text-align:center">${medal}</span>
+          <div class="flex-1 rounded-xl bg-gray-100 overflow-hidden" style="height:3.5rem">
+            <div class="standing-bar-end" style="background:${color(p.pid)};width:${Math.max(30, (p.total / maxScore) * 100)}%">
+              <span class="font-bold text-white px-3">${p.name}</span>
+            </div>
+          </div>
+          <span class="font-black text-2xl" style="width:4rem;text-align:right;color:${color(p.pid)}">${p.total}</span>
+        </div>`;
+      }).join('');
+
+      // Game stats
+      const duration = S.finishedGame.dur ? `${S.finishedGame.dur} min` : 'N/A';
+      const avgScore = Math.round(players.reduce((sum, p) => sum + p.total, 0) / players.length);
+
+      return `<div style="min-height:100vh;background:var(--bg);position:relative;overflow:hidden">
+        <canvas id="fireworks-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1"></canvas>
+
+        <div style="position:relative;z-index:2;padding-bottom:2rem">
+          <div class="header-gradient text-white p-6 text-center" style="padding-top:3rem;padding-bottom:3rem">
+            <div class="text-6xl mb-4 animate-bounce">🎉</div>
+            <h1 class="font-black text-2xl mb-4">GAME COMPLETE!</h1>
+            ${winnerText}
+          </div>
+
+          <div class="p-4" style="max-width:28rem;margin:0 auto">
+            <div class="card p-6 mb-4" style="background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%)">
+              <h2 class="font-bold text-lg mb-4 text-center" style="color:var(--accent)">📊 FINAL STANDINGS</h2>
+              ${standings}
+            </div>
+
+            <div class="card p-4 mb-4">
+              <h3 class="font-bold mb-3" style="color:var(--accent)">📈 Game Stats</h3>
+              <div class="flex justify-around text-center">
+                <div>
+                  <div class="text-2xl font-black" style="color:var(--accent)">${players.length}</div>
+                  <div class="text-xs text-gray-500">Players</div>
+                </div>
+                <div>
+                  <div class="text-2xl font-black" style="color:var(--accent)">${maxScore}</div>
+                  <div class="text-xs text-gray-500">High Score</div>
+                </div>
+                <div>
+                  <div class="text-2xl font-black" style="color:var(--accent)">${avgScore}</div>
+                  <div class="text-xs text-gray-500">Avg Score</div>
+                </div>
+                <div>
+                  <div class="text-2xl font-black" style="color:var(--accent)">${duration}</div>
+                  <div class="text-xs text-gray-500">Duration</div>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary w-full" style="padding:1rem;font-size:1.125rem" onclick="saveAndExit()">
+              Continue to Home 🏠
+            </button>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function startFireworks() {
+      const canvas = document.getElementById('fireworks-canvas');
+      if (!canvas) return;
+
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const particleCount = 100;
+      const gravity = 0.05;
+      const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f7dc6f', '#bb8fce', '#85c1e2', '#ff8b94'];
+
+      class Particle {
+        constructor(x, y, color) {
+          this.x = x;
+          this.y = y;
+          this.color = color;
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 6 + 2;
+          this.vx = Math.cos(angle) * speed;
+          this.vy = Math.sin(angle) * speed;
+          this.alpha = 1;
+          this.decay = Math.random() * 0.015 + 0.015;
+          this.size = Math.random() * 3 + 2;
+        }
+
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          this.vy += gravity;
+          this.alpha -= this.decay;
+        }
+
+        draw() {
+          ctx.save();
+          ctx.globalAlpha = this.alpha;
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      function createFirework() {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height * 0.5 + 50;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+
+        for (let i = 0; i < particleCount; i++) {
+          particles.push(new Particle(x, y, color));
+        }
+      }
+
+      function animate() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+          particles[i].update();
+          particles[i].draw();
+
+          if (particles[i].alpha <= 0) {
+            particles.splice(i, 1);
+          }
+        }
+
+        if (S.view === 'endScreen') {
+          requestAnimationFrame(animate);
+        }
+      }
+
+      // Create initial fireworks
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => createFirework(), i * 200);
+      }
+
+      // Continue creating fireworks periodically
+      const interval = setInterval(() => {
+        if (S.view === 'endScreen') {
+          createFirework();
+        } else {
+          clearInterval(interval);
+        }
+      }, 800);
+
+      animate();
+    }
+
     function addBonus() {
       if (S.game[S.cur].scores.yahtzee === 50) {
         S.game[S.cur].scores.bonus += 100;
@@ -1870,18 +2086,27 @@
     }
     
     function finishG() {
-      const rec = {
+      // Create game record with final scores
+      S.finishedGame = {
         id: Date.now(),
         date: new Date().toISOString(),
         dur: S.start ? Math.round((Date.now() - S.start) / 60000) : null,
         players: S.game.map(p => ({pid: p.id, name: p.name, scores: {...p.scores}, total: grand(p.scores)}))
       };
-      S.history.unshift(rec);
-      save();
+      // Navigate to end screen (don't save to history yet)
+      navigateTo('endScreen');
+    }
+
+    function saveAndExit() {
+      // Save the finished game to history
+      if (S.finishedGame) {
+        S.history.unshift(S.finishedGame);
+        save();
+        S.finishedGame = null;
+      }
       clearSavedGame();
       S.game = [];
       S.cur = 0;
-      showToast('Game finished! 🎉');
       navigateTo('setup');
     }
 

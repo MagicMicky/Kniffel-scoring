@@ -1099,6 +1099,27 @@
         }
       }
       else app.innerHTML = gameView();
+
+      // Update theme-color dynamically to match header
+      updateThemeColor();
+    }
+
+    function updateThemeColor() {
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (!metaThemeColor) return;
+
+      // Get colors from CSS variables
+      const styles = getComputedStyle(document.documentElement);
+      const accentColor = styles.getPropertyValue('--accent').trim();
+      const bgColor = styles.getPropertyValue('--bg').trim();
+
+      // Match the header gradient color on game/history views
+      if (S.view === 'setup') {
+        metaThemeColor.setAttribute('content', bgColor);
+      } else {
+        // game and history views have header-gradient (accent color)
+        metaThemeColor.setAttribute('content', accentColor);
+      }
     }
 
     function navigateTo(view) {

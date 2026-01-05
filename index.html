@@ -1601,14 +1601,6 @@
         }
       }).join('');
 
-      const stand = [...S.game].map(p => ({...p, t: grand(p.scores)})).sort((a,b) => b.t - a.t).map((p,r) =>
-        '<div class="flex items-center gap-3">'+
-          '<span class="text-xl" style="width:2rem;text-align:center">'+(r===0?'🥇':r===1?'🥈':r===2?'🥉':r+1)+'</span>'+
-          '<div class="flex-1 rounded-xl bg-gray-100" style="height:2.5rem"><div class="standing-bar" style="background:'+color(p.id)+';width:'+Math.max(30,p.t/4)+'%">'+p.name+'</div></div>'+
-          '<span class="font-black text-lg" style="width:3rem;text-align:right">'+p.t+'</span>'+
-        '</div>'
-      ).join('');
-
       const gameComplete = isGameComplete();
 
       // Yahtzee bonus section - handle both modes
@@ -1649,7 +1641,6 @@
             '<div><p style="opacity:0.7" class="text-sm">Grand Total</p><p class="text-4xl font-black">'+grand(sc)+'</p></div>'+
             '<div class="text-sm" style="text-align:right;opacity:0.7"><p>Upper: '+upTot(sc)+' + '+upBonus(sc)+'</p><p>Lower: '+loTot(sc)+'</p></div>'+
           '</div></div>'+
-          '<div class="card p-4"><h3 class="font-bold mb-3 text-gray-800">🏆 Standings</h3><div class="space-y-2">'+stand+'</div></div>'+
         '</div>'+
       '</div>'+(S.picker?picker():'')+(S.finishModal?finishConfirmModal():'')+(S.earlyFinishModal?earlyFinishModal():'');
     }

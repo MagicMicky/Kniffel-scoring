@@ -12,9 +12,79 @@
   <title>Yahtzee Scorer</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      /* Surfaces */
+      --bg: #0D1A14;
+      --surface: #13231C;
+      --surface2: #182C24;
+      --border: #2A4A3A;
+
+      /* Text & icons */
+      --text: #E6F3ED;
+      --muted: #A9C5B9;
+      --icon: #A9C5B9;
+      --onAccent: #0B1611;
+      --onLink: #0B1611;
+
+      /* Brand / interaction */
+      --accent: #39C6A7;
+      --link: #7AE7D0;
+
+      /* Status */
+      --success: #34D399;
+      --warning: #F4B24A;
+      --error: #FB7185;
+
+      /* State colors */
+      --surfaceHover: #1F2E27;
+      --surfacePressed: #283730;
+      --surface2Hover: #24372F;
+      --surface2Pressed: #2D3F38;
+      --accentSubtle: #1C3E34;
+
+      /* Emphasized borders & focus */
+      --borderAccent: #2F7560;
+      --borderFocus: #328E76;
+      --focusRing: rgba(57, 198, 167, 0.35);
+      --focusRingStrong: rgba(57, 198, 167, 0.55);
+
+      /* Overlays */
+      --scrim: rgba(0, 0, 0, 0.55);
+      --tooltipBg: var(--surface2);
+      --tooltipText: var(--text);
+      --divider: var(--border);
+
+      /* Skeleton loading */
+      --skeletonBase: var(--surface2);
+      --skeletonShimmer: var(--surface2Hover);
+
+      /* Spacing scale */
+      --s1: 4px;
+      --s2: 8px;
+      --s3: 12px;
+      --s4: 16px;
+      --s5: 20px;
+      --s6: 24px;
+      --s7: 32px;
+
+      /* Radii */
+      --rSm: 10px;
+      --rMd: 14px;
+      --rLg: 18px;
+      --rPill: 999px;
+
+      /* Shadows */
+      --shadowSm: 0 6px 18px rgba(0,0,0,.28);
+      --shadowMd: 0 12px 30px rgba(0,0,0,.32);
+      --shadowLg: 0 20px 50px rgba(0,0,0,.38);
+      --innerHighlight: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0D1A14 0%, #182C24 50%, #13231C 100%);
+      background: linear-gradient(135deg, var(--bg) 0%, var(--surface2) 50%, var(--surface) 100%);
+      color: var(--text);
       min-height: 100vh;
       padding-top: env(safe-area-inset-top);
       padding-bottom: env(safe-area-inset-bottom);
@@ -121,17 +191,23 @@
     
     /* Primary action button */
     .btn-primary {
-      background: linear-gradient(to right, #39C6A7, #2DA589);
-      color: #E6F3ED;
+      background: var(--accent);
+      color: var(--onAccent);
       font-weight: 900;
       padding: 1.25rem;
-      border-radius: 1rem;
+      border-radius: var(--rMd);
       font-size: 1.25rem;
       width: 100%;
-      box-shadow: 0 4px 12px rgba(57, 198, 167, 0.35), 0 2px 4px rgba(11, 17, 12, 0.2);
+      box-shadow: var(--shadowSm);
+      border: none;
     }
-    .btn-primary:hover { box-shadow: 0 6px 16px rgba(57, 198, 167, 0.4), 0 3px 6px rgba(11, 17, 12, 0.25); }
-    .btn-primary:focus { box-shadow: 0 0 0 2px rgba(57, 198, 167, 0.3), 0 0 12px rgba(57, 198, 167, 0.25), 0 4px 12px rgba(57, 198, 167, 0.35); }
+    .btn-primary:hover {
+      box-shadow: 0 8px 24px rgba(57, 198, 167, 0.4);
+      transform: translateY(-1px);
+    }
+    .btn-primary:focus {
+      box-shadow: 0 0 0 2px var(--focusRing), 0 0 12px var(--focusRing), var(--shadowSm);
+    }
     
     /* Resume game button */
     .btn-resume {
@@ -206,14 +282,18 @@
       background: #182C24;
       color: #E6F3ED;
     }
-    .input:focus { outline: none; border-color: #39C6A7; box-shadow: 0 0 0 2px rgba(57, 198, 167, 0.3), 0 0 12px rgba(57, 198, 167, 0.2); }
-    
+    .input:focus {
+      outline: none;
+      border-color: var(--borderFocus);
+      box-shadow: 0 0 0 2px var(--focusRing), 0 0 12px var(--focusRing);
+    }
+
     .card {
-      background: #13231C;
-      border-radius: 1rem;
-      box-shadow: 0 10px 15px -3px rgba(11, 17, 12, 0.4), 0 4px 6px -2px rgba(33, 64, 51, 0.1);
+      background: var(--surface);
+      border-radius: var(--rLg);
+      box-shadow: var(--shadowMd), var(--innerHighlight);
       overflow: hidden;
-      border: 1px solid #2A4A3A;
+      border: 1px solid var(--border);
     }
     
     .header-gradient { background: linear-gradient(to right, #39C6A7, #2DA589); }

@@ -1626,7 +1626,7 @@
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
           '<button class="btn-text text-white text-lg font-medium" onclick="pauseG()">← Back</button>'+
           '<h1 class="font-black text-lg">'+(isPlayMode?'🎲 YAHTZEE':'📝 SCORING')+'</h1>'+
-          '<button class="btn btn-small '+(gameComplete?'btn-green':'btn-orange')+'" onclick="'+(gameComplete?'finishG()':'saveG()')+'">'+(gameComplete?'Finish ✓':'Save')+'</button>'+
+          '<button class="btn btn-small btn-green" onclick="finishG()">Finish ✓</button>'+
         '</div></div>'+
         '<div class="sticky-tabs" style="background:var(--surface);box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid var(--border)"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
         '<div class="p-3" style="max-width:28rem;margin:0 auto">'+
@@ -1651,7 +1651,7 @@
           '</div></div>'+
           '<div class="card p-4"><h3 class="font-bold mb-3 text-gray-800">🏆 Standings</h3><div class="space-y-2">'+stand+'</div></div>'+
         '</div>'+
-      '</div>'+(S.picker?picker():'')+(S.finishModal?finishConfirmModal():'');
+      '</div>'+(S.picker?picker():'')+(S.finishModal?finishConfirmModal():'')+(S.earlyFinishModal?earlyFinishModal():'');
     }
 
     function finishConfirmModal() {
@@ -1663,9 +1663,49 @@
         '</div>'+
         '<div class="flex flex-col gap-3">'+
           '<button class="btn btn-green font-bold py-4 px-4 rounded-xl w-full text-lg" onclick="confirmFinish()">🏆 Reveal Winners!</button>'+
-          '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.finishModal=false;R()">Keep Editing</button>'+
+          '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.finishModal=false;R()">Keep Playing</button>'+
         '</div>'+
       '</div></div>';
+    }
+
+    function earlyFinishModal() {
+      const emptyCount = S.game.reduce((sum, p) => {
+        const scores = p.scores;
+        return sum + Object.keys(scores).filter(k => k !== 'bonus' && scores[k] === null).length;
+      }, 0);
+
+      return '<div class="modal-overlay" onclick="event.stopPropagation()"><div class="modal" onclick="event.stopPropagation()">'+
+        '<div class="text-center mb-4">'+
+          '<div class="text-5xl mb-3">⚠️</div>'+
+          '<h3 class="text-2xl font-black text-gray-800 mb-2">Game Not Complete</h3>'+
+          '<p class="text-gray-600 mb-2">There are still <span class="font-bold text-red-600">'+emptyCount+' empty scores</span>.</p>'+
+          '<p class="text-gray-500 text-sm">Are you sure you want to finish early?</p>'+
+        '</div>'+
+        '<div class="flex flex-col gap-3">'+
+          '<button class="btn btn-orange font-bold py-4 px-4 rounded-xl w-full text-lg" onclick="confirmEarlyFinish()">Finish Anyway</button>'+
+          '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.earlyFinishModal=false;R()">Keep Playing</button>'+
+        '</div>'+
+      '</div></div>';
+    }
+
+    function confirmEarlyFinish() {
+      // Fill remaining null scores with 0
+      S.game.forEach(p => {
+        Object.keys(p.scores).forEach(k => {
+          if (k !== 'bonus' && p.scores[k] === null) {
+            p.scores[k] = 0;
+          }
+        });
+      });
+
+      // Haptic feedback
+      if (navigator.vibrate) {
+        navigator.vibrate([100, 50, 100]);
+      }
+
+      S.earlyFinishModal = false;
+      S.finishModal = true;
+      R();
     }
 
     function picker() {
@@ -1974,42 +2014,37 @@
       const maxScore = players[0].total;
       const winners = players.filter(p => p.total === maxScore);
 
-      // Reverse for bottom-up reveal
-      const playersReversed = [...players].reverse();
-
       // Determine what to show
       const isRevealing = !S.revealComplete;
       const visibleCount = S.revealComplete ? players.length : Math.max(0, S.revealIndex + 1);
 
-      // Winner announcement - only show when complete
-      const winnerSection = S.revealComplete ? (winners.length === 1
+      // Winner announcement - fade in when complete
+      const winnerOpacity = S.revealComplete ? '1' : '0';
+      const winnerSection = winners.length === 1
         ? `<div class="text-4xl font-black mb-2" style="color:${color(winners[0].pid)}">${winners[0].name}</div><div class="text-xl text-gray-600">is the Champion!</div>`
-        : `<div class="text-3xl font-black mb-2 text-yellow-600">It's a Tie!</div><div class="text-lg text-gray-600">${winners.map(w => w.name).join(' & ')}</div>`)
-        : `<div class="text-2xl text-gray-400 animate-pulse">Revealing...</div>`;
+        : `<div class="text-3xl font-black mb-2 text-yellow-600">It's a Tie!</div><div class="text-lg text-gray-600">${winners.map(w => w.name).join(' & ')}</div>`;
 
-      // Build standings - show from last place up
-      const standings = playersReversed.map((p, revIdx) => {
-        const actualIdx = players.length - 1 - revIdx; // Convert back to actual position
-        const medal = actualIdx === 0 ? '🥇' : actualIdx === 1 ? '🥈' : actualIdx === 2 ? '🥉' : (actualIdx + 1);
+      // Build ALL player slots upfront (reserve space)
+      const standings = players.map((p, idx) => {
+        const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : (idx + 1);
         const isWinner = p.total === maxScore;
-        const isVisible = revIdx < visibleCount;
+        const isVisible = idx < visibleCount;
 
-        if (!isVisible) return '';
-
-        return `<div class="flex items-center gap-3 mb-3 ${isWinner ? 'winner-row' : ''} reveal-slide-up">
+        return `<div class="flex items-center gap-3 mb-3 ${isWinner && S.revealComplete ? 'winner-row' : ''}" style="opacity:${isVisible ? '1' : '0'};transition:opacity 0.4s ease-out">
           <span class="text-2xl" style="width:2.5rem;text-align:center">${medal}</span>
           <div class="flex-1 rounded-xl bg-gray-100 overflow-hidden" style="height:3.5rem">
-            <div class="standing-bar-end" style="background:${color(p.pid)};width:${Math.max(30, (p.total / maxScore) * 100)}%">
+            <div class="standing-bar-end" style="background:${color(p.pid)};width:${isVisible ? Math.max(30, (p.total / maxScore) * 100) : '0'}%">
               <span class="font-bold text-white px-3">${p.name}</span>
             </div>
           </div>
           <span class="font-black text-2xl" style="width:4rem;text-align:right;color:${color(p.pid)}">${p.total}</span>
         </div>`;
-      }).reverse().join(''); // Reverse back to show winners at top
+      }).join('');
 
       // Game stats
       const duration = S.finishedGame.dur ? `${S.finishedGame.dur} min` : 'N/A';
       const avgScore = Math.round(players.reduce((sum, p) => sum + p.total, 0) / players.length);
+      const statsOpacity = S.revealComplete ? '1' : '0';
 
       return `<div style="min-height:100vh;background:var(--bg);position:relative;overflow:hidden" onclick="${isRevealing ? 'skipReveal()' : ''}">
         <canvas id="fireworks-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1"></canvas>
@@ -2018,17 +2053,24 @@
           <div class="header-gradient text-white p-6 text-center" style="padding-top:3rem;padding-bottom:3rem">
             <div class="text-6xl mb-4 animate-bounce">🎉</div>
             <h1 class="font-black text-2xl mb-4">GAME COMPLETE!</h1>
-            ${winnerSection}
+            <div style="min-height:4rem;display:flex;flex-direction:column;align-items:center;justify-content:center">
+              <div style="opacity:${isRevealing ? '1' : '0'};transition:opacity 0.3s">
+                <div class="text-2xl text-gray-400 animate-pulse">Revealing...</div>
+              </div>
+              <div style="opacity:${winnerOpacity};transition:opacity 0.8s ease-in;${isRevealing ? 'position:absolute;' : ''}">
+                ${winnerSection}
+              </div>
+            </div>
             ${isRevealing ? '<p class="text-sm text-white mt-3" style="opacity:0.7">Tap to skip</p>' : ''}
           </div>
 
           <div class="p-4" style="max-width:28rem;margin:0 auto">
             <div class="card p-6 mb-4" style="background:linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%)">
               <h2 class="font-bold text-lg mb-4 text-center" style="color:var(--accent)">📊 FINAL STANDINGS</h2>
-              ${standings || '<div class="text-center text-gray-400">Preparing results...</div>'}
+              ${standings}
             </div>
 
-            ${S.revealComplete ? `<div class="card p-4 mb-4">
+            <div class="card p-4 mb-4" style="opacity:${statsOpacity};transition:opacity 1s ease-in 0.3s">
               <h3 class="font-bold mb-3" style="color:var(--accent)">📈 Game Stats</h3>
               <div class="flex justify-around text-center">
                 <div>
@@ -2050,9 +2092,9 @@
               </div>
             </div>
 
-            <button class="btn btn-primary w-full" style="padding:1rem;font-size:1.125rem" onclick="event.stopPropagation();saveAndExit()">
+            <button class="btn btn-primary w-full" style="padding:1rem;font-size:1.125rem;opacity:${statsOpacity};transition:opacity 1s ease-in 0.5s" onclick="event.stopPropagation();saveAndExit()">
               Continue to Home 🏠
-            </button>` : ''}
+            </button>
           </div>
         </div>
       </div>`;
@@ -2069,7 +2111,8 @@
       if (!S.finishedGame || S.revealComplete) return;
 
       const totalPlayers = S.finishedGame.players.length;
-      const delayPerPlayer = Math.min(400, 2000 / totalPlayers); // Max 2 seconds total
+      // Slower reveal: 600ms per player, or spread across 3 seconds max
+      const delayPerPlayer = Math.max(600, Math.min(1000, 3000 / totalPlayers));
 
       function revealNext() {
         if (S.revealComplete || S.view !== 'endScreen') return;
@@ -2078,11 +2121,18 @@
 
         if (S.revealIndex >= totalPlayers - 1) {
           // Final reveal - show winner
-          S.revealComplete = true;
-          // Extra haptic for winner reveal
-          if (navigator.vibrate) {
-            navigator.vibrate([200, 100, 200]);
-          }
+          setTimeout(() => {
+            if (S.view === 'endScreen') {
+              S.revealComplete = true;
+              // Extra haptic for winner reveal
+              if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200]);
+              }
+              R();
+            }
+          }, 400); // Pause before showing winner
+          R();
+          return;
         }
 
         R();
@@ -2093,7 +2143,7 @@
       }
 
       // Start the reveal sequence
-      setTimeout(revealNext, 500); // Initial delay
+      setTimeout(revealNext, 800); // Longer initial delay
     }
 
     function startFireworks() {
@@ -2208,8 +2258,14 @@
     }
     
     function finishG() {
-      // Show confirmation modal
-      S.finishModal = true;
+      // Check if game is actually complete
+      if (isGameComplete()) {
+        // Game is complete - show celebration modal
+        S.finishModal = true;
+      } else {
+        // Game not complete - show early finish warning modal
+        S.earlyFinishModal = true;
+      }
       R();
     }
 

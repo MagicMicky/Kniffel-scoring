@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kniffel-v40';
+const CACHE_NAME = 'kniffel-v41';
 const urlsToCache = [
   './',
   './index.html',

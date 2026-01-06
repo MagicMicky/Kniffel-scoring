@@ -698,6 +698,8 @@
       width: 70%;
       min-width: 16rem;
       justify-content: flex-start;
+      background: var(--surface2);
+      border: 1px solid var(--border);
     }
     .player-card:active {
       transform: scale(0.98);
@@ -712,6 +714,10 @@
       font-size: 1.25rem;
       font-weight: 900;
       text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .player-name-inactive {
+      color: var(--text);
+      text-shadow: none;
     }
     .player-card-stats {
       display: flex;
@@ -1680,10 +1686,10 @@
         const isCurrent = i === S.cur;
 
         if (!isCurrent) {
-          // Inactive players - show name with gradient, no score
-          return '<div class="player-card player-card-inactive" style="background:linear-gradient(135deg, '+color(p.id)+' 0%, '+color(p.id)+'dd 100%)" onclick="switchPlayer('+i+')">' +
+          // Inactive players - neutral background with colored left border accent
+          return '<div class="player-card player-card-inactive" style="border-left:4px solid '+color(p.id)+'" onclick="switchPlayer('+i+')">' +
             '<div class="player-card-header">' +
-              '<h3 class="player-name">'+p.name+'</h3>' +
+              '<h3 class="player-name player-name-inactive">'+p.name+'</h3>' +
             '</div>' +
           '</div>';
         }

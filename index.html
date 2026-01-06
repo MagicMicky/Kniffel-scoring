@@ -2237,14 +2237,33 @@
     }
 
     function next() {
+      // Save current scroll position before switching
+      const carousel = document.getElementById('playerCarousel');
+      const savedScrollLeft = carousel ? carousel.scrollLeft : 0;
+
       S.cur = (S.cur + 1) % S.game.length;
       R();
-      // Smoothly scroll to the new active player after render
-      setTimeout(scrollCarouselToActive, 50);
+
+      // Ensure scroll is restored before animating
+      requestAnimationFrame(() => {
+        const newCarousel = document.getElementById('playerCarousel');
+        if (newCarousel && savedScrollLeft > 0) {
+          // First restore the previous scroll position instantly
+          newCarousel.scrollLeft = savedScrollLeft;
+        }
+        // Then smoothly scroll to the new active player
+        requestAnimationFrame(() => {
+          scrollCarouselToActive();
+        });
+      });
     }
 
     function switchPlayer(index) {
       if (index === S.cur) return; // Already on this player
+
+      // Save current scroll position before switching
+      const carousel = document.getElementById('playerCarousel');
+      const savedScrollLeft = carousel ? carousel.scrollLeft : 0;
 
       // In play mode, reset dice when switching players
       if (S.mode === 'play') {
@@ -2255,8 +2274,19 @@
       saveCurrentGame();
       R();
 
-      // Smoothly scroll to the new active player after render
-      setTimeout(scrollCarouselToActive, 50);
+      // Ensure scroll is restored before animating
+      requestAnimationFrame(() => {
+        const newCarousel = document.getElementById('playerCarousel');
+        if (newCarousel && savedScrollLeft > 0) {
+          // First restore the previous scroll position instantly
+          newCarousel.scrollLeft = savedScrollLeft;
+        }
+        // Then smoothly scroll to the new active player
+        requestAnimationFrame(() => {
+          scrollCarouselToActive();
+        });
+      });
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 

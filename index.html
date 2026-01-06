@@ -1345,6 +1345,13 @@
     }
 
     function R() {
+      // Save carousel scroll position before re-render (to prevent jumping)
+      let savedScrollLeft = 0;
+      const carousel = document.getElementById('playerCarousel');
+      if (carousel) {
+        savedScrollLeft = carousel.scrollLeft;
+      }
+
       const app = document.getElementById('app');
       if (S.view === 'setup') app.innerHTML = setup();
       else if (S.view === 'history') {
@@ -1364,8 +1371,11 @@
       }
       else {
         app.innerHTML = gameView();
-        // Scroll carousel to active player after render
-        setTimeout(scrollCarouselToActive, 50);
+        // Restore scroll position immediately (no animation) to prevent jumping
+        const newCarousel = document.getElementById('playerCarousel');
+        if (newCarousel && savedScrollLeft > 0) {
+          newCarousel.scrollLeft = savedScrollLeft;
+        }
       }
 
       // Update theme-color dynamically to match header
@@ -2229,6 +2239,7 @@
     function next() {
       S.cur = (S.cur + 1) % S.game.length;
       R();
+      // Smoothly scroll to the new active player after render
       setTimeout(scrollCarouselToActive, 50);
     }
 
@@ -2244,7 +2255,7 @@
       saveCurrentGame();
       R();
 
-      // Scroll carousel to active player after render
+      // Smoothly scroll to the new active player after render
       setTimeout(scrollCarouselToActive, 50);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }

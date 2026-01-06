@@ -326,6 +326,9 @@
       overflow: hidden;
       border: 1px solid var(--border);
     }
+    .score-section-card {
+      min-height: 28rem;
+    }
     
     .header-gradient { background: linear-gradient(to right, var(--accent), var(--accentDark)); }
     .upper-gradient { background: linear-gradient(to right, var(--accent), var(--accentDark)); }
@@ -656,6 +659,7 @@
       box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
       border-bottom: 1px solid var(--border);
       overflow: hidden;
+      height: 7rem;
     }
     .player-carousel {
       display: flex;
@@ -680,19 +684,23 @@
       cursor: pointer;
       transition: all 0.2s;
       color: white;
-      min-height: 7rem;
+      height: 5.5rem;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
     }
     .player-card-active {
       width: 70%;
       min-width: 16rem;
+      justify-content: space-between;
     }
     .player-card-inactive {
-      width: 40%;
-      min-width: 10rem;
-      opacity: 0.8;
+      width: 30%;
+      min-width: 8rem;
+      background: var(--surface2) !important;
+      border: 1px solid var(--border);
+      justify-content: center;
+      align-items: center;
     }
     .player-card:active {
       transform: scale(0.98);
@@ -707,6 +715,12 @@
       font-size: 1.25rem;
       font-weight: 900;
       text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .player-name-inactive {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--textMuted);
+      text-align: center;
     }
     .player-card-stats {
       display: flex;
@@ -1672,37 +1686,28 @@
 
       // New player cards carousel
       const playerCards = S.game.map((p,i) => {
-        const pScores = p.scores;
-        const upperTotal = upTot(pScores);
-        const upperBonusVal = upBonus(pScores);
-        const lowerTotal = loTot(pScores);
-        const grandTotal = grand(pScores);
-        const turnNum = Math.floor(Object.keys(pScores).filter(k => k !== 'bonus' && pScores[k] !== null).length / S.game.length) + 1;
         const isCurrent = i === S.cur;
 
-        return '<div class="player-card '+(isCurrent?'player-card-active':'player-card-inactive')+'" style="background:linear-gradient(135deg, '+color(p.id)+' 0%, '+color(p.id)+'dd 100%)" onclick="'+(isCurrent?'showPlayerDetails()':'switchPlayer('+i+')')+'">' +
+        if (!isCurrent) {
+          // Inactive players - just show name, no colors
+          return '<div class="player-card player-card-inactive" onclick="switchPlayer('+i+')">' +
+            '<h3 class="player-name-inactive">'+p.name+'</h3>' +
+          '</div>';
+        }
+
+        // Active player - show full stats
+        const pScores = p.scores;
+        const grandTotal = grand(pScores);
+
+        return '<div class="player-card player-card-active" style="background:linear-gradient(135deg, '+color(p.id)+' 0%, '+color(p.id)+'dd 100%)" onclick="showPlayerDetails()">' +
           '<div class="player-card-header">' +
             '<h3 class="player-name">'+p.name+'</h3>' +
-            (isCurrent ? '<div class="pulse-dot-small"></div>' : '') +
+            '<div class="pulse-dot-small"></div>' +
           '</div>' +
           '<div class="player-card-stats">' +
             '<div class="stat-main">' +
               '<div class="stat-label">Total</div>' +
               '<div class="stat-value-large">'+grandTotal+'</div>' +
-            '</div>' +
-            '<div class="stat-row">' +
-              '<div class="stat-item">' +
-                '<div class="stat-label-sm">Upper</div>' +
-                '<div class="stat-value-sm">'+upperTotal+(upperBonusVal ? '+35' : '')+'</div>' +
-              '</div>' +
-              '<div class="stat-item">' +
-                '<div class="stat-label-sm">Lower</div>' +
-                '<div class="stat-value-sm">'+lowerTotal+'</div>' +
-              '</div>' +
-              '<div class="stat-item">' +
-                '<div class="stat-label-sm">Turn</div>' +
-                '<div class="stat-value-sm">'+turnNum+'</div>' +
-              '</div>' +
             '</div>' +
           '</div>' +
         '</div>';
@@ -1843,11 +1848,11 @@
 
       // Show only selected section
       const scoreSection = S.scoreSection === 'upper'
-        ? '<div class="card">'+
+        ? '<div class="card score-section-card">'+
             up+
             '<div class="flex items-center justify-between px-4 py-3" style="background:var(--surface2);border-top:1px solid var(--border)"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
           '</div>'
-        : '<div class="card">'+
+        : '<div class="card score-section-card">'+
             lo+
             yahtzeeBonus+
           '</div>';

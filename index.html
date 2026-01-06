@@ -695,12 +695,9 @@
       justify-content: space-between;
     }
     .player-card-inactive {
-      width: 30%;
-      min-width: 8rem;
-      background: var(--surface2) !important;
-      border: 1px solid var(--border);
-      justify-content: center;
-      align-items: center;
+      width: 70%;
+      min-width: 16rem;
+      justify-content: flex-start;
     }
     .player-card:active {
       transform: scale(0.98);
@@ -715,12 +712,6 @@
       font-size: 1.25rem;
       font-weight: 900;
       text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .player-name-inactive {
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: var(--textMuted);
-      text-align: center;
     }
     .player-card-stats {
       display: flex;
@@ -1689,9 +1680,11 @@
         const isCurrent = i === S.cur;
 
         if (!isCurrent) {
-          // Inactive players - just show name, no colors
-          return '<div class="player-card player-card-inactive" onclick="switchPlayer('+i+')">' +
-            '<h3 class="player-name-inactive">'+p.name+'</h3>' +
+          // Inactive players - show name with gradient, no score
+          return '<div class="player-card player-card-inactive" style="background:linear-gradient(135deg, '+color(p.id)+' 0%, '+color(p.id)+'dd 100%)" onclick="switchPlayer('+i+')">' +
+            '<div class="player-card-header">' +
+              '<h3 class="player-name">'+p.name+'</h3>' +
+            '</div>' +
           '</div>';
         }
 

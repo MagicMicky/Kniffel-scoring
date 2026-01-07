@@ -9,7 +9,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192-v2.png">
   <title>Schnitzel - Your Yahtzee Companion</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -1479,7 +1479,7 @@
         : '<div class="glass rounded-xl p-3 mb-4"><p class="text-white text-sm font-medium">📝 Score Mode</p><p class="text-purple-200 text-xs mt-1">Use your own dice. Manually enter scores as you play.</p></div>';
 
       return '<div class="container" style="min-height:100vh">'+
-        '<div class="text-center mb-6"><div class="mb-2"><img src="icon-192.png" alt="Schnitzel" style="width:96px;height:96px;margin:0 auto;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div><h1 class="text-4xl font-black text-white">SCHNITZEL</h1><p class="text-purple-200 text-sm">your Yahtzee companion app</p></div>'+
+        '<div class="text-center mb-6"><div class="mb-2"><img src="icon-192-v2.png" alt="Schnitzel" style="width:96px;height:96px;margin:0 auto;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div><h1 class="text-4xl font-black text-white">SCHNITZEL</h1><p class="text-purple-200 text-sm">your Yahtzee companion app</p></div>'+
         modeToggle+modeDesc+
         (S.savedGame ? '<div class="glass rounded-2xl p-4 mb-4"><p class="text-white font-bold mb-2">📌 Saved Game '+(S.savedGame.mode === 'play' ? '🎲' : '📝')+'</p><p class="text-purple-200 text-sm">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">Saved '+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
         resumeBtn+

@@ -326,6 +326,9 @@
       overflow: hidden;
       border: 1px solid var(--border);
     }
+    .score-section-card {
+      min-height: 28rem;
+    }
     
     .header-gradient { background: linear-gradient(to right, var(--accent), var(--accentDark)); }
     .upper-gradient { background: linear-gradient(to right, var(--accent), var(--accentDark)); }
@@ -635,9 +638,183 @@
       background: var(--link);
       animation: pulse 1.5s infinite;
     }
+    .pulse-dot-small {
+      width: 0.375rem;
+      height: 0.375rem;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      animation: pulse 1.5s infinite;
+    }
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    /* Player Carousel */
+    .player-carousel-container {
+      position: sticky;
+      top: 2.75rem;
+      z-index: 10;
+      background: var(--surface);
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      height: 7rem;
+    }
+    .player-carousel {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .player-carousel::-webkit-scrollbar {
+      display: none;
+    }
+    .player-card {
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -1px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: all 0.2s;
+      color: white;
+      height: 5.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .player-card-active {
+      width: 70%;
+      min-width: 16rem;
+      justify-content: space-between;
+    }
+    .player-card-inactive {
+      width: 70%;
+      min-width: 16rem;
+      justify-content: flex-start;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+    }
+    .player-card:active {
+      transform: scale(0.98);
+    }
+    .player-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .player-name {
+      font-size: 1.25rem;
+      font-weight: 900;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .player-name-inactive {
+      color: var(--text);
+      text-shadow: none;
+    }
+    .player-card-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .stat-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      opacity: 0.9;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat-value-large {
+      font-size: 2rem;
+      font-weight: 900;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .stat-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.25rem;
+    }
+    .stat-item {
+      flex: 1;
+      background: rgba(255,255,255,0.15);
+      border-radius: 0.5rem;
+      padding: 0.375rem 0.5rem;
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+    .stat-label-sm {
+      font-size: 0.625rem;
+      opacity: 0.85;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat-value-sm {
+      font-size: 0.875rem;
+      font-weight: 900;
+      margin-top: 0.125rem;
+    }
+
+    /* Section Tabs */
+    .section-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      background: var(--surface2);
+      padding: 0.375rem;
+      border-radius: var(--rLg);
+      border: 1px solid var(--border);
+    }
+    .section-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.625rem 0.75rem;
+      border-radius: var(--rMd);
+      border: none;
+      background: transparent;
+      color: var(--textMuted);
+      font-weight: 600;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+    .section-tab-active {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadowSm), var(--innerHighlight);
+    }
+    .section-tab-label {
+      font-size: 0.875rem;
+    }
+    .section-tab-badge {
+      font-size: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: var(--rPill);
+      background: var(--surface2);
+      color: var(--textMuted);
+      font-weight: 700;
+    }
+    .section-tab-active .section-tab-badge {
+      background: var(--link);
+      color: var(--bg);
+    }
+    .section-tab-badge-success {
+      background: var(--link) !important;
+      color: var(--bg) !important;
     }
 
     /* Version footer */
@@ -695,7 +872,7 @@
     .dice-area {
       background: linear-gradient(135deg, var(--surface2) 0%, var(--border) 100%);
       border-radius: 1rem;
-      padding: 1.25rem;
+      padding: 1rem;
       margin-bottom: 1rem;
       border: 1px solid var(--border);
     }
@@ -703,17 +880,17 @@
       display: flex;
       justify-content: center;
       gap: 0.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
     .die {
-      width: 3.5rem;
-      height: 3.5rem;
+      width: 3rem;
+      height: 3rem;
       background: white;
       border-radius: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
+      font-size: 1.75rem;
       font-weight: 900;
       color: var(--onAccent);
       cursor: pointer;
@@ -774,12 +951,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.625rem;
       color: var(--text);
     }
     .roll-count {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.875rem;
     }
     .shake-hint {
       font-size: 0.75rem;
@@ -1168,6 +1345,13 @@
     }
 
     function R() {
+      // Save carousel scroll position before re-render (to prevent jumping)
+      let savedScrollLeft = 0;
+      const carousel = document.getElementById('playerCarousel');
+      if (carousel) {
+        savedScrollLeft = carousel.scrollLeft;
+      }
+
       const app = document.getElementById('app');
       if (S.view === 'setup') app.innerHTML = setup();
       else if (S.view === 'history') {
@@ -1185,7 +1369,14 @@
           animateReveal();
         }, 100);
       }
-      else app.innerHTML = gameView();
+      else {
+        app.innerHTML = gameView();
+        // Restore scroll position immediately (no animation) to prevent jumping
+        const newCarousel = document.getElementById('playerCarousel');
+        if (newCarousel && savedScrollLeft > 0) {
+          newCarousel.scrollLeft = savedScrollLeft;
+        }
+      }
 
       // Update theme-color dynamically to match header
       updateThemeColor();
@@ -1497,9 +1688,39 @@
       const possibleScores = isPlayMode && S.rollCount > 0 ? getPossibleScores(S.dice) : {};
       const canSelectScore = isPlayMode && S.rollCount > 0 && !S.rolling;
 
-      const tabs = S.game.map((p,i) =>
-        '<button class="player-tab flex-shrink-0 '+(i===S.cur?'player-tab-active':'player-tab-inactive')+'" style="'+(i===S.cur?'background:'+color(p.id):'')+'" onclick="switchPlayer('+i+')">'+p.name+': '+grand(p.scores)+'</button>'
-      ).join('');
+      // Initialize score section view if not set
+      if (S.scoreSection === undefined) S.scoreSection = 'upper';
+
+      // New player cards carousel
+      const playerCards = S.game.map((p,i) => {
+        const isCurrent = i === S.cur;
+
+        if (!isCurrent) {
+          // Inactive players - neutral background with colored left border accent
+          return '<div class="player-card player-card-inactive" style="border-left:4px solid '+color(p.id)+'" onclick="switchPlayer('+i+')">' +
+            '<div class="player-card-header">' +
+              '<h3 class="player-name player-name-inactive">'+p.name+'</h3>' +
+            '</div>' +
+          '</div>';
+        }
+
+        // Active player - show full stats
+        const pScores = p.scores;
+        const grandTotal = grand(pScores);
+
+        return '<div class="player-card player-card-active" style="background:linear-gradient(135deg, '+color(p.id)+' 0%, '+color(p.id)+'dd 100%)" onclick="showPlayerDetails()">' +
+          '<div class="player-card-header">' +
+            '<h3 class="player-name">'+p.name+'</h3>' +
+            '<div class="pulse-dot-small"></div>' +
+          '</div>' +
+          '<div class="player-card-stats">' +
+            '<div class="stat-main">' +
+              '<div class="stat-label">Total</div>' +
+              '<div class="stat-value-large">'+grandTotal+'</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
 
       // Dice area for play mode
       const diceArea = isPlayMode ? '<div class="dice-area">'+
@@ -1509,7 +1730,7 @@
             '<span class="roll-count">'+(S.rollCount === 0 ? 'Roll to start!' : 'Roll '+S.rollCount+' of 3')+'</span>'+
             '<span class="shake-hint">'+(S.shakeEnabled ? '📳 Shake enabled' : 'Tap button to roll')+'</span>'+
           '</div>'+
-          '<div class="dice-container" style="padding-bottom:1.5rem">'+
+          '<div class="dice-container">'+
             S.dice.map((d, i) =>
               '<div class="die '+(S.held[i]?'held':'')+(S.rolling && !S.held[i]?' rolling':'')+'" onclick="toggleHold('+i+')">'+dieFace(d)+'</div>'
             ).join('')+
@@ -1517,7 +1738,7 @@
           '<button class="roll-btn" onclick="rollDice()" '+(S.rollCount >= 3 || S.rolling ? 'disabled' : '')+'>'+
             (S.rollCount === 0 ? '🎲 Roll Dice!' : S.rollCount >= 3 ? 'Select a score below' : '🎲 Roll Again ('+S.rollCount+'/3)')+
           '</button>'+
-          (S.rollCount > 0 && !S.rolling ? '<p class="text-center text-xs mt-2" style="color:rgba(255,255,255,0.6)">Tap dice to hold/release</p>' : '')
+          (S.rollCount > 0 && !S.rolling ? '<p class="text-center text-xs" style="color:rgba(255,255,255,0.6);margin-top:0.5rem">Tap dice to hold/release</p>' : '')
         :
           // Turn not started - show start button
           '<div class="text-center py-4">'+
@@ -1622,35 +1843,101 @@
             '<div class="flex items-center gap-2"><span class="font-black text-xl text-yellow-600">+'+sc.bonus+'</span><button class="btn btn-small '+(sc.yahtzee===50?'btn-yellow':'btn-gray-dark')+' font-bold" onclick="addBonus()" '+(sc.yahtzee!==50?'disabled':'')+'>+100</button></div>'+
           '</div>';
 
+      // Section toggle tabs for scores
+      const sectionTabs = '<div class="section-tabs">'+
+        '<button class="section-tab '+(S.scoreSection==='upper'?'section-tab-active':'')+'" onclick="S.scoreSection=\'upper\';R()">'+
+          '<span class="section-tab-label">Upper Section</span>'+
+          '<span class="section-tab-badge '+(upTot(sc)>=63?'section-tab-badge-success':'')+'">'+upTot(sc)+'/63</span>'+
+        '</button>'+
+        '<button class="section-tab '+(S.scoreSection==='lower'?'section-tab-active':'')+'" onclick="S.scoreSection=\'lower\';R()">'+
+          '<span class="section-tab-label">Lower Section</span>'+
+          '<span class="section-tab-badge">'+loTot(sc)+'</span>'+
+        '</button>'+
+      '</div>';
+
+      // Show only selected section
+      const scoreSection = S.scoreSection === 'upper'
+        ? '<div class="card score-section-card">'+
+            up+
+            '<div class="flex items-center justify-between px-4 py-3" style="background:var(--surface2);border-top:1px solid var(--border)"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
+          '</div>'
+        : '<div class="card score-section-card">'+
+            lo+
+            yahtzeeBonus+
+          '</div>';
+
       return '<div style="min-height:100vh;background:var(--bg);padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
           '<button class="btn-text text-white text-lg font-medium" onclick="pauseG()">← Back</button>'+
           '<h1 class="font-black text-lg">'+(isPlayMode?'🎲 YAHTZEE':'📝 SCORING')+'</h1>'+
           '<button class="btn btn-small btn-green" onclick="finishG()">Finish ✓</button>'+
         '</div></div>'+
-        '<div class="sticky-tabs" style="background:var(--surface);box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid var(--border)"><div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">'+tabs+'</div></div>'+
-        '<div class="p-3" style="max-width:28rem;margin:0 auto">'+
-          '<div class="card p-4 mb-4" style="border-left:4px solid '+color(cp.id)+'">'+
-            '<div class="current-turn-indicator"><div class="pulse-dot"></div><span class="text-gray-500 text-sm font-medium">Current Turn</span></div>'+
-            '<h2 class="font-black text-2xl" style="color:'+color(cp.id)+'">'+cp.name+'</h2>'+
-          '</div>'+
-          diceArea+
-          '<div class="card mb-4">'+
-            '<div class="upper-gradient text-white px-4 py-3 flex justify-between items-center"><span class="font-bold">Upper Section</span><span class="text-sm px-2 py-1 rounded-full '+(upTot(sc)>=63?'glass" style="background:var(--link);color:var(--bg)':'glass')+'">'+upTot(sc)+'/63</span></div>'+
-            up+
-            '<div class="flex items-center justify-between px-4 py-3" style="background:var(--surface2);border-top:1px solid var(--border)"><span class="font-bold text-blue-600">Upper Bonus</span><span class="font-black text-xl '+(upBonus(sc)?'text-green-600':'text-gray-400')+'">'+(upBonus(sc)?'+35 ✓':'0')+'</span></div>'+
-          '</div>'+
-          '<div class="card mb-4">'+
-            '<div class="lower-gradient text-white px-4 py-3 font-bold">Lower Section</div>'+
-            lo+
-            yahtzeeBonus+
-          '</div>'+
-          '<div class="total-gradient text-white rounded-2xl shadow-lg p-5 mb-4"><div class="flex justify-between items-center">'+
-            '<div><p style="opacity:0.7" class="text-sm">Grand Total</p><p class="text-4xl font-black">'+grand(sc)+'</p></div>'+
-            '<div class="text-sm" style="text-align:right;opacity:0.7"><p>Upper: '+upTot(sc)+' + '+upBonus(sc)+'</p><p>Lower: '+loTot(sc)+'</p></div>'+
-          '</div></div>'+
+        '<div class="player-carousel-container">'+
+          '<div class="player-carousel" id="playerCarousel">'+playerCards+'</div>'+
         '</div>'+
-      '</div>'+(S.picker?picker():'')+(S.finishModal?finishConfirmModal():'')+(S.earlyFinishModal?earlyFinishModal():'');
+        '<div class="p-3" style="max-width:28rem;margin:0 auto">'+
+          diceArea+
+          sectionTabs+
+          scoreSection+
+        '</div>'+
+      '</div>'+(S.picker?picker():'')+(S.finishModal?finishConfirmModal():'')+(S.earlyFinishModal?earlyFinishModal():'')+(S.playerDetailsModal?playerDetailsModal():'');
+    }
+
+    function showPlayerDetails() {
+      S.playerDetailsModal = true;
+      R();
+    }
+
+    function playerDetailsModal() {
+      const cp = S.game[S.cur];
+      const sc = cp.scores;
+      const upperTotal = upTot(sc);
+      const upperBonusVal = upBonus(sc);
+      const lowerTotal = loTot(sc);
+      const grandTotal = grand(sc);
+      const filledScores = Object.keys(sc).filter(k => k !== 'bonus' && sc[k] !== null).length;
+      const totalScores = UPPER.length + LOWER.length;
+
+      return '<div class="modal-overlay" onclick="S.playerDetailsModal=false;R()"><div class="modal" onclick="event.stopPropagation()" style="background:linear-gradient(135deg, '+color(cp.id)+' 0%, '+color(cp.id)+'dd 100%);color:white;border:none">'+
+        '<button class="btn-text text-white text-sm" style="position:absolute;top:1rem;right:1rem;opacity:0.8" onclick="S.playerDetailsModal=false;R()">✕</button>'+
+        '<div class="text-center mb-6">'+
+          '<h3 class="text-3xl font-black mb-2">'+cp.name+'</h3>'+
+          '<p class="text-white" style="opacity:0.8">Player Details</p>'+
+        '</div>'+
+        '<div class="flex flex-col gap-4" style="background:rgba(255,255,255,0.1);border-radius:1rem;padding:1.5rem;backdrop-filter:blur(10px)">'+
+          '<div class="flex justify-between items-center">'+
+            '<span class="text-white" style="opacity:0.9">Grand Total</span>'+
+            '<span class="text-4xl font-black">'+grandTotal+'</span>'+
+          '</div>'+
+          '<div class="divider" style="background:rgba(255,255,255,0.2)"></div>'+
+          '<div class="flex justify-between items-center">'+
+            '<span class="text-white" style="opacity:0.9">Upper Section</span>'+
+            '<span class="text-2xl font-bold">'+upperTotal+'</span>'+
+          '</div>'+
+          '<div class="flex justify-between items-center">'+
+            '<span class="text-white" style="opacity:0.9;padding-left:1rem">Base Score</span>'+
+            '<span class="text-xl">'+upperTotal+'</span>'+
+          '</div>'+
+          '<div class="flex justify-between items-center">'+
+            '<span class="text-white" style="opacity:0.9;padding-left:1rem">Bonus</span>'+
+            '<span class="text-xl">'+(upperBonusVal?'+35 ✓':'0')+'</span>'+
+          '</div>'+
+          '<div class="divider" style="background:rgba(255,255,255,0.2)"></div>'+
+          '<div class="flex justify-between items-center">'+
+            '<span class="text-white" style="opacity:0.9">Lower Section</span>'+
+            '<span class="text-2xl font-bold">'+lowerTotal+'</span>'+
+          '</div>'+
+          '<div class="flex justify-between items-center">'+
+            '<span class="text-white" style="opacity:0.9;padding-left:1rem">Yahtzee Bonus</span>'+
+            '<span class="text-xl">+'+(sc.bonus||0)+'</span>'+
+          '</div>'+
+          '<div class="divider" style="background:rgba(255,255,255,0.2)"></div>'+
+          '<div class="flex justify-between items-center">'+
+            '<span class="text-white" style="opacity:0.9">Progress</span>'+
+            '<span class="text-xl font-bold">'+filledScores+'/'+totalScores+'</span>'+
+          '</div>'+
+        '</div>'+
+      '</div></div>';
     }
 
     function finishConfirmModal() {
@@ -1939,13 +2226,44 @@
       }
     }
 
+    function scrollCarouselToActive() {
+      const carousel = document.getElementById('playerCarousel');
+      if (!carousel) return;
+
+      const activeCard = carousel.querySelector('.player-card-active');
+      if (activeCard) {
+        activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+      }
+    }
+
     function next() {
+      // Save current scroll position before switching
+      const carousel = document.getElementById('playerCarousel');
+      const savedScrollLeft = carousel ? carousel.scrollLeft : 0;
+
       S.cur = (S.cur + 1) % S.game.length;
       R();
+
+      // Ensure scroll is restored before animating
+      requestAnimationFrame(() => {
+        const newCarousel = document.getElementById('playerCarousel');
+        if (newCarousel && savedScrollLeft > 0) {
+          // First restore the previous scroll position instantly
+          newCarousel.scrollLeft = savedScrollLeft;
+        }
+        // Then smoothly scroll to the new active player
+        requestAnimationFrame(() => {
+          scrollCarouselToActive();
+        });
+      });
     }
 
     function switchPlayer(index) {
       if (index === S.cur) return; // Already on this player
+
+      // Save current scroll position before switching
+      const carousel = document.getElementById('playerCarousel');
+      const savedScrollLeft = carousel ? carousel.scrollLeft : 0;
 
       // In play mode, reset dice when switching players
       if (S.mode === 'play') {
@@ -1955,6 +2273,20 @@
       S.cur = index;
       saveCurrentGame();
       R();
+
+      // Ensure scroll is restored before animating
+      requestAnimationFrame(() => {
+        const newCarousel = document.getElementById('playerCarousel');
+        if (newCarousel && savedScrollLeft > 0) {
+          // First restore the previous scroll position instantly
+          newCarousel.scrollLeft = savedScrollLeft;
+        }
+        // Then smoothly scroll to the new active player
+        requestAnimationFrame(() => {
+          scrollCarouselToActive();
+        });
+      });
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 

@@ -1,7 +1,7 @@
 {
-  "name": "Kniffel Scorer",
-  "short_name": "Kniffel",
-  "description": "Yahtzee/Kniffel scoring app",
+  "name": "Schnitzel",
+  "short_name": "Schnitzel",
+  "description": "Your Yahtzee companion app",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0D1A14",

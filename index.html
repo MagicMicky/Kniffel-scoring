@@ -10,7 +10,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <title>Yahtzee Scorer</title>
+  <title>Schnitzel - Your Yahtzee Companion</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
@@ -1479,7 +1479,7 @@
         : '<div class="glass rounded-xl p-3 mb-4"><p class="text-white text-sm font-medium">📝 Score Mode</p><p class="text-purple-200 text-xs mt-1">Use your own dice. Manually enter scores as you play.</p></div>';
 
       return '<div class="container" style="min-height:100vh">'+
-        '<div class="text-center mb-6"><div class="mb-2"><img src="icon-192.png" alt="Yahtzee" style="width:96px;height:96px;margin:0 auto;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div><h1 class="text-4xl font-black text-white">YAHTZEE</h1><p class="text-purple-200 text-sm">Score Keeper</p></div>'+
+        '<div class="text-center mb-6"><div class="mb-2"><img src="icon-192.png" alt="Schnitzel" style="width:96px;height:96px;margin:0 auto;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div><h1 class="text-4xl font-black text-white">SCHNITZEL</h1><p class="text-purple-200 text-sm">your Yahtzee companion app</p></div>'+
         modeToggle+modeDesc+
         (S.savedGame ? '<div class="glass rounded-2xl p-4 mb-4"><p class="text-white font-bold mb-2">📌 Saved Game '+(S.savedGame.mode === 'play' ? '🎲' : '📝')+'</p><p class="text-purple-200 text-sm">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">Saved '+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
         resumeBtn+
@@ -1870,7 +1870,7 @@
       return '<div style="min-height:100vh;background:var(--bg);padding-bottom:6rem">'+
         '<div class="header-gradient text-white p-3 sticky"><div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">'+
           '<button class="btn-text text-white text-lg font-medium" onclick="pauseG()">← Back</button>'+
-          '<h1 class="font-black text-lg">'+(isPlayMode?'🎲 YAHTZEE':'📝 SCORING')+'</h1>'+
+          '<h1 class="font-black text-lg">'+(isPlayMode?'🎲 SCHNITZEL':'📝 SCHNITZEL')+'</h1>'+
           '<button class="btn btn-small btn-green" onclick="finishG()">Finish ✓</button>'+
         '</div></div>'+
         '<div class="player-carousel-container">'+

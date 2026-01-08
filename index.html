@@ -631,7 +631,49 @@
       from { opacity: 1; transform: translateX(-50%) translateY(0); }
       to { opacity: 0; transform: translateX(-50%) translateY(1rem); }
     }
-    
+
+    /* Fireworks celebration */
+    #fireworks-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+    }
+    #fireworks-container.active {
+      display: block;
+    }
+    .firework {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background-image: url('fireworks.webp');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0;
+      animation: firework-burst 1.2s ease-out forwards;
+    }
+    @keyframes firework-burst {
+      0% {
+        opacity: 0;
+        transform: scale(0.3) rotate(0deg);
+      }
+      20% {
+        opacity: 1;
+      }
+      80% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.5) rotate(360deg);
+      }
+    }
+
     /* Current turn indicator */
     .current-turn-indicator {
       display: flex;
@@ -1016,6 +1058,7 @@
 <body>
   <div id="app"></div>
   <div id="toast"></div>
+  <div id="fireworks-container"></div>
   <div id="version" class="version-footer">v1.0.0</div>
 
   <script>
@@ -1151,6 +1194,7 @@
           // Check for Yahtzee and notify
           if (calcScore(S.dice, 'yahtzee') === 50) {
             showToast('🎉 YAHTZEE!');
+            showFireworks();
             // Fun but brief celebration pattern
             if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
           }
@@ -1261,6 +1305,37 @@
       const toast = document.getElementById('toast');
       toast.innerHTML = '<div class="toast">' + msg + '</div>';
       setTimeout(() => { toast.innerHTML = ''; }, 2000);
+    };
+
+    const showFireworks = () => {
+      const container = document.getElementById('fireworks-container');
+      container.classList.add('active');
+
+      // Create multiple fireworks at random positions
+      const fireworkCount = 5;
+      const fireworks = [];
+
+      for (let i = 0; i < fireworkCount; i++) {
+        const firework = document.createElement('div');
+        firework.className = 'firework';
+
+        // Random position across the screen
+        const left = Math.random() * 80 + 10; // 10% to 90%
+        const top = Math.random() * 70 + 10;  // 10% to 80%
+
+        firework.style.left = left + '%';
+        firework.style.top = top + '%';
+        firework.style.animationDelay = (i * 0.15) + 's'; // Stagger the fireworks
+
+        container.appendChild(firework);
+        fireworks.push(firework);
+      }
+
+      // Clean up after animation completes
+      setTimeout(() => {
+        fireworks.forEach(fw => fw.remove());
+        container.classList.remove('active');
+      }, 2000);
     };
 
     function exportData() {
@@ -2102,6 +2177,7 @@
       if (calcScore(S.dice, 'yahtzee') === 50 && cp.scores.yahtzee === 50) {
         cp.scores.bonus += 100;
         showToast('YAHTZEE BONUS! +100');
+        showFireworks();
       }
 
       // Set the score
@@ -2305,6 +2381,13 @@
 
     function sel(v) {
       S.game[S.cur].scores[S.picker.id] = v;
+
+      // Celebrate Yahtzee!
+      if (S.picker.id === 'yahtzee' && v === 50) {
+        showFireworks();
+        showToast('🎉 YAHTZEE!');
+      }
+
       S.picker = null;
 
       // Check if game is now complete
@@ -2579,6 +2662,8 @@
     function addBonus() {
       if (S.game[S.cur].scores.yahtzee === 50) {
         S.game[S.cur].scores.bonus += 100;
+        showFireworks();
+        showToast('YAHTZEE BONUS! +100');
         saveCurrentGame();
         R();
       }

@@ -1683,9 +1683,9 @@
       const ord = S.game.length > 0 ? '<div class="glass rounded-xl p-3 mt-4"><p class="text-sm text-purple-200 mb-1">Play order:</p><p class="font-medium text-white">'+S.game.map(p=>p.name).join(' → ')+'</p></div>' : '';
 
       const resumeBtn = S.savedGame ?
-        '<div class="grid grid-cols-2 gap-2 mb-4">'+
-          '<button class="btn btn-secondary" onclick="discardSaved()">🗑️ Discard</button>'+
-          '<button class="btn btn-resume" onclick="resumeGame()">▶️ RESUME GAME</button>'+
+        '<div class="grid grid-cols-3 gap-2 mb-4">'+
+          '<button class="btn btn-secondary" style="grid-column: span 2;" onclick="discardSaved()">🗑️ Discard</button>'+
+          '<button class="btn btn-resume" onclick="resumeGame()">▶️ RESUME</button>'+
         '</div>' : '';
 
       const modeButtons = '<div class="mode-select-container">'+

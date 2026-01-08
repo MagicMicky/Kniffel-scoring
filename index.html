@@ -299,6 +299,13 @@
     .btn-gray-dark:hover {
       background-color: var(--surfaceHover);
     }
+    .btn-red {
+      background-color: var(--error);
+      color: white;
+    }
+    .btn-red:hover {
+      opacity: 0.9;
+    }
     
     .input {
       border: 2px solid var(--border);
@@ -1998,32 +2005,37 @@
     function picker() {
       const c = S.picker;
       if (c.t === 'upper') {
-        const btns = [0,1,2,3,4,5].map(n => 
+        const btns = [1,2,3,4,5,6].map(n =>
           '<button class="picker-btn" onclick="sel('+n*c.v+')"><div class="text-2xl font-black text-blue-600">'+n*c.v+'</div><div class="text-xs text-gray-500">'+n+' × '+c.v+'</div></button>'
         ).join('');
         return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
           '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3><p class="text-blue-600 text-sm mt-1">How many '+c.v+'s did you roll?</p></div>'+
           '<div class="grid grid-cols-3 gap-2 mb-4">'+btns+'</div>'+
-          '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
+          '<div class="grid grid-cols-2 gap-2">'+
+            '<button class="btn btn-red font-medium py-3 px-4 rounded-xl" onclick="sel(0)">Zero</button>'+
+            '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl" onclick="S.picker=null;R()">Cancel</button>'+
+          '</div>'+
         '</div></div>';
       } else if (c.t === 'fixed') {
         return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
           '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3></div>'+
-          '<div class="grid grid-cols-2 gap-3 mb-4">'+
-            '<button class="picker-btn-green p-4" onclick="sel('+c.v+')"><div class="text-3xl font-black text-green-600">✓ '+c.v+'</div><div class="text-sm text-green-700 font-medium">Got it!</div></button>'+
-            '<button class="picker-btn-red p-4" onclick="sel(0)"><div class="text-3xl font-black text-red-400">✗ 0</div><div class="text-sm text-red-500 font-medium">Missed</div></button>'+
+          '<button class="picker-btn p-6 mb-4 w-full" onclick="sel('+c.v+')"><div class="text-4xl font-black text-blue-600">'+c.v+'</div></button>'+
+          '<div class="grid grid-cols-2 gap-2">'+
+            '<button class="btn btn-red font-medium py-3 px-4 rounded-xl" onclick="sel(0)">Zero</button>'+
+            '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl" onclick="S.picker=null;R()">Cancel</button>'+
           '</div>'+
-          '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
         '</div></div>';
       } else {
         const quick = [5,10,15,20,25,30].map(n => '<button class="picker-btn-purple text-purple-700 font-bold text-sm" onclick="sel('+n+')">'+n+'</button>').join('');
         return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
           '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3><p class="text-purple-600 text-xs mt-1">Sum of all dice (5-30)</p></div>'+
-          '<button class="picker-btn-red w-full mb-3 p-3" onclick="sel(0)"><span class="font-black text-red-500">✗ Score 0</span></button>'+
           '<p class="text-xs text-gray-400 mb-2 text-center">Quick select:</p>'+
           '<div class="grid grid-cols-6 gap-1 mb-3">'+quick+'</div>'+
           '<div class="flex gap-2 mb-4"><input type="number" id="cust" min="5" max="30" class="input flex-1 text-center text-xl font-bold" placeholder="Custom..."><button class="btn btn-purple font-bold py-3 px-4 rounded-xl" onclick="subCust()">✓</button></div>'+
-          '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.picker=null;R()">Cancel</button>'+
+          '<div class="grid grid-cols-2 gap-2">'+
+            '<button class="btn btn-red font-medium py-3 px-4 rounded-xl" onclick="sel(0)">Zero</button>'+
+            '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl" onclick="S.picker=null;R()">Cancel</button>'+
+          '</div>'+
         '</div></div>';
       }
     }

@@ -886,36 +886,137 @@
       color: rgba(255, 255, 255, 0.8);
     }
 
-    /* Mode toggle styles */
-    .mode-toggle {
-      display: flex;
+    /* Hamburger menu styles */
+    .hamburger-btn {
+      position: fixed;
+      top: calc(env(safe-area-inset-top) + 1rem);
+      right: 1rem;
+      z-index: 1000;
+      width: 44px;
+      height: 44px;
       background: var(--surface2);
-      border-radius: var(--rMd);
-      padding: 0.25rem;
-      margin-bottom: 1rem;
       border: 1px solid var(--border);
-    }
-    .mode-btn {
-      flex: 1;
-      padding: 0.75rem;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 0.875rem;
+      border-radius: var(--rMd);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      border-radius: var(--rSm);
       transition: all 0.2s;
-      font-family: inherit;
-    }
-    .mode-btn:hover:not(.active) {
-      background: var(--surfaceHover);
-      color: var(--text);
-    }
-    .mode-btn.active {
-      background: var(--accent);
-      color: var(--onAccent);
       box-shadow: var(--shadowSm);
+    }
+    .hamburger-btn:hover {
+      background: var(--surface2Hover);
+      border-color: var(--borderAccent);
+    }
+    .hamburger-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Side menu styles */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 280px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      box-shadow: var(--shadowLg);
+      z-index: 999;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .side-menu.open {
+      transform: translateX(0);
+    }
+    .side-menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--scrim);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .side-menu-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .side-menu-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .side-menu-content {
+      padding: 1.5rem;
+    }
+    .side-menu-item {
+      background: var(--surface2);
+      color: var(--text);
+      font-weight: 700;
+      padding: 1rem;
+      border-radius: var(--rMd);
+      width: 100%;
+      border: 1px solid var(--border);
+      margin-bottom: 0.75rem;
+      text-align: left;
+    }
+    .side-menu-item:hover {
+      background: var(--surface2Hover);
+      border-color: var(--borderAccent);
+    }
+
+    /* Game mode button styles */
+    .mode-select-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .game-mode-btn {
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      border-radius: var(--rMd);
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .game-mode-btn:hover {
+      background: var(--surface2Hover);
+      border-color: var(--borderAccent);
+      transform: translateY(-2px);
+      box-shadow: var(--shadowMd);
+    }
+    .game-mode-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    .game-mode-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .game-mode-btn .icon {
+      font-size: 2.5rem;
+      line-height: 1;
+    }
+    .game-mode-btn .title {
+      font-weight: 900;
+      font-size: 1rem;
+      color: var(--text);
+      margin-top: 0.25rem;
+    }
+    .game-mode-btn .desc {
+      font-size: 0.7rem;
+      color: var(--muted);
+      line-height: 1.3;
     }
 
     /* Dice styles */
@@ -1105,6 +1206,7 @@
       picker: null,
       mgr: false,
       stats: null,
+      sideMenuOpen: false,
       // Game mode: 'score' (manual entry) or 'play' (with dice)
       mode: 'score',
       // Dice state for play mode
@@ -1530,51 +1632,75 @@
       R();
     });
 
+    function toggleSideMenu() {
+      S.sideMenuOpen = !S.sideMenuOpen;
+      R();
+    }
+
+    function startGameWithMode(mode) {
+      if (S.game.length === 0) return;
+      S.mode = mode;
+      start();
+    }
+
     function setup() {
       const pl = S.known.length === 0
         ? '<div class="text-center py-5 text-purple-200"><p class="mb-2">No players yet!</p><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">+ Add Players</button></div>'
         : S.known.map((p,i) => {
             const sel = S.game.some(g => g.id === p.id);
             const gi = S.game.findIndex(g => g.id === p.id);
-            return '<div class="flex items-center gap-2 rounded-xl p-3 '+(sel?'glass-dark':'glass')+'" style="'+(sel?'box-shadow:0 0 0 2px white;':'')+'" onclick="tog('+p.id+')">'+
+            return '<div class="flex items-center gap-2 rounded-xl p-2 '+(sel?'glass-dark':'glass')+'" style="'+(sel?'box-shadow:0 0 0 2px white;':'')+'" onclick="tog('+p.id+')">'+
               '<div class="checkbox">'+(sel?'<div class="checkbox-inner"></div>':'')+'</div>'+
               '<div class="color-dot" style="background:'+COLORS[i%COLORS.length]+'"></div>'+
-              '<span class="flex-1 font-medium text-white">'+p.name+'</span>'+
+              '<span class="flex-1 font-medium text-white text-sm">'+p.name+'</span>'+
               (sel?'<button class="order-btn" onclick="event.stopPropagation();mv('+gi+',-1)">▲</button><button class="order-btn" onclick="event.stopPropagation();mv('+gi+',1)">▼</button>':'')+
               '<button class="btn btn-small glass text-white text-xs" onclick="event.stopPropagation();S.stats=S.known.find(x=>x.id==='+p.id+');R()">📊</button>'+
             '</div>';
           }).join('');
 
-      const ord = S.game.length > 0 ? '<div class="glass rounded-xl p-3 mt-4"><p class="text-sm text-purple-200 mb-1">Play order:</p><p class="font-medium text-white">'+S.game.map(p=>p.name).join(' → ')+'</p></div>' : '';
+      const ord = S.game.length > 0 ? '<div class="glass rounded-xl p-2 mt-3"><p class="text-xs text-purple-200 mb-1">Play order:</p><p class="font-medium text-white text-sm">'+S.game.map(p=>p.name).join(' → ')+'</p></div>' : '';
 
       const resumeBtn = S.savedGame ?
         '<button class="btn btn-resume mb-4" onclick="resumeGame()">▶️ RESUME GAME</button>'+
         '<button class="btn btn-secondary mb-4" onclick="discardSaved()">🗑️ Discard Saved Game</button>' : '';
 
-      const modeToggle = '<div class="mode-toggle">'+
-        '<button class="mode-btn '+(S.mode==='score'?'active':'')+'" onclick="S.mode=\'score\';R()">📝 Score Only</button>'+
-        '<button class="mode-btn '+(S.mode==='play'?'active':'')+'" onclick="S.mode=\'play\';R()">🎲 Play Mode</button>'+
+      const modeButtons = '<div class="mode-select-container">'+
+        '<button class="game-mode-btn" onclick="startGameWithMode(\'score\')" '+(S.game.length===0?'disabled':'')+'>'+
+          '<div class="icon">📝</div>'+
+          '<div class="title">SCORE MODE</div>'+
+          '<div class="desc">Use physical dice<br>Manual scoring</div>'+
+        '</button>'+
+        '<button class="game-mode-btn" onclick="startGameWithMode(\'play\')" '+(S.game.length===0?'disabled':'')+'>'+
+          '<div class="icon">🎲</div>'+
+          '<div class="title">PLAY MODE</div>'+
+          '<div class="desc">Virtual dice<br>Auto-calculate</div>'+
+        '</button>'+
       '</div>';
 
-      const modeDesc = S.mode === 'play'
-        ? '<div class="glass rounded-xl p-3 mb-4"><p class="text-white text-sm font-medium">🎲 Play Mode</p><p class="text-purple-200 text-xs mt-1">Roll dice on your phone! Shake to roll or tap the button. Scores are calculated automatically.</p></div>'
-        : '<div class="glass rounded-xl p-3 mb-4"><p class="text-white text-sm font-medium">📝 Score Mode</p><p class="text-purple-200 text-xs mt-1">Use your own dice. Manually enter scores as you play.</p></div>';
+      const hamburger = '<button class="hamburger-btn btn" onclick="toggleSideMenu()">☰</button>';
+
+      const sideMenu = '<div class="side-menu-overlay '+(S.sideMenuOpen?'open':'')+'" onclick="toggleSideMenu()"></div>'+
+        '<div class="side-menu '+(S.sideMenuOpen?'open':'')+'">'+
+          '<div class="side-menu-header">'+
+            '<h2 class="text-xl font-black text-white">Menu</h2>'+
+          '</div>'+
+          '<div class="side-menu-content">'+
+            '<button class="side-menu-item btn" onclick="exportData();toggleSideMenu()">📥 Export Data</button>'+
+            '<button class="side-menu-item btn" onclick="triggerImport();toggleSideMenu()">📤 Import Data</button>'+
+            '<button class="side-menu-item btn" onclick="navigateTo(\'history\');toggleSideMenu()">📜 Game History</button>'+
+          '</div>'+
+        '</div>';
 
       return '<div class="container" style="min-height:100vh">'+
-        '<div class="text-center mb-6"><div class="mb-2"><img src="icon-192-v2.png" alt="Schnitzel" style="width:96px;height:96px;margin:0 auto;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div><h1 class="text-4xl font-black text-white">SCHNITZEL</h1><p class="text-purple-200 text-sm">your Yahtzee companion app</p></div>'+
-        modeToggle+modeDesc+
-        (S.savedGame ? '<div class="glass rounded-2xl p-4 mb-4"><p class="text-white font-bold mb-2">📌 Saved Game '+(S.savedGame.mode === 'play' ? '🎲' : '📝')+'</p><p class="text-purple-200 text-sm">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">Saved '+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
+        hamburger+sideMenu+
+        '<div class="text-center mb-4"><div class="mb-2"><img src="icon-192-v2.png" alt="Schnitzel" style="width:80px;height:80px;margin:0 auto;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div><h1 class="text-4xl font-black text-white">SCHNITZEL</h1><p class="text-purple-200 text-sm">your Yahtzee companion app</p></div>'+
+        (S.savedGame ? '<div class="glass rounded-2xl p-3 mb-3"><p class="text-white font-bold text-sm mb-1">📌 Saved Game '+(S.savedGame.mode === 'play' ? '🎲' : '📝')+'</p><p class="text-purple-200 text-xs">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">'+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
         resumeBtn+
-        '<div class="glass rounded-2xl p-5 mb-4">'+
-          '<div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-white">Select Players</h2><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">⚙️ Manage</button></div>'+
+        '<div class="glass rounded-2xl p-4 mb-3">'+
+          '<div class="flex justify-between items-center mb-3"><h2 class="text-lg font-bold text-white">Select Players</h2><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">⚙️</button></div>'+
           '<div class="space-y-2">'+pl+'</div>'+ord+
         '</div>'+
-        '<button class="btn btn-primary" onclick="start()" '+(S.game.length===0?'disabled':'')+'>'+(S.game.length===0?'Select Players':(S.mode==='play'?'🎲 START GAME':'📝 START SCORING')+' ('+S.game.length+')')+'</button>'+
-        '<button class="btn btn-secondary mt-4" onclick="navigateTo(\'history\')">📜 Game History</button>'+
-        '<div class="grid grid-cols-2 gap-2 mt-4">'+
-          '<button class="btn btn-secondary" onclick="exportData()">📥 Export</button>'+
-          '<button class="btn btn-secondary" onclick="triggerImport()">📤 Import</button>'+
-        '</div>'+
+        modeButtons+
       '</div>'+(S.mgr?mgr():'')+(S.stats?statsModal():'');
     }
 

@@ -1428,10 +1428,15 @@
     }
 
     function R() {
+      // Track if current player changed (to avoid restoring scroll when switching players)
+      const playerChanged = S._prevPlayer !== undefined && S._prevPlayer !== S.cur;
+      S._prevPlayer = S.cur;
+
       // Save carousel scroll position before re-render (to prevent jumping)
+      // But only restore it if we're NOT switching players
       let savedScrollLeft = 0;
       const carousel = document.getElementById('playerCarousel');
-      if (carousel) {
+      if (carousel && !playerChanged) {
         savedScrollLeft = carousel.scrollLeft;
       }
 
@@ -1455,8 +1460,9 @@
       else {
         app.innerHTML = gameView();
         // Restore scroll position immediately (no animation) to prevent jumping
+        // But NOT when switching players (they'll be scrolled to explicitly)
         const newCarousel = document.getElementById('playerCarousel');
-        if (newCarousel && savedScrollLeft > 0) {
+        if (newCarousel && savedScrollLeft > 0 && !playerChanged) {
           newCarousel.scrollLeft = savedScrollLeft;
         }
       }

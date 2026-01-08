@@ -2005,7 +2005,7 @@
     function picker() {
       const c = S.picker;
       if (c.t === 'upper') {
-        const btns = [1,2,3,4,5,6].map(n =>
+        const btns = [1,2,3,4,5].map(n =>
           '<button class="picker-btn" onclick="sel('+n*c.v+')"><div class="text-2xl font-black text-blue-600">'+n*c.v+'</div><div class="text-xs text-gray-500">'+n+' × '+c.v+'</div></button>'
         ).join('');
         return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
@@ -2018,8 +2018,10 @@
         '</div></div>';
       } else if (c.t === 'fixed') {
         return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
-          '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3></div>'+
-          '<button class="picker-btn p-6 mb-4 w-full" onclick="sel('+c.v+')"><div class="text-4xl font-black text-blue-600">'+c.v+'</div></button>'+
+          '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3><p class="text-sm mt-1" style="visibility:hidden">Spacer</p></div>'+
+          '<div style="min-height: 140px" class="flex items-center justify-center mb-4">'+
+            '<button class="picker-btn p-6 w-full" onclick="sel('+c.v+')"><div class="text-4xl font-black text-blue-600">'+c.v+'</div></button>'+
+          '</div>'+
           '<div class="grid grid-cols-2 gap-2">'+
             '<button class="btn btn-red font-medium py-3 px-4 rounded-xl" onclick="sel(0)">Zero</button>'+
             '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl" onclick="S.picker=null;R()">Cancel</button>'+
@@ -2028,10 +2030,12 @@
       } else {
         const quick = [5,10,15,20,25,30].map(n => '<button class="picker-btn-purple text-purple-700 font-bold text-sm" onclick="sel('+n+')">'+n+'</button>').join('');
         return '<div class="modal-overlay" onclick="S.picker=null;R()"><div class="modal" onclick="event.stopPropagation()">'+
-          '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3><p class="text-purple-600 text-xs mt-1">Sum of all dice (5-30)</p></div>'+
-          '<p class="text-xs text-gray-400 mb-2 text-center">Quick select:</p>'+
-          '<div class="grid grid-cols-6 gap-1 mb-3">'+quick+'</div>'+
-          '<div class="flex gap-2 mb-4"><input type="number" id="cust" min="5" max="30" class="input flex-1 text-center text-xl font-bold" placeholder="Custom..."><button class="btn btn-purple font-bold py-3 px-4 rounded-xl" onclick="subCust()">✓</button></div>'+
+          '<div class="text-center mb-4"><h3 class="text-xl font-black text-gray-800">'+c.name+'</h3><p class="text-purple-600 text-sm mt-1">Sum of all dice (5-30)</p></div>'+
+          '<div class="mb-4">'+
+            '<p class="text-xs text-gray-400 mb-2 text-center">Quick select:</p>'+
+            '<div class="grid grid-cols-6 gap-1 mb-3">'+quick+'</div>'+
+            '<div class="flex gap-2"><input type="number" id="cust" min="5" max="30" class="input flex-1 text-center text-xl font-bold" placeholder="Custom..."><button class="btn btn-purple font-bold py-3 px-4 rounded-xl" onclick="subCust()">✓</button></div>'+
+          '</div>'+
           '<div class="grid grid-cols-2 gap-2">'+
             '<button class="btn btn-red font-medium py-3 px-4 rounded-xl" onclick="sel(0)">Zero</button>'+
             '<button class="btn btn-gray font-medium py-3 px-4 rounded-xl" onclick="S.picker=null;R()">Cancel</button>'+

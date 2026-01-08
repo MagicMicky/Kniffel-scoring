@@ -1459,10 +1459,16 @@
       }
       else {
         app.innerHTML = gameView();
-        // Restore scroll position immediately (no animation) to prevent jumping
-        // But NOT when switching players (they'll be scrolled to explicitly)
         const newCarousel = document.getElementById('playerCarousel');
-        if (newCarousel && savedScrollLeft > 0 && !playerChanged) {
+
+        if (playerChanged && newCarousel) {
+          // When player changed, scroll to active player immediately (no animation to avoid flash)
+          const activeCard = newCarousel.querySelector('.player-card-active');
+          if (activeCard) {
+            activeCard.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'start' });
+          }
+        } else if (newCarousel && savedScrollLeft > 0) {
+          // Restore scroll position immediately (no animation) to prevent jumping
           newCarousel.scrollLeft = savedScrollLeft;
         }
       }
@@ -2330,12 +2336,7 @@
 
     function next() {
       S.cur = (S.cur + 1) % S.game.length;
-      R();
-
-      // Scroll to the new active player after render
-      requestAnimationFrame(() => {
-        scrollCarouselToActive();
-      });
+      R(); // R() will handle scrolling to the active player
     }
 
     function switchPlayer(index) {
@@ -2348,12 +2349,7 @@
 
       S.cur = index;
       saveCurrentGame();
-      R();
-
-      // Scroll to the new active player after render
-      requestAnimationFrame(() => {
-        scrollCarouselToActive();
-      });
+      R(); // R() will handle scrolling to the active player
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }

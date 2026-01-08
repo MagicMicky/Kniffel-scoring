@@ -1651,7 +1651,7 @@
         : S.known.map((p,i) => {
             const sel = S.game.some(g => g.id === p.id);
             const gi = S.game.findIndex(g => g.id === p.id);
-            return '<div class="flex items-center gap-2 rounded-xl p-3 '+(sel?'glass-dark':'glass')+'" style="'+(sel?'box-shadow:0 0 0 2px white;':'')+'" onclick="tog('+p.id+')">'+
+            return '<div class="flex items-center gap-2 rounded-xl p-3 '+(sel?'glass-dark':'glass')+'" style="'+(sel?'box-shadow:0 0 0 2px '+COLORS[i%COLORS.length]+';':'')+'" onclick="tog('+p.id+')">'+
               '<div class="checkbox">'+(sel?'<div class="checkbox-inner"></div>':'')+'</div>'+
               '<div class="color-dot" style="background:'+COLORS[i%COLORS.length]+'"></div>'+
               '<span class="flex-1 font-medium text-white">'+p.name+'</span>'+

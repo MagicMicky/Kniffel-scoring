@@ -1722,7 +1722,7 @@
       return '<div class="container" style="min-height:100vh">'+
         hamburger+sideMenu+
         '<div class="text-center mb-6"><div class="mb-2"><img src="icon-192-v2.png" alt="Schnitzel" style="width:96px;height:96px;margin:0 auto;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div><h1 class="text-4xl font-black text-white">SCHNITZEL</h1><p class="text-purple-200 text-sm">your Yahtzee companion app</p></div>'+
-        (S.savedGame ? '<div class="glass rounded-2xl p-4 mb-4"><p class="text-white font-bold mb-2">📌 Saved Game '+(S.savedGame.mode === 'play' ? '🎲' : '📝')+'</p><p class="text-purple-200 text-sm">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">'+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
+        (S.savedGame ? '<div class="glass rounded-2xl p-4 mb-2"><p class="text-white font-bold mb-2">📌 Paused Game '+(S.savedGame.mode === 'play' ? '🎲' : '📝')+'</p><p class="text-purple-200 text-sm">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">'+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
         resumeBtn+
         '<div class="glass rounded-2xl p-5 mb-4">'+
           '<div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-white">Select Players</h2><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">⚙️</button></div>'+

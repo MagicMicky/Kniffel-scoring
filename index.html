@@ -867,23 +867,9 @@
       color: var(--bg) !important;
     }
 
-    /* Version footer */
+    /* Version footer - hidden (now in side menu) */
     .version-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      text-align: center;
-      padding: 0.25rem 0.5rem;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(5px);
-      font-size: 0.625rem;
-      color: rgba(255, 255, 255, 0.5);
-      z-index: 1000;
-      font-family: monospace;
-    }
-    .version-footer:hover {
-      color: rgba(255, 255, 255, 0.8);
+      display: none;
     }
 
     /* Hamburger menu styles */
@@ -967,6 +953,15 @@
     .side-menu-item:hover {
       background: var(--surface2Hover);
       border-color: var(--borderAccent);
+    }
+    .side-menu-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
     /* Game mode button styles */
@@ -1639,6 +1634,30 @@
       R();
     }
 
+    async function forceUpdate() {
+      try {
+        // Unregister all service workers
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (let registration of registrations) {
+            await registration.unregister();
+          }
+        }
+
+        // Clear all caches
+        if ('caches' in window) {
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(name => caches.delete(name)));
+        }
+
+        // Force reload from server (bypasses cache)
+        window.location.reload(true);
+      } catch (error) {
+        // Fallback to simple reload if anything fails
+        window.location.reload(true);
+      }
+    }
+
     function startGameWithMode(mode) {
       if (S.game.length === 0) return;
       S.mode = mode;
@@ -1692,6 +1711,10 @@
             '<button class="side-menu-item btn" onclick="exportData();toggleSideMenu()">📥 Export Data</button>'+
             '<button class="side-menu-item btn" onclick="triggerImport();toggleSideMenu()">📤 Import Data</button>'+
             '<button class="side-menu-item btn" onclick="navigateTo(\'history\');toggleSideMenu()">📜 Game History</button>'+
+            '<button class="side-menu-item btn" onclick="forceUpdate()">🔄 Update App</button>'+
+          '</div>'+
+          '<div class="side-menu-footer">'+
+            '<div id="side-version" class="text-xs text-gray-400" style="text-align:center;padding:1rem;font-family:monospace;">v1.0.0</div>'+
           '</div>'+
         '</div>';
 
@@ -2864,20 +2887,21 @@
     history.replaceState({ view: S.view }, '', '#' + S.view);
     R();
 
-    // Load and display version
+    // Load and display version (only in side menu now)
     fetch('version.json')
       .then(res => res.json())
       .then(data => {
-        const versionEl = document.getElementById('version');
-        if (versionEl) {
-          versionEl.textContent = `v${data.version} (${data.commit})`;
+        const versionText = `v${data.version} (${data.commit})`;
+        const sideVersionEl = document.getElementById('side-version');
+        if (sideVersionEl) {
+          sideVersionEl.textContent = versionText;
         }
       })
       .catch(() => {
         // Fallback if version.json doesn't load
-        const versionEl = document.getElementById('version');
-        if (versionEl) {
-          versionEl.textContent = 'v1.0.0';
+        const sideVersionEl = document.getElementById('side-version');
+        if (sideVersionEl) {
+          sideVersionEl.textContent = 'v1.0.0';
         }
       });
 

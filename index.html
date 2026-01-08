@@ -975,8 +975,8 @@
       margin-bottom: 1rem;
     }
     .game-mode-btn {
-      background: var(--surface2);
-      border: 2px solid var(--border);
+      background: var(--accent);
+      border: none;
       border-radius: var(--rMd);
       padding: 0.875rem;
       cursor: pointer;
@@ -988,12 +988,11 @@
       align-items: center;
       justify-content: center;
       gap: 0.375rem;
+      box-shadow: var(--shadowSm);
     }
     .game-mode-btn:hover {
-      background: var(--surface2Hover);
-      border-color: var(--borderAccent);
+      box-shadow: 0 8px 24px rgba(57, 198, 167, 0.4);
       transform: translateY(-2px);
-      box-shadow: var(--shadowMd);
     }
     .game-mode-btn:active {
       transform: translateY(0) scale(0.98);
@@ -1010,12 +1009,13 @@
     .game-mode-btn .title {
       font-weight: 900;
       font-size: 0.875rem;
-      color: var(--text);
+      color: var(--onAccent);
       margin-top: 0.125rem;
     }
     .game-mode-btn .desc {
       font-size: 0.65rem;
-      color: var(--muted);
+      color: var(--onAccent);
+      opacity: 0.8;
       line-height: 1.2;
     }
 

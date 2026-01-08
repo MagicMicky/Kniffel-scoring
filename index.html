@@ -1204,6 +1204,7 @@
       mgr: false,
       stats: null,
       sideMenuOpen: false,
+      version: 'v1.0.0', // App version from version.json
       // Game mode: 'score' (manual entry) or 'play' (with dice)
       mode: 'score',
       // Dice state for play mode
@@ -1714,7 +1715,7 @@
             '<button class="side-menu-item btn" onclick="forceUpdate()">🔄 Update App</button>'+
           '</div>'+
           '<div class="side-menu-footer">'+
-            '<div id="side-version" class="text-xs text-gray-400" style="text-align:center;padding:1rem;font-family:monospace;">v1.0.0</div>'+
+            '<div class="text-xs text-gray-400" style="text-align:center;padding:1rem;font-family:monospace;">'+S.version+'</div>'+
           '</div>'+
         '</div>';
 
@@ -2891,18 +2892,13 @@
     fetch('version.json')
       .then(res => res.json())
       .then(data => {
-        const versionText = `v${data.version} (${data.commit})`;
-        const sideVersionEl = document.getElementById('side-version');
-        if (sideVersionEl) {
-          sideVersionEl.textContent = versionText;
-        }
+        S.version = `v${data.version} (${data.commit})`;
+        R(); // Re-render to show updated version
       })
       .catch(() => {
         // Fallback if version.json doesn't load
-        const sideVersionEl = document.getElementById('side-version');
-        if (sideVersionEl) {
-          sideVersionEl.textContent = 'v1.0.0';
-        }
+        S.version = 'v1.0.0';
+        R(); // Re-render to show fallback version
       });
 
     // Register service worker for PWA with update detection

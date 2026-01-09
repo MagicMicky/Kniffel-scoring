@@ -1,0 +1,25 @@
+/* Modal Components */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--scrim);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--surface2);
+  border-radius: var(--rLg);
+  padding: 1.25rem;
+  width: 100%;
+  max-width: 24rem;
+  max-height: 80vh;
+  overflow: auto;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadowLg);
+}

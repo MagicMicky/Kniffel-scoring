@@ -867,55 +867,153 @@
       color: var(--bg) !important;
     }
 
-    /* Version footer */
+    /* Version footer - hidden (now in side menu) */
     .version-footer {
+      display: none;
+    }
+
+    /* Hamburger menu styles */
+    .hamburger-btn {
       position: fixed;
+      top: calc(env(safe-area-inset-top) + 1rem);
+      right: 1rem;
+      z-index: 1000;
+      width: 44px;
+      height: 44px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--rMd);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: var(--shadowSm);
+      color: var(--text);
+      font-size: 1.25rem;
+    }
+    .hamburger-btn:hover {
+      background: var(--surface2Hover);
+      border-color: var(--borderAccent);
+    }
+    .hamburger-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Side menu styles */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 280px;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      box-shadow: var(--shadowLg);
+      z-index: 999;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .side-menu.open {
+      transform: translateX(0);
+    }
+    .side-menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--scrim);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .side-menu-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .side-menu-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .side-menu-content {
+      padding: 1.5rem;
+    }
+    .side-menu-item {
+      background: var(--surface2);
+      color: var(--text);
+      font-weight: 700;
+      padding: 1rem;
+      border-radius: var(--rMd);
+      width: 100%;
+      border: 1px solid var(--border);
+      margin-bottom: 0.75rem;
+      text-align: left;
+    }
+    .side-menu-item:hover {
+      background: var(--surface2Hover);
+      border-color: var(--borderAccent);
+    }
+    .side-menu-footer {
+      position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
-      text-align: center;
-      padding: 0.25rem 0.5rem;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(5px);
-      font-size: 0.625rem;
-      color: rgba(255, 255, 255, 0.5);
-      z-index: 1000;
-      font-family: monospace;
-    }
-    .version-footer:hover {
-      color: rgba(255, 255, 255, 0.8);
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
-    /* Mode toggle styles */
-    .mode-toggle {
-      display: flex;
-      background: var(--surface2);
-      border-radius: var(--rMd);
-      padding: 0.25rem;
+    /* Game mode button styles */
+    .mode-select-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
       margin-bottom: 1rem;
-      border: 1px solid var(--border);
     }
-    .mode-btn {
-      flex: 1;
-      padding: 0.75rem;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      font-weight: 700;
-      font-size: 0.875rem;
-      cursor: pointer;
-      border-radius: var(--rSm);
-      transition: all 0.2s;
-      font-family: inherit;
-    }
-    .mode-btn:hover:not(.active) {
-      background: var(--surfaceHover);
-      color: var(--text);
-    }
-    .mode-btn.active {
+    .game-mode-btn {
       background: var(--accent);
-      color: var(--onAccent);
+      border: none;
+      border-radius: var(--rMd);
+      padding: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
       box-shadow: var(--shadowSm);
+    }
+    .game-mode-btn:hover {
+      box-shadow: 0 8px 24px rgba(57, 198, 167, 0.4);
+      transform: translateY(-2px);
+    }
+    .game-mode-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    .game-mode-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .game-mode-btn .icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .game-mode-btn .title {
+      font-weight: 900;
+      font-size: 0.875rem;
+      color: var(--onAccent);
+      margin-top: 0.125rem;
+    }
+    .game-mode-btn .desc {
+      font-size: 0.65rem;
+      color: var(--onAccent);
+      opacity: 0.8;
+      line-height: 1.2;
     }
 
     /* Dice styles */
@@ -1105,6 +1203,8 @@
       picker: null,
       mgr: false,
       stats: null,
+      sideMenuOpen: false,
+      version: 'v1.0.0', // App version from version.json
       // Game mode: 'score' (manual entry) or 'play' (with dice)
       mode: 'score',
       // Dice state for play mode
@@ -1542,13 +1642,48 @@
       R();
     });
 
+    function toggleSideMenu() {
+      S.sideMenuOpen = !S.sideMenuOpen;
+      R();
+    }
+
+    async function forceUpdate() {
+      try {
+        // Unregister all service workers
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (let registration of registrations) {
+            await registration.unregister();
+          }
+        }
+
+        // Clear all caches
+        if ('caches' in window) {
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(name => caches.delete(name)));
+        }
+
+        // Force reload from server (bypasses cache)
+        window.location.reload(true);
+      } catch (error) {
+        // Fallback to simple reload if anything fails
+        window.location.reload(true);
+      }
+    }
+
+    function startGameWithMode(mode) {
+      if (S.game.length === 0) return;
+      S.mode = mode;
+      start();
+    }
+
     function setup() {
       const pl = S.known.length === 0
         ? '<div class="text-center py-5 text-purple-200"><p class="mb-2">No players yet!</p><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">+ Add Players</button></div>'
         : S.known.map((p,i) => {
             const sel = S.game.some(g => g.id === p.id);
             const gi = S.game.findIndex(g => g.id === p.id);
-            return '<div class="flex items-center gap-2 rounded-xl p-3 '+(sel?'glass-dark':'glass')+'" style="'+(sel?'box-shadow:0 0 0 2px white;':'')+'" onclick="tog('+p.id+')">'+
+            return '<div class="flex items-center gap-2 rounded-xl p-3 '+(sel?'glass-dark':'glass')+'" style="'+(sel?'box-shadow:0 0 0 2px '+COLORS[i%COLORS.length]+';':'')+'" onclick="tog('+p.id+')">'+
               '<div class="checkbox">'+(sel?'<div class="checkbox-inner"></div>':'')+'</div>'+
               '<div class="color-dot" style="background:'+COLORS[i%COLORS.length]+'"></div>'+
               '<span class="flex-1 font-medium text-white">'+p.name+'</span>'+
@@ -1560,33 +1695,52 @@
       const ord = S.game.length > 0 ? '<div class="glass rounded-xl p-3 mt-4"><p class="text-sm text-purple-200 mb-1">Play order:</p><p class="font-medium text-white">'+S.game.map(p=>p.name).join(' → ')+'</p></div>' : '';
 
       const resumeBtn = S.savedGame ?
-        '<button class="btn btn-resume mb-4" onclick="resumeGame()">▶️ RESUME GAME</button>'+
-        '<button class="btn btn-secondary mb-4" onclick="discardSaved()">🗑️ Discard Saved Game</button>' : '';
+        '<div class="grid grid-cols-2 gap-2 mb-4">'+
+          '<button class="btn btn-secondary" style="padding:0.5rem;" onclick="discardSaved()">🗑️ Discard</button>'+
+          '<button class="btn btn-resume" style="padding:0.5rem;" onclick="resumeGame()">▶️ RESUME</button>'+
+        '</div>' : '';
 
-      const modeToggle = '<div class="mode-toggle">'+
-        '<button class="mode-btn '+(S.mode==='score'?'active':'')+'" onclick="S.mode=\'score\';R()">📝 Score Only</button>'+
-        '<button class="mode-btn '+(S.mode==='play'?'active':'')+'" onclick="S.mode=\'play\';R()">🎲 Play Mode</button>'+
+      const modeButtons = '<div class="mode-select-container">'+
+        '<button class="game-mode-btn" onclick="startGameWithMode(\'score\')" '+(S.game.length===0?'disabled':'')+'>'+
+          '<div class="icon">🎲</div>'+
+          '<div class="title">PHYSICAL DICE</div>'+
+          '<div class="desc">Roll real dice<br>Enter scores</div>'+
+        '</button>'+
+        '<button class="game-mode-btn" onclick="startGameWithMode(\'play\')" '+(S.game.length===0?'disabled':'')+'>'+
+          '<div class="icon">📱</div>'+
+          '<div class="title">VIRTUAL DICE</div>'+
+          '<div class="desc">Roll on phone<br>Auto-scoring</div>'+
+        '</button>'+
       '</div>';
 
-      const modeDesc = S.mode === 'play'
-        ? '<div class="glass rounded-xl p-3 mb-4"><p class="text-white text-sm font-medium">🎲 Play Mode</p><p class="text-purple-200 text-xs mt-1">Roll dice on your phone! Shake to roll or tap the button. Scores are calculated automatically.</p></div>'
-        : '<div class="glass rounded-xl p-3 mb-4"><p class="text-white text-sm font-medium">📝 Score Mode</p><p class="text-purple-200 text-xs mt-1">Use your own dice. Manually enter scores as you play.</p></div>';
+      const hamburger = '<button class="hamburger-btn btn" onclick="toggleSideMenu()">☰</button>';
+
+      const sideMenu = '<div class="side-menu-overlay '+(S.sideMenuOpen?'open':'')+'" onclick="toggleSideMenu()"></div>'+
+        '<div class="side-menu '+(S.sideMenuOpen?'open':'')+'">'+
+          '<div class="side-menu-header">'+
+            '<h2 class="text-xl font-black text-white">Menu</h2>'+
+          '</div>'+
+          '<div class="side-menu-content">'+
+            '<button class="side-menu-item btn" onclick="exportData();toggleSideMenu()">📥 Export Data</button>'+
+            '<button class="side-menu-item btn" onclick="triggerImport();toggleSideMenu()">📤 Import Data</button>'+
+            '<button class="side-menu-item btn" onclick="navigateTo(\'history\');toggleSideMenu()">📜 Game History</button>'+
+            '<button class="side-menu-item btn" onclick="forceUpdate()">🔄 Update App</button>'+
+          '</div>'+
+          '<div class="side-menu-footer">'+
+            '<div class="text-xs text-gray-400" style="text-align:center;padding:1rem;font-family:monospace;">'+S.version+'</div>'+
+          '</div>'+
+        '</div>';
 
       return '<div class="container" style="min-height:100vh">'+
+        hamburger+sideMenu+
         '<div class="text-center mb-6"><div class="mb-2"><img src="icon-192-v2.png" alt="Schnitzel" style="width:96px;height:96px;margin:0 auto;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div><h1 class="text-4xl font-black text-white">SCHNITZEL</h1><p class="text-purple-200 text-sm">your Yahtzee companion app</p></div>'+
-        modeToggle+modeDesc+
-        (S.savedGame ? '<div class="glass rounded-2xl p-4 mb-4"><p class="text-white font-bold mb-2">📌 Saved Game '+(S.savedGame.mode === 'play' ? '🎲' : '📝')+'</p><p class="text-purple-200 text-sm">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">Saved '+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
+        (S.savedGame ? '<div class="glass rounded-2xl p-4 mb-2"><p class="text-white font-bold mb-2">📌 Paused Game '+(S.savedGame.mode === 'play' ? '🎲' : '📝')+'</p><p class="text-purple-200 text-sm">'+S.savedGame.game.map(p=>p.name).join(', ')+'</p><p class="text-purple-200 text-xs mt-1">'+new Date(S.savedGame.savedAt).toLocaleString()+'</p></div>' : '')+
         resumeBtn+
         '<div class="glass rounded-2xl p-5 mb-4">'+
-          '<div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-white">Select Players</h2><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">⚙️ Manage</button></div>'+
+          '<div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold text-white">Select Players</h2><button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">⚙️</button></div>'+
           '<div class="space-y-2">'+pl+'</div>'+ord+
         '</div>'+
-        '<button class="btn btn-primary" onclick="start()" '+(S.game.length===0?'disabled':'')+'>'+(S.game.length===0?'Select Players':(S.mode==='play'?'🎲 START GAME':'📝 START SCORING')+' ('+S.game.length+')')+'</button>'+
-        '<button class="btn btn-secondary mt-4" onclick="navigateTo(\'history\')">📜 Game History</button>'+
-        '<div class="grid grid-cols-2 gap-2 mt-4">'+
-          '<button class="btn btn-secondary" onclick="exportData()">📥 Export</button>'+
-          '<button class="btn btn-secondary" onclick="triggerImport()">📤 Import</button>'+
-        '</div>'+
+        modeButtons+
       '</div>'+(S.mgr?mgr():'')+(S.stats?statsModal():'');
     }
 
@@ -2712,21 +2866,17 @@
     history.replaceState({ view: S.view }, '', '#' + S.view);
     R();
 
-    // Load and display version
+    // Load and display version (only in side menu now)
     fetch('version.json')
       .then(res => res.json())
       .then(data => {
-        const versionEl = document.getElementById('version');
-        if (versionEl) {
-          versionEl.textContent = `v${data.version} (${data.commit})`;
-        }
+        S.version = `v${data.version} (${data.commit})`;
+        R(); // Re-render to show updated version
       })
       .catch(() => {
         // Fallback if version.json doesn't load
-        const versionEl = document.getElementById('version');
-        if (versionEl) {
-          versionEl.textContent = 'v1.0.0';
-        }
+        S.version = 'v1.0.0';
+        R(); // Re-render to show fallback version
       });
 
     // Register service worker for PWA with update detection

@@ -24,17 +24,6 @@ import { endScreenView, animateReveal, skipReveal as skipRevealFn } from './view
 // ============================================
 
 function R() {
-  // Track if current player changed
-  const playerChanged = S._prevPlayer !== undefined && S._prevPlayer !== S.cur;
-  S._prevPlayer = S.cur;
-
-  // Save carousel scroll position before re-render
-  let savedScrollLeft = 0;
-  const carousel = document.getElementById('playerCarousel');
-  if (carousel && !playerChanged) {
-    savedScrollLeft = carousel.scrollLeft;
-  }
-
   const app = document.getElementById('app');
 
   if (S.view === 'setup') {
@@ -53,19 +42,32 @@ function R() {
     }, 100);
   } else {
     app.innerHTML = gameView();
-    const newCarousel = document.getElementById('playerCarousel');
-
-    if (playerChanged && newCarousel) {
-      const activeCard = newCarousel.querySelector('.player-card-active');
-      if (activeCard) {
-        activeCard.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'start' });
-      }
-    } else if (newCarousel && savedScrollLeft > 0) {
-      newCarousel.scrollLeft = savedScrollLeft;
-    }
   }
 
   updateThemeColor();
+}
+
+/**
+ * Scroll the carousel to show the active player card with smooth animation
+ */
+function scrollCarouselToActivePlayer() {
+  // Use requestAnimationFrame to ensure DOM is updated
+  requestAnimationFrame(() => {
+    const carousel = document.getElementById('playerCarousel');
+    if (!carousel) return;
+
+    const activeCard = carousel.querySelector('.player-card-active');
+    if (!activeCard) return;
+
+    // Calculate target scroll position (align card to start with some padding)
+    const targetScroll = activeCard.offsetLeft - 12; // 12px = 0.75rem padding
+
+    // Animate scroll
+    carousel.scrollTo({
+      left: Math.max(0, targetScroll),
+      behavior: 'smooth'
+    });
+  });
 }
 
 // Make R, S, and save available globally for onclick handlers
@@ -261,6 +263,7 @@ window.switchPlayer = (index) => {
   S.cur = index;
   saveCurrentGame();
   R();
+  scrollCarouselToActivePlayer();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
@@ -309,6 +312,7 @@ window.sel = (v) => {
   S.cur = nextPlayer;
   saveCurrentGame();
   R();
+  scrollCarouselToActivePlayer();
   window.scrollTo({ top: 0, behavior: 'smooth' });
   showToast(nextPlayerName + "'s turn");
 };
@@ -363,6 +367,7 @@ window.selectPlayScore = (categoryId, score) => {
   resetDiceForTurn();
   saveCurrentGame();
   R();
+  scrollCarouselToActivePlayer();
   window.scrollTo({ top: 0, behavior: 'smooth' });
   showToast(nextPlayerName + "'s turn");
 };

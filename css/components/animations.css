@@ -1,0 +1,139 @@
+/* Animation Keyframes and Classes */
+
+/* Keyframes */
+@keyframes pulse-winner {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.95;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(1rem); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to { opacity: 0; transform: translateX(-50%) translateY(1rem); }
+}
+
+@keyframes firework-burst {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(360deg);
+  }
+}
+
+@keyframes dice-roll {
+  0% { transform: rotate(-5deg) scale(1.05); }
+  50% { transform: rotate(5deg) scale(0.95); }
+  100% { transform: rotate(-5deg) scale(1.05); }
+}
+
+/* Animation classes */
+.winner-row {
+  animation: pulse-winner 2s ease-in-out infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.reveal-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--tooltipBg);
+  color: var(--tooltipText);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--rMd);
+  font-weight: 600;
+  z-index: 100;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadowLg);
+  animation: toast-in 0.3s ease, toast-out 0.3s ease 1.7s forwards;
+}
+
+/* Fireworks celebration */
+#fireworks-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+}
+
+#fireworks-container.active {
+  display: block;
+}
+
+.firework {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-image: url('../../fireworks.webp');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  animation: firework-burst 1.2s ease-out forwards;
+}

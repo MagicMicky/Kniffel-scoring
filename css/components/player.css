@@ -1,0 +1,267 @@
+/* Player Components - Carousel, Cards, Tabs */
+
+/* Game Container - natural height, no forced scrolling */
+.game-container {
+  background: var(--bg);
+}
+
+/* Combined Sticky Header (header + carousel as one unit) */
+.game-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface);
+}
+
+/* Player Carousel */
+.player-carousel-container {
+  background: var(--surface);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+  border-bottom: 1px solid var(--border);
+  /* Use padding on container for vertical spacing */
+  padding: 0.75rem 0;
+  /* Prevent scroll chaining to parent */
+  overscroll-behavior: contain;
+  /* Contain overflow to prevent any scroll bleed */
+  overflow: hidden;
+}
+
+.player-carousel {
+  display: flex;
+  gap: 0.75rem;
+  /* Only horizontal padding for left/right card spacing */
+  padding: 0 0.75rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /* Limit touch gestures to horizontal only */
+  touch-action: pan-x;
+  /* Prevent scroll chaining */
+  overscroll-behavior-x: contain;
+}
+
+.player-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* Player Cards */
+.player-card {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -1px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+  color: white;
+  height: 5.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.player-card-active {
+  width: 70%;
+  min-width: 16rem;
+  justify-content: space-between;
+}
+
+.player-card-inactive {
+  width: 70%;
+  min-width: 16rem;
+  justify-content: flex-start;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+
+.player-card:active {
+  transform: scale(0.98);
+}
+
+.player-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.player-name {
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.player-name-inactive {
+  color: var(--text);
+  text-shadow: none;
+}
+
+.player-card-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stat-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value-large {
+  font-size: 2rem;
+  font-weight: 900;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.stat-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.stat-item {
+  flex: 1;
+  background: rgba(255,255,255,0.15);
+  border-radius: 0.5rem;
+  padding: 0.375rem 0.5rem;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.stat-label-sm {
+  font-size: 0.625rem;
+  opacity: 0.85;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value-sm {
+  font-size: 0.875rem;
+  font-weight: 900;
+  margin-top: 0.125rem;
+}
+
+/* Player Tabs */
+.player-tab {
+  padding: 0.5rem 1rem;
+  border-radius: var(--rPill);
+  font-size: 0.875rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.player-tab:active { transform: scale(0.95); }
+.player-tab:hover { opacity: 0.9; }
+
+.player-tab-active {
+  color: var(--text);
+  box-shadow: var(--shadowSm);
+}
+
+.player-tab-inactive {
+  background-color: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.player-tab-inactive:hover {
+  background-color: var(--surface2Hover);
+  border-color: var(--borderAccent);
+}
+
+/* Section Tabs */
+.section-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  background: var(--surface2);
+  padding: 0.375rem;
+  border-radius: var(--rLg);
+  border: 1px solid var(--border);
+}
+
+.section-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--rMd);
+  border: none;
+  background: transparent;
+  color: var(--textMuted);
+  font-weight: 600;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.section-tab-active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadowSm), var(--innerHighlight);
+}
+
+.section-tab-label {
+  font-size: 0.875rem;
+}
+
+.section-tab-badge {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--rPill);
+  background: var(--surface2);
+  color: var(--textMuted);
+  font-weight: 700;
+}
+
+.section-tab-active .section-tab-badge {
+  background: var(--link);
+  color: var(--bg);
+}
+
+.section-tab-badge-success {
+  background: var(--link) !important;
+  color: var(--bg) !important;
+}
+
+/* Current turn indicator */
+.current-turn-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.pulse-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--link);
+  animation: pulse 1.5s infinite;
+}
+
+.pulse-dot-small {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  animation: pulse 1.5s infinite;
+}

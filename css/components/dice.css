@@ -1,0 +1,77 @@
+/* Dice Components */
+
+.dice-area {
+  background: linear-gradient(135deg, var(--surface2) 0%, var(--border) 100%);
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+}
+
+.dice-container {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.die {
+  width: 3rem;
+  height: 3rem;
+  background: white;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: var(--onAccent);
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.die:active {
+  transform: scale(0.95);
+}
+
+.die.held {
+  background: var(--link);
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 12px var(--focusRingStrong);
+}
+
+.die.held::after {
+  content: 'HOLD';
+  position: absolute;
+  bottom: -1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.die.rolling {
+  animation: dice-roll 0.1s ease-in-out infinite;
+}
+
+.roll-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.625rem;
+  color: var(--text);
+}
+
+.roll-count {
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.shake-hint {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}

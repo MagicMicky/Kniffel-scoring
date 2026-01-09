@@ -1,0 +1,151 @@
+/* Score Components */
+
+/* Score buttons */
+.score-btn {
+  min-width: 4rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--rMd);
+  font-weight: 700;
+  font-size: 1.125rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.score-btn:active { transform: scale(0.95); }
+.score-btn:hover { opacity: 0.9; }
+
+.score-filled-blue {
+  background-color: rgba(122, 231, 208, 0.15);
+  color: var(--link);
+  border: 1px solid var(--link);
+}
+
+.score-filled-purple {
+  background-color: var(--accentSubtle);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.score-empty {
+  background-color: var(--surface2);
+  color: var(--muted);
+  border: 2px dashed var(--border);
+}
+
+.score-empty:hover {
+  background-color: var(--surface2Hover);
+  border-color: var(--borderAccent);
+}
+
+/* Picker buttons */
+.picker-btn {
+  background-color: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--rMd);
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.picker-btn:hover { background-color: var(--surface2Hover); }
+.picker-btn:active { background-color: var(--surface2Pressed); transform: scale(0.95); }
+
+.picker-btn-green {
+  background-color: rgba(122, 231, 208, 0.12);
+  border: 2px solid var(--link);
+  border-radius: var(--rMd);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.picker-btn-green:hover { background-color: rgba(122, 231, 208, 0.2); }
+.picker-btn-green:active { background-color: rgba(122, 231, 208, 0.3); transform: scale(0.95); }
+
+.picker-btn-red {
+  background-color: rgba(251, 113, 133, 0.12);
+  border: 2px solid var(--error);
+  border-radius: var(--rMd);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.picker-btn-red:hover { background-color: rgba(251, 113, 133, 0.2); }
+.picker-btn-red:active { background-color: rgba(251, 113, 133, 0.3); transform: scale(0.95); }
+
+.picker-btn-purple {
+  background-color: var(--accentSubtle);
+  border: 1px solid var(--accent);
+  border-radius: var(--rSm);
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.picker-btn-purple:hover { background-color: rgba(57, 198, 167, 0.2); }
+.picker-btn-purple:active { background-color: rgba(57, 198, 167, 0.3); transform: scale(0.95); }
+
+/* Play mode category button */
+.score-btn-play {
+  min-width: 4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.score-btn-play:active {
+  transform: scale(0.95);
+}
+
+.score-btn-play:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.score-available {
+  background: rgba(57, 198, 167, 0.15);
+  color: var(--link);
+  border: 2px solid var(--link);
+}
+
+.score-zero-only {
+  background: rgba(251, 113, 133, 0.15);
+  color: var(--error);
+  border: 2px dashed var(--error);
+}
+
+/* Score suggestion styles */
+.score-suggestion {
+  background: rgba(57, 198, 167, 0.15);
+  border: 2px solid var(--link);
+}
+
+.score-suggestion-text {
+  color: var(--link);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+/* Standing bars */
+.standing-bar-end {
+  height: 3.5rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: width 1s ease-out;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}

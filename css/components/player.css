@@ -8,8 +8,12 @@
   background: var(--surface);
   box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
   border-bottom: 1px solid var(--border);
-  /* Use padding on container for vertical spacing - avoids scroll artifacts */
+  /* Use padding on container for vertical spacing */
   padding: 0.75rem 0;
+  /* Prevent scroll chaining to parent */
+  overscroll-behavior: contain;
+  /* Contain overflow to prevent any scroll bleed */
+  overflow: hidden;
 }
 
 .player-carousel {
@@ -18,10 +22,15 @@
   /* Only horizontal padding for left/right card spacing */
   padding: 0 0.75rem;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  /* Limit touch gestures to horizontal only */
+  touch-action: pan-x;
+  /* Prevent scroll chaining */
+  overscroll-behavior-x: contain;
 }
 
 .player-carousel::-webkit-scrollbar {

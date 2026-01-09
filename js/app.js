@@ -73,6 +73,14 @@ window.R = R;
 window.S = S;
 window.save = save;
 
+// Debug: verify globals are set correctly
+console.log('[Schnitzel] App initialized. Globals:', {
+  R: typeof window.R,
+  S: typeof window.S,
+  save: typeof window.save,
+  addP: typeof window.addP
+});
+
 // ============================================
 // GLOBAL FUNCTIONS FOR ONCLICK HANDLERS
 // ============================================
@@ -366,6 +374,14 @@ window.selectPlayScore = (categoryId, score) => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   showToast(nextPlayerName + "'s turn");
 };
+
+// Debug: verify all globals are set
+console.log('[Schnitzel] All handlers registered:', {
+  addP: typeof window.addP,
+  tog: typeof window.tog,
+  confirmFinish: typeof window.confirmFinish,
+  confirmEarlyFinish: typeof window.confirmEarlyFinish
+});
 
 // ============================================
 // INITIALIZATION

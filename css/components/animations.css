@@ -130,7 +130,7 @@
   position: absolute;
   width: 200px;
   height: 200px;
-  background-image: url('../fireworks.webp');
+  background-image: url('../../fireworks.webp');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

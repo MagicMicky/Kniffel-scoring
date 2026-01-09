@@ -32,8 +32,10 @@ export function gameView() {
 
   return `
     <div style="min-height:100vh;background:var(--bg);padding-bottom:6rem">
-      ${gameHeader(isPlayMode)}
-      ${playerCarousel(S.game, S.cur)}
+      <div class="game-sticky-header">
+        ${gameHeader(isPlayMode)}
+        ${playerCarousel(S.game, S.cur)}
+      </div>
       <div class="p-3" style="max-width:28rem;margin:0 auto">
         ${diceArea()}
         ${sectionTabs(scores)}
@@ -54,7 +56,7 @@ function gameHeader(isPlayMode) {
   const title = isPlayMode ? '🎲 SCHNITZEL' : '📝 SCHNITZEL';
 
   return `
-    <div class="header-gradient text-white p-3 sticky">
+    <div class="header-gradient text-white p-3">
       <div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">
         <button class="btn-text text-white text-lg font-medium" onclick="pauseG()">← Back</button>
         <h1 class="font-black text-lg">${title}</h1>

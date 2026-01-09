@@ -1,5 +1,10 @@
 /* Player Components - Carousel, Cards, Tabs */
 
+/* Game Container - natural height, no forced scrolling */
+.game-container {
+  background: var(--bg);
+}
+
 /* Combined Sticky Header (header + carousel as one unit) */
 .game-sticky-header {
   position: sticky;

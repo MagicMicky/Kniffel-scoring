@@ -31,7 +31,7 @@ export function gameView() {
   if (S.scoreSection === undefined) S.scoreSection = 'upper';
 
   return `
-    <div style="min-height:100vh;background:var(--bg);padding-bottom:6rem">
+    <div class="game-container">
       <div class="game-sticky-header">
         ${gameHeader(isPlayMode)}
         ${playerCarousel(S.game, S.cur)}

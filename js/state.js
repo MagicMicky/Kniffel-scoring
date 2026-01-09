@@ -39,7 +39,9 @@ export const S = {
   earlyFinishModal: false,
   playerDetailsModal: false,
   // Score section view (upper/lower)
-  scoreSection: 'upper'
+  scoreSection: 'upper',
+  // Track when bonus was just claimed (to show reminder)
+  bonusJustClaimed: false
 };
 
 /**

@@ -38,6 +38,7 @@ export function gameView() {
       </div>
       <div class="p-3" style="max-width:28rem;margin:0 auto">
         ${diceArea()}
+        ${S.bonusJustClaimed && !isPlayMode ? bonusReminderBanner() : ''}
         ${sectionTabs(scores)}
         ${scoreSection(scores, isPlayMode, possibleScores, canSelectScore)}
       </div>
@@ -272,4 +273,33 @@ function playerDetailsModal(player) {
     </div>
   `, 'S.playerDetailsModal=false;R()', '',
     `background:linear-gradient(135deg, ${playerColor} 0%, ${playerColor}dd 100%);color:white;border:none`);
+}
+
+/**
+ * Create bonus reminder banner for Score Mode
+ * @returns {string} HTML string
+ */
+function bonusReminderBanner() {
+  return `
+    <div style="margin: 1rem 0 1rem 0; padding: 1rem; border-radius: 0.75rem; text-align: center;
+                background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+                border: 2px solid #FBBF24; box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+                animation: pulse 1.5s ease-in-out infinite;">
+      <div style="font-size: 1.25rem; font-weight: 800; color: #78350F; margin-bottom: 0.25rem;">
+        ✅ Bonus Claimed! +100
+      </div>
+      <div style="font-size: 0.875rem; color: #92400E; font-weight: 600;">
+        ⬇️ Now score your roll in any category below ⬇️
+      </div>
+      <div style="font-size: 0.75rem; color: #92400E; opacity: 0.8; margin-top: 0.25rem;">
+        (Use as joker: Chance, 3/4 of a kind, etc.)
+      </div>
+    </div>
+    <style>
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+      }
+    </style>
+  `;
 }

@@ -329,6 +329,7 @@ window.sel = (v) => {
   }
 
   S.picker = null;
+  S.bonusJustClaimed = false; // Clear reminder after scoring
 
   if (isGameComplete()) {
     vibrate([100, 50, 100, 50, 200]);
@@ -363,6 +364,7 @@ window.clr = (id) => {
 window.addBonus = () => {
   if (S.game[S.cur].scores.yahtzee === 50) {
     S.game[S.cur].scores.bonus += 100;
+    S.bonusJustClaimed = true;
     showFireworks();
     showToast('YAHTZEE BONUS! +100');
     saveCurrentGame();

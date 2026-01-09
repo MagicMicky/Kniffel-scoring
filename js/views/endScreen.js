@@ -4,7 +4,7 @@
  */
 
 import { S } from '../state.js';
-import { color } from '../utils/helpers.js';
+import { color, escapeHtml } from '../utils/helpers.js';
 import { standings } from './components/standings.js';
 
 /**
@@ -26,10 +26,10 @@ export function endScreenView() {
   // Winner announcement
   const winnerOpacity = S.revealComplete ? '1' : '0';
   const winnerSection = winners.length === 1
-    ? `<div class="text-4xl font-black mb-2 text-white" style="text-shadow:0 2px 4px rgba(0,0,0,0.2)">${winners[0].name}</div>
+    ? `<div class="text-4xl font-black mb-2 text-white" style="text-shadow:0 2px 4px rgba(0,0,0,0.2)">${escapeHtml(winners[0].name)}</div>
        <div class="text-xl text-white" style="opacity:0.9">is the Champion!</div>`
     : `<div class="text-3xl font-black mb-2 text-white" style="text-shadow:0 2px 4px rgba(0,0,0,0.2)">It's a Tie!</div>
-       <div class="text-lg text-white" style="opacity:0.9">${winners.map(w => w.name).join(' & ')}</div>`;
+       <div class="text-lg text-white" style="opacity:0.9">${winners.map(w => escapeHtml(w.name)).join(' & ')}</div>`;
 
   // Standings
   const standingsHtml = standings(players, maxScore, isRevealing, visibleCount, S.revealComplete);

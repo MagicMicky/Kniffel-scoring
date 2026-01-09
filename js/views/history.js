@@ -6,7 +6,7 @@
 import { S } from '../state.js';
 import { UPPER, LOWER } from '../constants.js';
 import { upTot, upBonus, loTot } from '../utils/scoring.js';
-import { color, formatDate, formatTime } from '../utils/helpers.js';
+import { color, formatDate, formatTime, escapeHtml } from '../utils/helpers.js';
 import { readOnlyScoreRow } from './components/scoreRow.js';
 import { historyStandings } from './components/standings.js';
 
@@ -58,7 +58,7 @@ function historyGamesList() {
         <div class="flex justify-between items-center ${isWinner ? 'text-yellow-400 font-bold' : 'text-white'}">
           <div class="flex items-center gap-2">
             <div class="color-dot-sm" style="background:${playerColor}"></div>
-            <span>${isWinner ? '🏆 ' : ''}${p.name}</span>
+            <span>${isWinner ? '🏆 ' : ''}${escapeHtml(p.name)}</span>
           </div>
           <span class="text-lg">${p.total}</span>
         </div>
@@ -109,7 +109,7 @@ export function historyDetailView() {
     return `
       <button class="player-tab flex-shrink-0 ${isActive ? 'player-tab-active' : 'player-tab-inactive'}"
               style="${activeStyle}" onclick="switchHistoryPlayer(${i})">
-        ${p.name}: ${p.total}
+        ${escapeHtml(p.name)}: ${p.total}
       </button>
     `;
   }).join('');
@@ -146,7 +146,7 @@ export function historyDetailView() {
 
       <div class="p-3" style="max-width:28rem;margin:0 auto">
         <div class="card p-4 mb-4" style="border-left:4px solid ${playerColor}">
-          <h2 class="font-black text-2xl" style="color:${playerColor}">${currentPlayer.name}</h2>
+          <h2 class="font-black text-2xl" style="color:${playerColor}">${escapeHtml(currentPlayer.name)}</h2>
           <p class="text-gray-500 text-sm mt-1">Final Score: ${currentPlayer.total}</p>
         </div>
 

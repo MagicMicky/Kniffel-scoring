@@ -3,7 +3,7 @@
  * Used in the player carousel during game
  */
 
-import { color } from '../../utils/helpers.js';
+import { color, escapeHtml } from '../../utils/helpers.js';
 import { grand } from '../../utils/scoring.js';
 
 /**
@@ -20,7 +20,7 @@ export function activePlayerCard(player) {
          style="background:linear-gradient(135deg, ${playerColor} 0%, ${playerColor}dd 100%)"
          onclick="showPlayerDetails()">
       <div class="player-card-header">
-        <h3 class="player-name">${player.name}</h3>
+        <h3 class="player-name">${escapeHtml(player.name)}</h3>
         <div class="pulse-dot-small"></div>
       </div>
       <div class="player-card-stats">
@@ -47,7 +47,7 @@ export function inactivePlayerCard(player, index) {
          style="border-left:4px solid ${playerColor}"
          onclick="switchPlayer(${index})">
       <div class="player-card-header">
-        <h3 class="player-name player-name-inactive">${player.name}</h3>
+        <h3 class="player-name player-name-inactive">${escapeHtml(player.name)}</h3>
       </div>
     </div>
   `;

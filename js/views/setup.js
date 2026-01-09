@@ -5,6 +5,7 @@
 
 import { S } from '../state.js';
 import { COLORS } from '../constants.js';
+import { escapeHtml } from '../utils/helpers.js';
 import { hamburgerButton, sideMenu } from './components/sideMenu.js';
 import { modal } from './components/modal.js';
 import { upTot, grand, upBonus, loTot } from '../utils/scoring.js';
@@ -21,7 +22,7 @@ export function setupView() {
   const playOrder = S.game.length > 0
     ? `<div class="glass rounded-xl p-3 mt-4">
         <p class="text-sm text-purple-200 mb-1">Play order:</p>
-        <p class="font-medium text-white">${S.game.map(p => p.name).join(' → ')}</p>
+        <p class="font-medium text-white">${S.game.map(p => escapeHtml(p.name)).join(' → ')}</p>
        </div>`
     : '';
 
@@ -90,7 +91,7 @@ function playerSelectionList() {
            style="${selectedStyle}" onclick="tog(${p.id})">
         <div class="checkbox">${isSelected ? '<div class="checkbox-inner"></div>' : ''}</div>
         <div class="color-dot" style="background:${playerColor}"></div>
-        <span class="flex-1 font-medium text-white">${p.name}</span>
+        <span class="flex-1 font-medium text-white">${escapeHtml(p.name)}</span>
         ${orderButtons}
         <button class="btn btn-small glass text-white text-xs"
                 onclick="event.stopPropagation();S.stats=S.known.find(x=>x.id===${p.id});R()">📊</button>
@@ -106,7 +107,7 @@ function savedGameBanner() {
   if (!S.savedGame) return '';
 
   const modeIcon = S.savedGame.mode === 'play' ? '🎲' : '📝';
-  const players = S.savedGame.game.map(p => p.name).join(', ');
+  const players = S.savedGame.game.map(p => escapeHtml(p.name)).join(', ');
   const savedDate = new Date(S.savedGame.savedAt).toLocaleString();
 
   return `
@@ -159,7 +160,7 @@ function managerModal() {
   const playerList = S.known.map((p, i) => `
     <div class="flex items-center gap-2 bg-gray-50 rounded-xl p-3">
       <div class="color-dot" style="background:${COLORS[i % COLORS.length]}"></div>
-      <input type="text" class="input flex-1" value="${p.name}" onchange="ren(${p.id},this.value)">
+      <input type="text" class="input flex-1" value="${escapeHtml(p.name)}" onchange="ren(${p.id},this.value)">
       <button class="delete-btn" onclick="del(${p.id})">Delete</button>
     </div>
   `).join('');
@@ -221,7 +222,7 @@ function statsModal() {
     `;
 
   return modal(`
-    <h2 class="text-2xl font-black text-white mb-1">${p.name}</h2>
+    <h2 class="text-2xl font-black text-white mb-1">${escapeHtml(p.name)}</h2>
     <p class="text-gray-500 text-sm mb-4">Statistics</p>
     ${statsContent}
     <button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.stats=null;R()">

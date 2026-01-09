@@ -81,18 +81,6 @@ export function isGameComplete() {
 }
 
 /**
- * Save finished game to history
- */
-export function saveFinishedGame() {
-  if (S.finishedGame) {
-    S.history.unshift(S.finishedGame);
-    save();
-    S.finishedGame = null;
-  }
-  clearSavedGame();
-}
-
-/**
  * Create a game record for history
  * @returns {Object} Game record
  */

@@ -6,7 +6,7 @@
 import { S } from '../state.js';
 import { UPPER, LOWER } from '../constants.js';
 import { upTot, upBonus, loTot, grand, getPossibleScores } from '../utils/scoring.js';
-import { color } from '../utils/helpers.js';
+import { color, escapeHtml } from '../utils/helpers.js';
 import { playerCarousel } from './components/playerCard.js';
 import { diceArea } from './components/diceArea.js';
 import { picker } from './components/picker.js';
@@ -233,7 +233,7 @@ function playerDetailsModal(player) {
     <button class="btn-text text-white text-sm" style="position:absolute;top:1rem;right:1rem;opacity:0.8"
             onclick="S.playerDetailsModal=false;R()">✕</button>
     <div class="text-center mb-6">
-      <h3 class="text-3xl font-black mb-2">${player.name}</h3>
+      <h3 class="text-3xl font-black mb-2">${escapeHtml(player.name)}</h3>
       <p class="text-white" style="opacity:0.8">Player Details</p>
     </div>
     <div class="flex flex-col gap-4"

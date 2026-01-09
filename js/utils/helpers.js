@@ -6,6 +6,21 @@ import { S } from '../state.js';
 import { COLORS } from '../constants.js';
 
 /**
+ * Escape HTML to prevent XSS attacks
+ * @param {string} str - String to escape
+ * @returns {string} Escaped string safe for HTML insertion
+ */
+export function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
  * Get player color based on their position in known players
  * @param {number} playerId - Player ID
  * @returns {string} Hex color code

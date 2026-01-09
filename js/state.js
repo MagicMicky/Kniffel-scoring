@@ -39,20 +39,8 @@ export const S = {
   earlyFinishModal: false,
   playerDetailsModal: false,
   // Score section view (upper/lower)
-  scoreSection: 'upper',
-  // Track previous player for carousel scroll management
-  _prevPlayer: undefined
+  scoreSection: 'upper'
 };
-
-/**
- * Initialize state from localStorage
- * Called on app startup
- */
-export function initState() {
-  S.known = JSON.parse(localStorage.getItem('yahtzeeP') || '[]');
-  S.history = JSON.parse(localStorage.getItem('yahtzeeH') || '[]');
-  S.savedGame = JSON.parse(localStorage.getItem('yahtzeeSaved') || 'null');
-}
 
 /**
  * Reset game-related state
@@ -76,7 +64,6 @@ export function resetGameState() {
   S.earlyFinishModal = false;
   S.playerDetailsModal = false;
   S.scoreSection = 'upper';
-  S._prevPlayer = undefined;
 }
 
 /**

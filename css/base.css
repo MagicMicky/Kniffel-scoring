@@ -52,11 +52,13 @@ body {
   backdrop-filter: blur(12px);
 }
 
-/* Gradient headers */
-.header-gradient { background: linear-gradient(to right, var(--accent), var(--accentDark)); }
-.upper-gradient { background: linear-gradient(to right, var(--accent), var(--accentDark)); }
-.lower-gradient { background: linear-gradient(to right, var(--accent), var(--accentDark)); }
-.total-gradient { background: linear-gradient(to right, var(--accent), var(--accentDark)); }
+/* Gradient headers - all use the same accent gradient */
+.header-gradient,
+.upper-gradient,
+.lower-gradient,
+.total-gradient {
+  background: linear-gradient(to right, var(--accent), var(--accentDark));
+}
 
 /* Version footer - hidden (now in side menu) */
 .version-footer {

@@ -3,7 +3,7 @@
  * Displays player standings/rankings
  */
 
-import { color } from '../../utils/helpers.js';
+import { color, escapeHtml } from '../../utils/helpers.js';
 
 /**
  * Create standings display for end screen
@@ -29,7 +29,7 @@ export function standings(players, maxScore, isRevealing, visibleCount, revealCo
         <div class="flex-1 rounded-xl bg-gray-100 overflow-hidden" style="height:3.5rem">
           <div class="standing-bar-end"
                style="background:${playerColor};width:${isVisible ? Math.max(30, (p.total / maxScore) * 100) : '0'}%">
-            <span class="font-bold text-white px-3">${p.name}</span>
+            <span class="font-bold text-white px-3">${escapeHtml(p.name)}</span>
           </div>
         </div>
         <span class="font-black text-2xl"
@@ -59,7 +59,7 @@ export function historyStandings(players, maxScore) {
         <div class="flex-1 rounded-xl bg-gray-100 overflow-hidden" style="height:3.5rem">
           <div class="standing-bar-end"
                style="background:${playerColor};width:${Math.max(30, (p.total / maxScore) * 100)}%">
-            <span class="font-bold text-white px-3">${p.name}</span>
+            <span class="font-bold text-white px-3">${escapeHtml(p.name)}</span>
           </div>
         </div>
         <span class="font-black text-2xl"

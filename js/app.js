@@ -23,25 +23,61 @@ import { endScreenView, animateReveal, skipReveal as skipRevealFn } from './view
 // RENDER FUNCTION
 // ============================================
 
+// Track the last rendered player for carousel animation
+let lastRenderedPlayer = null;
+let savedCarouselScroll = 0;
+
 function R() {
+  // Save carousel scroll position BEFORE re-render
+  const carousel = document.getElementById('playerCarousel');
+  if (carousel) {
+    savedCarouselScroll = carousel.scrollLeft;
+  }
+
+  // Check if player changed (for animation decision)
+  const playerChanged = lastRenderedPlayer !== null && lastRenderedPlayer !== S.cur;
+
   const app = document.getElementById('app');
 
   if (S.view === 'setup') {
     app.innerHTML = setupView();
+    lastRenderedPlayer = null; // Reset when leaving game view
   } else if (S.view === 'history') {
     if (S.selectedHistoryGame) {
       app.innerHTML = historyDetailView();
     } else {
       app.innerHTML = historyListView();
     }
+    lastRenderedPlayer = null;
   } else if (S.view === 'endScreen') {
     app.innerHTML = endScreenView();
     setTimeout(() => {
       startFireworksCanvas();
       animateReveal();
     }, 100);
+    lastRenderedPlayer = null;
   } else {
+    // Game view
     app.innerHTML = gameView();
+
+    // Handle carousel scroll position
+    const newCarousel = document.getElementById('playerCarousel');
+    if (newCarousel) {
+      // Always restore scroll position immediately first (prevents jump to 0)
+      newCarousel.scrollLeft = savedCarouselScroll;
+
+      if (playerChanged) {
+        // Player changed: animate from current (restored) position to new player
+        // Use double RAF to ensure the scroll restoration has taken effect
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            scrollCarouselToActivePlayer(newCarousel);
+          });
+        });
+      }
+    }
+
+    lastRenderedPlayer = S.cur;
   }
 
   updateThemeColor();
@@ -49,24 +85,21 @@ function R() {
 
 /**
  * Scroll the carousel to show the active player card with smooth animation
+ * @param {HTMLElement} [carousel] - Optional carousel element (avoids re-query)
  */
-function scrollCarouselToActivePlayer() {
-  // Use requestAnimationFrame to ensure DOM is updated
-  requestAnimationFrame(() => {
-    const carousel = document.getElementById('playerCarousel');
-    if (!carousel) return;
+function scrollCarouselToActivePlayer(carousel) {
+  const el = carousel || document.getElementById('playerCarousel');
+  if (!el) return;
 
-    const activeCard = carousel.querySelector('.player-card-active');
-    if (!activeCard) return;
+  const activeCard = el.querySelector('.player-card-active');
+  if (!activeCard) return;
 
-    // Calculate target scroll position (align card to start with some padding)
-    const targetScroll = activeCard.offsetLeft - 12; // 12px = 0.75rem padding
+  // Calculate target scroll position (align card to start with padding)
+  const targetScroll = activeCard.offsetLeft - 12; // 12px = 0.75rem padding
 
-    // Animate scroll
-    carousel.scrollTo({
-      left: Math.max(0, targetScroll),
-      behavior: 'smooth'
-    });
+  el.scrollTo({
+    left: Math.max(0, targetScroll),
+    behavior: 'smooth'
   });
 }
 
@@ -262,8 +295,7 @@ window.switchPlayer = (index) => {
   }
   S.cur = index;
   saveCurrentGame();
-  R();
-  scrollCarouselToActivePlayer();
+  R(); // R() automatically animates carousel when player changes
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
@@ -311,8 +343,7 @@ window.sel = (v) => {
   const nextPlayerName = S.game[nextPlayer].name;
   S.cur = nextPlayer;
   saveCurrentGame();
-  R();
-  scrollCarouselToActivePlayer();
+  R(); // R() automatically animates carousel when player changes
   window.scrollTo({ top: 0, behavior: 'smooth' });
   showToast(nextPlayerName + "'s turn");
 };
@@ -366,8 +397,7 @@ window.selectPlayScore = (categoryId, score) => {
   S.cur = nextPlayer;
   resetDiceForTurn();
   saveCurrentGame();
-  R();
-  scrollCarouselToActivePlayer();
+  R(); // R() automatically animates carousel when player changes
   window.scrollTo({ top: 0, behavior: 'smooth' });
   showToast(nextPlayerName + "'s turn");
 };

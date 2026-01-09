@@ -68,8 +68,10 @@ function R() {
   updateThemeColor();
 }
 
-// Make R available globally for onclick handlers
+// Make R, S, and save available globally for onclick handlers
 window.R = R;
+window.S = S;
+window.save = save;
 
 // ============================================
 // GLOBAL FUNCTIONS FOR ONCLICK HANDLERS

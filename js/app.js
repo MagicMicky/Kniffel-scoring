@@ -126,6 +126,17 @@ window.switchHistoryPlayer = (index) => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
+// Badge info modal
+window.showBadgeInfo = (icon, name, desc) => {
+  S.selectedBadge = { icon, name, desc };
+  R();
+};
+
+window.closeBadgeInfo = () => {
+  S.selectedBadge = null;
+  R();
+};
+
 // Side menu
 window.toggleSideMenu = () => {
   S.sideMenuOpen = !S.sideMenuOpen;

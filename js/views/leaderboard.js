@@ -181,9 +181,9 @@ export function leaderboardView() {
     const achievementsBadges = achievements.length > 0
       ? `<div class="achievements-row">
           ${achievements.map(a => `
-            <div class="achievement-badge" title="${a.name}: ${a.desc}">
+            <button class="achievement-badge" onclick="showBadgeInfo('${a.icon}', '${a.name}', '${escapeHtml(a.desc)}')">
               <span class="achievement-icon">${a.icon}</span>
-            </div>
+            </button>
           `).join('')}
          </div>`
       : '';
@@ -237,6 +237,20 @@ export function leaderboardView() {
     `;
   }).join('');
 
+  // Badge info modal
+  const badgeModal = S.selectedBadge ? `
+    <div class="modal-overlay" onclick="closeBadgeInfo()">
+      <div class="modal badge-modal" onclick="event.stopPropagation()">
+        <div class="text-center mb-4">
+          <div class="badge-modal-icon">${S.selectedBadge.icon}</div>
+          <h2 class="text-2xl font-black text-white mb-2">${escapeHtml(S.selectedBadge.name)}</h2>
+          <p class="text-purple-200">${escapeHtml(S.selectedBadge.desc)}</p>
+        </div>
+        <button class="btn btn-primary w-full" onclick="closeBadgeInfo()">Got it!</button>
+      </div>
+    </div>
+  ` : '';
+
   return `
     <div class="container" style="min-height:100vh">
       <div class="flex items-center justify-between mb-6">
@@ -255,6 +269,7 @@ export function leaderboardView() {
 
       ${leaderboardHtml}
     </div>
+    ${badgeModal}
   `;
 }
 

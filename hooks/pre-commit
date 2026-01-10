@@ -1,8 +1,8 @@
 #!/bin/bash
 # Auto-update version.json and service worker cache before each commit
 
-# Only update if index.html, manifest.json, or sw.js changed
-if git diff --cached --name-only | grep -qE '(index\.html|manifest\.json|sw\.js)'; then
+# Update version if any code files changed (.js, .css, .html, .json)
+if git diff --cached --name-only | grep -qE '\.(js|css|html|json)$'; then
 
   # Get commit count as version number (e.g., 1.0.47 for 47th commit)
   COMMIT_COUNT=$(git rev-list --count HEAD 2>/dev/null || echo "0")

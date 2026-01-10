@@ -99,8 +99,8 @@ function blitzTimerDisplay() {
       <div class="timer-header">
         <span class="timer-label">⚡ Time Remaining</span>
         <span class="timer-value ${isWarning ? 'text-red-400' : 'text-white'}">${timeRemaining}s</span>
-        ${speedBonusActive ? '<span class="speed-bonus-indicator">+5 speed bonus!</span>' : ''}
       </div>
+      ${speedBonusActive ? '<div class="speed-bonus-indicator">⚡ +5 speed bonus active!</div>' : ''}
       <div class="timer-bar-container">
         <div class="timer-bar ${speedBonusClass}" style="width: ${percentage}%"></div>
       </div>

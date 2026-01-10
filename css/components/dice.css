@@ -95,7 +95,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .timer-label {
@@ -111,11 +111,11 @@
 }
 
 .speed-bonus-indicator {
-  position: absolute;
-  right: 0.75rem;
+  text-align: center;
   font-size: 0.75rem;
   font-weight: 700;
   color: #FCD34D;
+  margin: 0.25rem 0;
   animation: bonus-glow 1.5s ease-in-out infinite;
 }
 

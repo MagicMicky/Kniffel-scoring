@@ -145,10 +145,23 @@ export function stopBlitzTimer() {
  * Auto-select best available score when time runs out
  */
 function autoSelectBestScore() {
-  const possibleScores = getPossibleScores(S.dice);
   const currentPlayer = S.game[S.cur];
 
-  // Find best available score from blitz categories
+  // If player hasn't rolled at all, score 0 in first available category
+  if (S.rollCount === 0) {
+    const bestCategory = S.blitzCategories.find(catId => currentPlayer.scores[catId] === null);
+    if (bestCategory) {
+      showToast("⏰ Time's up! Auto-scoring 0...");
+      vibrate([100, 50, 100]);
+      setTimeout(() => {
+        window.selectPlayScore(bestCategory, 0);
+      }, 500);
+    }
+    return;
+  }
+
+  // Player has rolled - find best available score from actual dice
+  const possibleScores = getPossibleScores(S.dice);
   let bestCategory = null;
   let bestScore = -1;
 

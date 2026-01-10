@@ -27,9 +27,6 @@ export function gameView() {
   const possibleScores = isPlayMode && S.rollCount > 0 ? getPossibleScores(S.dice) : {};
   const canSelectScore = isPlayMode && S.rollCount > 0 && !S.rolling;
 
-  // Initialize score section view if not set
-  if (S.scoreSection === undefined) S.scoreSection = 'upper';
-
   return `
     <div class="game-container">
       <div class="game-sticky-header">
@@ -39,8 +36,8 @@ export function gameView() {
       <div class="p-3" style="max-width:28rem;margin:0 auto">
         ${diceArea()}
         ${S.bonusJustClaimed && !isPlayMode ? bonusReminderBanner() : ''}
-        ${sectionTabs(scores)}
-        ${scoreSection(scores, isPlayMode, possibleScores, canSelectScore)}
+        ${upperSection(scores, isPlayMode, possibleScores, canSelectScore)}
+        ${lowerSection(scores, isPlayMode, possibleScores, canSelectScore)}
       </div>
     </div>
     ${picker()}
@@ -68,39 +65,6 @@ function gameHeader(isPlayMode) {
 }
 
 /**
- * Create section tabs (Upper/Lower)
- */
-function sectionTabs(scores) {
-  const upperBadgeClass = upTot(scores) >= 63 ? 'section-tab-badge-success' : '';
-
-  return `
-    <div class="section-tabs">
-      <button class="section-tab ${S.scoreSection === 'upper' ? 'section-tab-active' : ''}"
-              onclick="S.scoreSection='upper';R()">
-        <span class="section-tab-label">Upper Section</span>
-        <span class="section-tab-badge ${upperBadgeClass}">${upTot(scores)}/63</span>
-      </button>
-      <button class="section-tab ${S.scoreSection === 'lower' ? 'section-tab-active' : ''}"
-              onclick="S.scoreSection='lower';R()">
-        <span class="section-tab-label">Lower Section</span>
-        <span class="section-tab-badge">${loTot(scores)}</span>
-      </button>
-    </div>
-  `;
-}
-
-/**
- * Create score section content
- */
-function scoreSection(scores, isPlayMode, possibleScores, canSelectScore) {
-  if (S.scoreSection === 'upper') {
-    return upperSection(scores, isPlayMode, possibleScores, canSelectScore);
-  } else {
-    return lowerSection(scores, isPlayMode, possibleScores, canSelectScore);
-  }
-}
-
-/**
  * Create upper section card
  */
 function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
@@ -114,9 +78,15 @@ function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
 
   const bonusClass = upBonus(scores) ? 'text-green-600' : 'text-gray-400';
   const bonusText = upBonus(scores) ? '+35 ✓' : '0';
+  const upperTotal = upTot(scores);
+  const bonusAchieved = upperTotal >= 63;
 
   return `
     <div class="card score-section-card">
+      <div class="flex items-center justify-between px-4 py-3 upper-gradient text-white">
+        <h2 class="font-black text-sm uppercase tracking-wide">Upper Section</h2>
+        <span class="font-black text-lg ${bonusAchieved ? 'opacity-100' : 'opacity-75'}">${upperTotal}/63</span>
+      </div>
       ${rows}
       <div class="flex items-center justify-between px-4 py-3"
            style="background:var(--surface2);border-top:1px solid var(--border)">
@@ -159,8 +129,14 @@ function lowerSection(scores, isPlayMode, possibleScores, canSelectScore) {
         </div>
        </div>`;
 
+  const lowerTotal = loTot(scores);
+
   return `
-    <div class="card score-section-card">
+    <div class="card score-section-card" style="margin-top: 1.5rem;">
+      <div class="flex items-center justify-between px-4 py-3 lower-gradient text-white">
+        <h2 class="font-black text-sm uppercase tracking-wide">Lower Section</h2>
+        <span class="font-black text-lg">${lowerTotal}</span>
+      </div>
       ${rows}
       ${yahtzeeBonus}
     </div>

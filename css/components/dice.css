@@ -202,6 +202,7 @@
 /* Reduce spacing between sections */
 .blitz-mode .score-section-card {
   margin-top: 0.5rem !important;
+  min-height: auto !important; /* Remove min-height to fit content */
 }
 
 .blitz-mode .score-section-card:first-of-type {

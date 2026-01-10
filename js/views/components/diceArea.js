@@ -15,10 +15,14 @@ export function diceArea() {
   if (S.mode !== 'play') return '';
 
   if (!S.turnStarted) {
+    const blitzHint = S.isBlitzMode
+      ? '<p class="text-yellow-300 text-xs mb-2" style="font-weight:600">⚡ Blitz Mode: 2 rolls, 30 seconds!</p>'
+      : '';
     return `
       <div class="dice-area">
         <div class="text-center py-4">
           <p class="text-white text-lg font-bold mb-2">Ready to roll?</p>
+          ${blitzHint}
           <p class="text-white text-xs mb-4" style="opacity:0.7">Tap the button when you're ready</p>
           <button class="roll-btn" onclick="startTurn()">
             👆 Start My Turn
@@ -38,15 +42,16 @@ export function diceArea() {
     `;
   }).join('');
 
+  const maxRolls = S.isBlitzMode ? 2 : 3;
   const rollBtnText = S.rollCount === 0
     ? '🎲 Roll Dice!'
-    : S.rollCount >= 3
+    : S.rollCount >= maxRolls
       ? 'Select a score below'
-      : `🎲 Roll Again (${S.rollCount}/3)`;
+      : `🎲 Roll Again (${S.rollCount}/${maxRolls})`;
 
-  const rollBtnDisabled = S.rollCount >= 3 || S.rolling ? 'disabled' : '';
+  const rollBtnDisabled = S.rollCount >= maxRolls || S.rolling ? 'disabled' : '';
 
-  const rollCountText = S.rollCount === 0 ? 'Roll to start!' : `Roll ${S.rollCount} of 3`;
+  const rollCountText = S.rollCount === 0 ? 'Roll to start!' : `Roll ${S.rollCount} of ${maxRolls}`;
   const shakeHint = S.shakeEnabled ? '📳 Shake enabled' : 'Tap button to roll';
 
   // Check if bonus Yahtzee is rolled
@@ -55,8 +60,12 @@ export function diceArea() {
                          calcScore(S.dice, 'yahtzee') === 50 &&
                          currentPlayer.scores.yahtzee === 50;
 
+  // Timer display for blitz mode
+  const timerDisplay = S.isBlitzMode ? blitzTimerDisplay() : '';
+
   return `
     <div class="dice-area">
+      ${timerDisplay}
       <div class="roll-info">
         <span class="roll-count">${rollCountText}</span>
         <span class="shake-hint">${shakeHint}</span>
@@ -69,6 +78,32 @@ export function diceArea() {
         ${rollBtnText}
       </button>
       ${S.rollCount > 0 && !S.rolling ? '<p class="text-center text-xs" style="color:rgba(255,255,255,0.6);margin-top:0.5rem">Tap dice to hold/release</p>' : ''}
+    </div>
+  `;
+}
+
+/**
+ * Create blitz mode timer display
+ * @returns {string} HTML string
+ */
+function blitzTimerDisplay() {
+  const timeRemaining = Math.ceil(S.turnTimeRemaining);
+  const percentage = (S.turnTimeRemaining / 30) * 100;
+  const isWarning = timeRemaining <= 10;
+  const warningClass = isWarning ? 'timer-warning' : '';
+  const speedBonusActive = S.turnTimeRemaining >= 15;
+  const speedBonusClass = speedBonusActive ? 'speed-bonus-active' : '';
+
+  return `
+    <div class="blitz-timer ${warningClass}">
+      <div class="timer-header">
+        <span class="timer-label">⚡ Time Remaining</span>
+        <span class="timer-value ${isWarning ? 'text-red-400' : 'text-white'}">${timeRemaining}s</span>
+        ${speedBonusActive ? '<span class="speed-bonus-indicator">+5 speed bonus!</span>' : ''}
+      </div>
+      <div class="timer-bar-container">
+        <div class="timer-bar ${speedBonusClass}" style="width: ${percentage}%"></div>
+      </div>
     </div>
   `;
 }

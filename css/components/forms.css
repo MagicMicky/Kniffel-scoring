@@ -52,3 +52,33 @@
   border-radius: 9999px;
   flex-shrink: 0;
 }
+
+/* Blitz Mode Select */
+.blitz-mode-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--rMd);
+  border: 2px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  font-size: 0.875rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.blitz-mode-select:hover {
+  border-color: var(--borderAccent);
+}
+
+.blitz-mode-select:focus {
+  outline: none;
+  border-color: var(--borderFocus);
+  box-shadow: 0 0 0 2px var(--focusRing);
+}
+
+.blitz-mode-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -22,7 +22,8 @@ export function rollDie() {
  * @param {Function} render - Render callback function
  */
 export function rollDice(render) {
-  if (!S.turnStarted || S.rolling || S.rollCount >= 3) return;
+  const maxRolls = S.isBlitzMode ? 2 : 3;
+  if (!S.turnStarted || S.rolling || S.rollCount >= maxRolls) return;
 
   // Haptic feedback
   vibrate(50);
@@ -86,7 +87,58 @@ export function resetDiceForTurn() {
 export function startTurn(render) {
   S.turnStarted = true;
   vibrate(50);
+
+  // Start timer for blitz mode
+  if (S.isBlitzMode) {
+    startBlitzTimer(render);
+  }
+
   render();
+}
+
+/**
+ * Start the blitz mode timer
+ * @param {Function} render - Render callback function
+ */
+function startBlitzTimer(render) {
+  S.turnStartTime = Date.now();
+  S.turnTimeRemaining = 30;
+  S.speedBonusEarned = false;
+
+  // Clear any existing timer
+  if (S.turnTimer) {
+    clearInterval(S.turnTimer);
+  }
+
+  // Update timer every 100ms for smooth countdown
+  S.turnTimer = setInterval(() => {
+    const elapsed = (Date.now() - S.turnStartTime) / 1000;
+    S.turnTimeRemaining = Math.max(0, 30 - elapsed);
+
+    // Warning vibration at 10 seconds
+    if (S.turnTimeRemaining <= 10 && S.turnTimeRemaining > 9.9) {
+      vibrate([50, 50, 50]);
+    }
+
+    // Time's up
+    if (S.turnTimeRemaining <= 0) {
+      clearInterval(S.turnTimer);
+      S.turnTimer = null;
+      showToast("⏰ Time's up! Select a score");
+    }
+
+    render();
+  }, 100);
+}
+
+/**
+ * Stop the blitz mode timer
+ */
+export function stopBlitzTimer() {
+  if (S.turnTimer) {
+    clearInterval(S.turnTimer);
+    S.turnTimer = null;
+  }
 }
 
 /**
@@ -126,7 +178,8 @@ export function setupShakeDetection(rollCallback) {
   function addShakeListener() {
     window.addEventListener('devicemotion', (e) => {
       if (S.view !== 'game' || S.mode !== 'play') return;
-      if (!S.turnStarted || S.rolling || S.rollCount >= 3) return;
+      const maxRolls = S.isBlitzMode ? 2 : 3;
+      if (!S.turnStarted || S.rolling || S.rollCount >= maxRolls) return;
 
       const acc = e.accelerationIncludingGravity;
       if (!acc) return;

@@ -27,6 +27,10 @@ export function gameView() {
   const possibleScores = isPlayMode && S.rollCount > 0 ? getPossibleScores(S.dice) : {};
   const canSelectScore = isPlayMode && S.rollCount > 0 && !S.rolling;
 
+  // Check if sections should be shown (for blitz mode filtering)
+  const hasUpperCategories = !S.isBlitzMode || UPPER.some(c => S.blitzCategories.includes(c.id));
+  const hasLowerCategories = !S.isBlitzMode || LOWER.some(c => S.blitzCategories.includes(c.id));
+
   return `
     <div class="game-container">
       <div class="game-sticky-header">
@@ -36,8 +40,8 @@ export function gameView() {
       <div class="p-3" style="max-width:28rem;margin:0 auto">
         ${diceArea()}
         ${S.bonusJustClaimed && !isPlayMode ? bonusReminderBanner() : ''}
-        ${upperSection(scores, isPlayMode, possibleScores, canSelectScore)}
-        ${lowerSection(scores, isPlayMode, possibleScores, canSelectScore)}
+        ${hasUpperCategories ? upperSection(scores, isPlayMode, possibleScores, canSelectScore) : ''}
+        ${hasLowerCategories ? lowerSection(scores, isPlayMode, possibleScores, canSelectScore) : ''}
       </div>
     </div>
     ${picker()}
@@ -51,7 +55,10 @@ export function gameView() {
  * Create game header
  */
 function gameHeader(isPlayMode) {
-  const title = isPlayMode ? '🎲 SCHNITZEL' : '📝 SCHNITZEL';
+  let title = isPlayMode ? '🎲 SCHNITZEL' : '📝 SCHNITZEL';
+  if (S.isBlitzMode) {
+    title = '⚡ BLITZ MODE';
+  }
 
   return `
     <div class="header-gradient text-white p-3">
@@ -68,7 +75,12 @@ function gameHeader(isPlayMode) {
  * Create upper section card
  */
 function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
-  const rows = UPPER.map(c => {
+  // Filter categories for blitz mode
+  const categories = S.isBlitzMode
+    ? UPPER.filter(c => S.blitzCategories.includes(c.id))
+    : UPPER;
+
+  const rows = categories.map(c => {
     if (isPlayMode) {
       return upperScoreRowPlay(c, scores[c.id], possibleScores[c.id], canSelectScore && scores[c.id] === null);
     } else {
@@ -101,7 +113,12 @@ function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
  * Create lower section card
  */
 function lowerSection(scores, isPlayMode, possibleScores, canSelectScore) {
-  const rows = LOWER.map(c => {
+  // Filter categories for blitz mode
+  const categories = S.isBlitzMode
+    ? LOWER.filter(c => S.blitzCategories.includes(c.id))
+    : LOWER;
+
+  const rows = categories.map(c => {
     if (isPlayMode) {
       return lowerScoreRowPlay(c, scores[c.id], possibleScores[c.id], canSelectScore && scores[c.id] === null);
     } else {

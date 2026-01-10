@@ -106,7 +106,10 @@ function playerSelectionList() {
 function savedGameBanner() {
   if (!S.savedGame) return '';
 
-  const modeIcon = S.savedGame.mode === 'play' ? '🎲' : '📝';
+  let modeIcon = S.savedGame.mode === 'play' ? '🎲' : '📝';
+  if (S.savedGame.isBlitzMode) {
+    modeIcon = '⚡';
+  }
   const players = S.savedGame.game.map(p => escapeHtml(p.name)).join(', ');
   const savedDate = new Date(S.savedGame.savedAt).toLocaleString();
 
@@ -144,11 +147,19 @@ function gameModeButtons() {
         <div class="title">PHYSICAL DICE</div>
         <div class="desc">Roll real dice<br>Enter scores</div>
       </button>
-      <button class="game-mode-btn" onclick="startGameWithMode('play')" ${disabled}>
-        <div class="icon">📱</div>
-        <div class="title">VIRTUAL DICE</div>
-        <div class="desc">Roll on phone<br>Auto-scoring</div>
-      </button>
+      <div style="position: relative;">
+        <button class="game-mode-btn" onclick="startGameWithMode('play', false)" ${disabled}>
+          <div class="icon">📱</div>
+          <div class="title">VIRTUAL DICE</div>
+          <div class="desc">Roll on phone<br>Auto-scoring</div>
+        </button>
+        <div style="margin-top: 0.5rem;">
+          <select id="blitzModeSelect" class="blitz-mode-select" onchange="handleBlitzModeChange()" ${disabled}>
+            <option value="standard">Standard Game</option>
+            <option value="blitz">⚡ Blitz Mode (6 categories, 2 rolls, 30s timer)</option>
+          </select>
+        </div>
+      </div>
     </div>
   `;
 }

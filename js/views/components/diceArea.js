@@ -16,7 +16,7 @@ export function diceArea() {
 
   if (!S.turnStarted) {
     const blitzHint = S.isBlitzMode
-      ? '<p class="text-yellow-300 text-xs mb-2" style="font-weight:600">⚡ 20s timer • 2 rolls • Score in 5s = <span style="color:#FCD34D">+5 bonus!</span></p>'
+      ? '<p class="text-yellow-300 text-xs mb-2" style="font-weight:600">⚡ 15s timer • 2 rolls • Score in 5s = <span style="color:#FCD34D">+5 bonus!</span></p>'
       : '';
     return `
       <div class="dice-area">
@@ -88,7 +88,7 @@ export function diceArea() {
  */
 function blitzTimerDisplay() {
   const timeRemaining = Math.ceil(S.turnTimeRemaining);
-  const percentage = (S.turnTimeRemaining / 20) * 100;
+  const percentage = (S.turnTimeRemaining / 15) * 100;
   const isWarning = timeRemaining <= 10;
   const warningClass = isWarning ? 'timer-warning' : '';
   const speedBonusActive = S.turnTimeRemaining >= 15;

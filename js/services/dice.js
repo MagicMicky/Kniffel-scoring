@@ -102,7 +102,7 @@ export function startTurn(render) {
  */
 function startBlitzTimer(render) {
   S.turnStartTime = Date.now();
-  S.turnTimeRemaining = 20;
+  S.turnTimeRemaining = 15;
   S.speedBonusEarned = false;
 
   // Clear any existing timer
@@ -113,7 +113,7 @@ function startBlitzTimer(render) {
   // Update timer every 100ms for smooth countdown
   S.turnTimer = setInterval(() => {
     const elapsed = (Date.now() - S.turnStartTime) / 1000;
-    S.turnTimeRemaining = Math.max(0, 20 - elapsed);
+    S.turnTimeRemaining = Math.max(0, 15 - elapsed);
 
     // Warning vibration at 10 seconds
     if (S.turnTimeRemaining <= 10 && S.turnTimeRemaining > 9.9) {

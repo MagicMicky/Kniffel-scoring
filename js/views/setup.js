@@ -174,7 +174,7 @@ function gameModeButtons() {
             <div class="variant-icon">⚡</div>
             <div class="variant-info">
               <div class="variant-title">Blitz Mode</div>
-              <div class="variant-desc">2 rolls • 6 categories • 20s timer</div>
+              <div class="variant-desc">2 rolls • 6 categories • 15s timer</div>
             </div>
           </button>
         </div>

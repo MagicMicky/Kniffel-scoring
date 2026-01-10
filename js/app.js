@@ -247,7 +247,7 @@ window.resumeGame = () => {
       S.rollCount = S.savedGame.rollCount || 0;
       S.turnStarted = S.savedGame.turnStarted || false;
       S.turnStartTime = S.savedGame.turnStartTime || null;
-      S.turnTimeRemaining = S.savedGame.turnTimeRemaining || 20;
+      S.turnTimeRemaining = S.savedGame.turnTimeRemaining || 15;
       S.speedBonusEarned = S.savedGame.speedBonusEarned || false;
       S.diceHistory = S.savedGame.diceHistory || [];
       if (S.mode === 'play') {

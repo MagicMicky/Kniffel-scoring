@@ -39,7 +39,9 @@ export const S = {
   earlyFinishModal: false,
   playerDetailsModal: false,
   // Track when bonus was just claimed (to show reminder)
-  bonusJustClaimed: false
+  bonusJustClaimed: false,
+  // Track all dice rolls for fun stats (Play Mode only)
+  diceHistory: []
 };
 
 /**
@@ -63,6 +65,7 @@ export function resetGameState() {
   S.finishModal = false;
   S.earlyFinishModal = false;
   S.playerDetailsModal = false;
+  S.diceHistory = [];
 }
 
 /**

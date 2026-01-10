@@ -160,33 +160,23 @@ function autoSelectBestScore() {
     return;
   }
 
-  // Player has rolled - find best available score from actual dice
+  // Player has rolled - randomly select an available category
   const possibleScores = getPossibleScores(S.dice);
-  let bestCategory = null;
-  let bestScore = -1;
 
-  S.blitzCategories.forEach(catId => {
-    if (currentPlayer.scores[catId] === null && possibleScores[catId] !== undefined) {
-      if (possibleScores[catId] > bestScore) {
-        bestScore = possibleScores[catId];
-        bestCategory = catId;
-      }
-    }
-  });
+  // Get all available categories (not yet scored)
+  const availableCategories = S.blitzCategories.filter(catId => currentPlayer.scores[catId] === null);
 
-  // If no valid score found, select first available category with 0
-  if (bestCategory === null) {
-    bestCategory = S.blitzCategories.find(catId => currentPlayer.scores[catId] === null);
-    bestScore = 0;
-  }
+  if (availableCategories.length > 0) {
+    // Pick a random available category
+    const randomCategory = availableCategories[Math.floor(Math.random() * availableCategories.length)];
+    const randomScore = possibleScores[randomCategory] !== undefined ? possibleScores[randomCategory] : 0;
 
-  if (bestCategory) {
     showToast("⏰ Time's up! Auto-scoring...");
     vibrate([100, 50, 100]);
 
     // Call the global selectPlayScore function
     setTimeout(() => {
-      window.selectPlayScore(bestCategory, bestScore);
+      window.selectPlayScore(randomCategory, randomScore);
     }, 500);
   }
 }

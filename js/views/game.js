@@ -27,7 +27,7 @@ export function gameView() {
   const possibleScores = isPlayMode && S.rollCount > 0 ? getPossibleScores(S.dice) : {};
   const canSelectScore = isPlayMode && S.rollCount > 0 && !S.rolling;
 
-  // Initialize score section view if not set
+  // Initialize score section view if not set (used for active tab tracking)
   if (S.scoreSection === undefined) S.scoreSection = 'upper';
 
   return `
@@ -40,7 +40,10 @@ export function gameView() {
         ${diceArea()}
         ${S.bonusJustClaimed && !isPlayMode ? bonusReminderBanner() : ''}
         ${sectionTabs(scores)}
-        ${scoreSection(scores, isPlayMode, possibleScores, canSelectScore)}
+        <div id="score-sections-container">
+          ${upperSection(scores, isPlayMode, possibleScores, canSelectScore)}
+          ${lowerSection(scores, isPlayMode, possibleScores, canSelectScore)}
+        </div>
       </div>
     </div>
     ${picker()}
@@ -68,7 +71,7 @@ function gameHeader(isPlayMode) {
 }
 
 /**
- * Create section tabs (Upper/Lower)
+ * Create section tabs (Upper/Lower) - now acts as jump buttons with scroll-spy
  */
 function sectionTabs(scores) {
   const upperBadgeClass = upTot(scores) >= 63 ? 'section-tab-badge-success' : '';
@@ -76,12 +79,12 @@ function sectionTabs(scores) {
   return `
     <div class="section-tabs">
       <button class="section-tab ${S.scoreSection === 'upper' ? 'section-tab-active' : ''}"
-              onclick="S.scoreSection='upper';R()">
+              onclick="scrollToSection('upper')">
         <span class="section-tab-label">Upper Section</span>
         <span class="section-tab-badge ${upperBadgeClass}">${upTot(scores)}/63</span>
       </button>
       <button class="section-tab ${S.scoreSection === 'lower' ? 'section-tab-active' : ''}"
-              onclick="S.scoreSection='lower';R()">
+              onclick="scrollToSection('lower')">
         <span class="section-tab-label">Lower Section</span>
         <span class="section-tab-badge">${loTot(scores)}</span>
       </button>
@@ -89,16 +92,6 @@ function sectionTabs(scores) {
   `;
 }
 
-/**
- * Create score section content
- */
-function scoreSection(scores, isPlayMode, possibleScores, canSelectScore) {
-  if (S.scoreSection === 'upper') {
-    return upperSection(scores, isPlayMode, possibleScores, canSelectScore);
-  } else {
-    return lowerSection(scores, isPlayMode, possibleScores, canSelectScore);
-  }
-}
 
 /**
  * Create upper section card
@@ -116,7 +109,7 @@ function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
   const bonusText = upBonus(scores) ? '+35 ✓' : '0';
 
   return `
-    <div class="card score-section-card">
+    <div id="upper-section" class="card score-section-card" style="scroll-margin-top: 120px;">
       ${rows}
       <div class="flex items-center justify-between px-4 py-3"
            style="background:var(--surface2);border-top:1px solid var(--border)">
@@ -160,7 +153,7 @@ function lowerSection(scores, isPlayMode, possibleScores, canSelectScore) {
        </div>`;
 
   return `
-    <div class="card score-section-card">
+    <div id="lower-section" class="card score-section-card" style="margin-top: 1.5rem; scroll-margin-top: 120px;">
       ${rows}
       ${yahtzeeBonus}
     </div>

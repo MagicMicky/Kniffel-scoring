@@ -49,7 +49,9 @@ export const S = {
   // Track when bonus was just claimed (to show reminder)
   bonusJustClaimed: false,
   // Track all dice rolls for fun stats (Play Mode only)
-  diceHistory: []
+  diceHistory: [],
+  // Leaderboard badge modal
+  selectedBadge: null
 };
 
 /**

@@ -93,8 +93,8 @@ function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
   const upperTotal = upTot(scores);
   const bonusAchieved = upperTotal >= 63;
 
-  // In blitz mode, only show bonus if there are upper categories
-  const showBonus = !S.isBlitzMode || categories.length > 0;
+  // Disable bonus display in blitz mode
+  const showBonus = !S.isBlitzMode;
 
   return `
     <div class="card score-section-card">
@@ -131,8 +131,8 @@ function lowerSection(scores, isPlayMode, possibleScores, canSelectScore) {
     }
   }).join('');
 
-  // In blitz mode, only show yahtzee bonus if yahtzee is one of the selected categories
-  const hasYahtzee = !S.isBlitzMode || S.blitzCategories.includes('yahtzee');
+  // Disable Yahtzee bonus display in blitz mode
+  const hasYahtzee = !S.isBlitzMode;
 
   const yahtzeeBonus = hasYahtzee
     ? (isPlayMode

@@ -402,6 +402,9 @@ window.clr = (id) => {
 };
 
 window.addBonus = () => {
+  // Bonuses disabled in blitz mode
+  if (S.isBlitzMode) return;
+
   if (S.game[S.cur].scores.yahtzee === 50) {
     S.game[S.cur].scores.bonus += 100;
     S.bonusJustClaimed = true;
@@ -416,8 +419,8 @@ window.addBonus = () => {
 window.selectPlayScore = (categoryId, score) => {
   const cp = S.game[S.cur];
 
-  // Handle Yahtzee bonus
-  if (calcScore(S.dice, 'yahtzee') === 50 && cp.scores.yahtzee === 50) {
+  // Handle Yahtzee bonus (disabled in blitz mode)
+  if (!S.isBlitzMode && calcScore(S.dice, 'yahtzee') === 50 && cp.scores.yahtzee === 50) {
     cp.scores.bonus += 100;
     showToast('YAHTZEE BONUS! +100');
     showFireworks();

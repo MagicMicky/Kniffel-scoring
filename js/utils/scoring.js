@@ -3,6 +3,8 @@
  * Calculate totals, bonuses, and grand totals
  */
 
+import { S } from '../state.js';
+
 /**
  * Calculate upper section total
  * @param {Object} scores - Player scores object
@@ -15,21 +17,26 @@ export function upTot(scores) {
 
 /**
  * Calculate upper section bonus (35 if total >= 63)
+ * Disabled in blitz mode
  * @param {Object} scores - Player scores object
  * @returns {number} 35 or 0
  */
 export function upBonus(scores) {
+  if (S.isBlitzMode) return 0;
   return upTot(scores) >= 63 ? 35 : 0;
 }
 
 /**
  * Calculate lower section total (including yahtzee bonus)
+ * Yahtzee bonus disabled in blitz mode
  * @param {Object} scores - Player scores object
  * @returns {number} Total of lower section scores
  */
 export function loTot(scores) {
-  return ['threeOfKind', 'fourOfKind', 'fullHouse', 'smallStraight', 'largeStraight', 'yahtzee', 'chance']
-    .reduce((acc, key) => acc + (scores[key] || 0), 0) + (scores.bonus || 0);
+  const categoryTotal = ['threeOfKind', 'fourOfKind', 'fullHouse', 'smallStraight', 'largeStraight', 'yahtzee', 'chance']
+    .reduce((acc, key) => acc + (scores[key] || 0), 0);
+  const yahtzeeBonus = S.isBlitzMode ? 0 : (scores.bonus || 0);
+  return categoryTotal + yahtzeeBonus;
 }
 
 /**

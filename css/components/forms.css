@@ -56,6 +56,8 @@
 /* Expandable Mode Container */
 .expandable-mode-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .game-mode-btn.expandable-header {

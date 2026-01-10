@@ -78,9 +78,6 @@ function R() {
     }
 
     lastRenderedPlayer = S.cur;
-
-    // Setup scroll spy for score sections
-    setupScrollSpy();
   }
 
   updateThemeColor();
@@ -106,70 +103,10 @@ function scrollCarouselToActivePlayer(carousel) {
   });
 }
 
-/**
- * Scroll to a score section (upper or lower)
- * @param {string} section - 'upper' or 'lower'
- */
-function scrollToSection(section) {
-  const element = document.getElementById(`${section}-section`);
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-}
-
-/**
- * Setup scroll spy to update active tab based on scroll position
- */
-let scrollSpyCleanup = null;
-function setupScrollSpy() {
-  // Clean up previous listener if exists
-  if (scrollSpyCleanup) {
-    scrollSpyCleanup();
-    scrollSpyCleanup = null;
-  }
-
-  const upperSection = document.getElementById('upper-section');
-  const lowerSection = document.getElementById('lower-section');
-  const tabs = document.querySelectorAll('.section-tab');
-
-  if (!upperSection || !lowerSection || tabs.length !== 2) return;
-
-  const [upperTab, lowerTab] = tabs;
-
-  const handleScroll = () => {
-    const upperRect = upperSection.getBoundingClientRect();
-    const lowerRect = lowerSection.getBoundingClientRect();
-
-    // Determine which section is more visible (based on which is closer to top of viewport)
-    // Use 200px threshold to account for sticky header
-    const threshold = 200;
-
-    if (lowerRect.top < threshold) {
-      if (S.scoreSection !== 'lower') {
-        S.scoreSection = 'lower';
-        // Update tabs directly without full re-render
-        upperTab.classList.remove('section-tab-active');
-        lowerTab.classList.add('section-tab-active');
-      }
-    } else {
-      if (S.scoreSection !== 'upper') {
-        S.scoreSection = 'upper';
-        // Update tabs directly without full re-render
-        lowerTab.classList.remove('section-tab-active');
-        upperTab.classList.add('section-tab-active');
-      }
-    }
-  };
-
-  window.addEventListener('scroll', handleScroll, { passive: true });
-  scrollSpyCleanup = () => window.removeEventListener('scroll', handleScroll);
-}
-
 // Make R, S, and save available globally for onclick handlers
 window.R = R;
 window.S = S;
 window.save = save;
-window.scrollToSection = scrollToSection;
 
 // ============================================
 // GLOBAL FUNCTIONS FOR ONCLICK HANDLERS

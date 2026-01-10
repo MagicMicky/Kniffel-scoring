@@ -38,8 +38,6 @@ export const S = {
   finishModal: false,
   earlyFinishModal: false,
   playerDetailsModal: false,
-  // Score section view (upper/lower)
-  scoreSection: 'upper',
   // Track when bonus was just claimed (to show reminder)
   bonusJustClaimed: false
 };
@@ -65,7 +63,6 @@ export function resetGameState() {
   S.finishModal = false;
   S.earlyFinishModal = false;
   S.playerDetailsModal = false;
-  S.scoreSection = 'upper';
 }
 
 /**

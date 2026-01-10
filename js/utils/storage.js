@@ -28,7 +28,8 @@ export function saveCurrentGame() {
     dice: S.dice,
     held: S.held,
     rollCount: S.rollCount,
-    turnStarted: S.turnStarted
+    turnStarted: S.turnStarted,
+    diceHistory: S.diceHistory
   };
   localStorage.setItem('yahtzeeSaved', JSON.stringify(gameState));
   S.savedGame = gameState;
@@ -85,7 +86,7 @@ export function isGameComplete() {
  * @returns {Object} Game record
  */
 export function createGameRecord() {
-  return {
+  const record = {
     id: Date.now(),
     date: new Date().toISOString(),
     dur: S.start ? Math.round((Date.now() - S.start) / 60000) : null,
@@ -96,4 +97,11 @@ export function createGameRecord() {
       total: grand(p.scores)
     }))
   };
+
+  // Include dice history for Play Mode games
+  if (S.mode === 'play' && S.diceHistory.length > 0) {
+    record.diceHistory = [...S.diceHistory];
+  }
+
+  return record;
 }

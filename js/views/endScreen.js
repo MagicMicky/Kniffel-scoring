@@ -39,6 +39,10 @@ export function endScreenView() {
   const avgScore = Math.round(players.reduce((sum, p) => sum + p.total, 0) / players.length);
   const statsOpacity = S.revealComplete ? '1' : '0';
 
+  // Fun stats (if Play Mode with dice history)
+  const hasDiceHistory = S.finishedGame.diceHistory && S.finishedGame.diceHistory.length > 0;
+  const funStatsHtml = hasDiceHistory ? renderFunStats(S.finishedGame.diceHistory, statsOpacity) : '';
+
   return `
     <div style="min-height:100vh;background:var(--bg);position:relative;overflow:hidden"
          onclick="${isRevealing ? 'skipReveal()' : ''}">
@@ -85,6 +89,8 @@ export function endScreenView() {
               </div>
             </div>
           </div>
+
+          ${funStatsHtml}
 
           <button class="btn btn-primary w-full"
                   style="padding:1rem;font-size:1.125rem;opacity:${statsOpacity};transition:opacity 1s ease-in 0.5s"
@@ -144,4 +150,75 @@ export function skipReveal() {
   S.revealComplete = true;
   S.revealIndex = S.finishedGame.players.length - 1;
   window.R();
+}
+
+/**
+ * Render fun stats section for Play Mode games
+ * @param {Array<number>} diceHistory - Array of all rolled dice values
+ * @param {string} opacity - CSS opacity value
+ * @returns {string} HTML string
+ */
+function renderFunStats(diceHistory, opacity) {
+  // Calculate number distribution
+  const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+  diceHistory.forEach(value => {
+    if (value >= 1 && value <= 6) {
+      distribution[value]++;
+    }
+  });
+
+  const totalRolls = diceHistory.length;
+  const maxCount = Math.max(...Object.values(distribution));
+
+  // Find most and least rolled numbers
+  const mostRolled = Object.keys(distribution).filter(k => distribution[k] === maxCount);
+  const minCount = Math.min(...Object.values(distribution));
+  const leastRolled = Object.keys(distribution).filter(k => distribution[k] === minCount);
+
+  // Create visual bars for number distribution
+  const barsHtml = [1, 2, 3, 4, 5, 6].map(num => {
+    const count = distribution[num];
+    const percentage = totalRolls > 0 ? (count / totalRolls * 100).toFixed(1) : 0;
+    const barWidth = totalRolls > 0 ? (count / maxCount * 100) : 0;
+    const isMost = mostRolled.includes(String(num));
+    const barColor = isMost ? 'var(--accent)' : 'var(--surface2)';
+
+    return `
+      <div style="margin-bottom:0.75rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.25rem">
+          <div style="display:flex;align-items:center;gap:0.5rem">
+            <div style="width:2rem;height:2rem;background:${barColor};border-radius:0.375rem;display:flex;align-items:center;justify-content:center;color:var(--onAccent);font-weight:bold;font-size:0.875rem;box-shadow:0 2px 4px rgba(0,0,0,0.1)">
+              ${num}
+            </div>
+            <span style="font-size:0.875rem;color:var(--text);font-weight:500">${count} rolls</span>
+          </div>
+          <span style="font-size:0.875rem;color:var(--textSec);font-weight:600">${percentage}%</span>
+        </div>
+        <div style="width:100%;height:0.5rem;background:var(--surface);border-radius:0.25rem;overflow:hidden">
+          <div style="width:${barWidth}%;height:100%;background:${barColor};transition:width 0.5s ease-out"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="card p-4 mb-4" style="opacity:${opacity};transition:opacity 1s ease-in 0.4s">
+      <h3 class="font-bold mb-4" style="color:var(--accent)">🎲 Fun Stats - Number Distribution</h3>
+      <div style="margin-bottom:1rem">
+        <div style="text-align:center;padding:0.75rem;background:var(--surface);border-radius:0.5rem;margin-bottom:1rem">
+          <div style="font-size:1.5rem;font-weight:800;color:var(--accent)">${totalRolls}</div>
+          <div style="font-size:0.75rem;color:var(--textSec)">Total Dice Rolled</div>
+        </div>
+      </div>
+      ${barsHtml}
+      <div style="margin-top:1rem;padding:0.75rem;background:var(--surface);border-radius:0.5rem;font-size:0.875rem;color:var(--textSec);text-align:center">
+        ${mostRolled.length === 1
+          ? `🔥 Most rolled: <strong style="color:var(--accent)">${mostRolled[0]}</strong> (${maxCount} times)`
+          : `🔥 Most rolled: <strong style="color:var(--accent)">${mostRolled.join(', ')}</strong> (${maxCount} times each)`}
+        ${mostRolled.length !== 6 && leastRolled.length > 0
+          ? `<br/>❄️ Least rolled: <strong style="color:var(--text)">${leastRolled.join(', ')}</strong> (${minCount} times)`
+          : ''}
+      </div>
+    </div>
+  `;
 }

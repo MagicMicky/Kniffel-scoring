@@ -214,6 +214,7 @@ window.resumeGame = () => {
       S.held = S.savedGame.held || [false, false, false, false, false];
       S.rollCount = S.savedGame.rollCount || 0;
       S.turnStarted = S.savedGame.turnStarted || false;
+      S.diceHistory = S.savedGame.diceHistory || [];
       if (S.mode === 'play') {
         setupShakeDetection(() => rollDiceService(R));
       }

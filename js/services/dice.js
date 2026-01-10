@@ -40,6 +40,14 @@ export function rollDice(render) {
       clearInterval(animInterval);
       S.rolling = false;
       S.rollCount++;
+
+      // Track dice values for fun stats (only count non-held dice that were just rolled)
+      S.dice.forEach((value, i) => {
+        if (!S.held[i]) {
+          S.diceHistory.push(value);
+        }
+      });
+
       render();
 
       // Check for Yahtzee and notify

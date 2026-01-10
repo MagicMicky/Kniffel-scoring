@@ -110,13 +110,12 @@
   color: white;
 }
 
-.speed-bonus-indicator {
-  text-align: center;
-  font-size: 0.75rem;
-  font-weight: 700;
+.speed-bonus-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
   color: #FCD34D;
-  margin: 0.25rem 0;
   animation: bonus-glow 1.5s ease-in-out infinite;
+  margin-left: 0.25rem;
 }
 
 .timer-bar-container {
@@ -184,9 +183,8 @@
   font-size: 0.75rem;
 }
 
-.blitz-mode .speed-bonus-indicator {
+.blitz-mode .speed-bonus-badge {
   font-size: 0.65rem;
-  margin: 0.1rem 0;
 }
 
 .blitz-mode .timer-bar-container {

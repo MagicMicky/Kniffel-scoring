@@ -94,13 +94,17 @@ function blitzTimerDisplay() {
   const speedBonusActive = S.turnTimeRemaining >= 15;
   const speedBonusClass = speedBonusActive ? 'speed-bonus-active' : '';
 
+  // Show bonus indicator inline with timer label
+  const timerLabel = speedBonusActive
+    ? '<span class="timer-label">⚡ Time <span class="speed-bonus-badge">+5 Bonus!</span></span>'
+    : '<span class="timer-label">⚡ Time Remaining</span>';
+
   return `
     <div class="blitz-timer ${warningClass}">
       <div class="timer-header">
-        <span class="timer-label">⚡ Time Remaining</span>
+        ${timerLabel}
         <span class="timer-value ${isWarning ? 'text-red-400' : 'text-white'}">${timeRemaining}s</span>
       </div>
-      ${speedBonusActive ? '<div class="speed-bonus-indicator">⚡ +5 speed bonus active!</div>' : ''}
       <div class="timer-bar-container">
         <div class="timer-bar ${speedBonusClass}" style="width: ${percentage}%"></div>
       </div>

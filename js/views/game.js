@@ -76,45 +76,21 @@ function gameViewReview(game, playerIndex) {
   const currentPlayer = players[playerIndex];
   const scores = currentPlayer.scores;
 
-  // Player tabs
-  const tabs = players.map((p, i) => {
-    const playerColor = color(p.pid);
-    const isActive = i === playerIndex;
-    const activeStyle = isActive ? `background:${playerColor}` : '';
-
-    return `
-      <button class="player-tab flex-shrink-0 ${isActive ? 'player-tab-active' : 'player-tab-inactive'}"
-              style="${activeStyle}" onclick="switchHistoryPlayer(${i})">
-        ${escapeHtml(p.name)}: ${p.total}
-      </button>
-    `;
-  }).join('');
-
   // Standings
   const sortedPlayers = [...players].sort((a, b) => b.total - a.total);
   const maxScore = sortedPlayers[0].total;
   const standingsHtml = historyStandings(sortedPlayers, maxScore);
 
   const duration = game.dur ? ` • ${game.dur} minutes` : '';
-  const playerColor = color(currentPlayer.pid);
 
   return `
-    <div style="min-height:100vh;background:var(--bg);padding-bottom:6rem">
+    <div class="game-container">
       <div class="game-sticky-header">
         ${reviewHeader()}
-        <div class="sticky-tabs" style="background:var(--surface);box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid var(--border)">
-          <div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">
-            ${tabs}
-          </div>
-        </div>
+        ${playerCarousel(players, playerIndex, 'review')}
       </div>
 
       <div class="p-3" style="max-width:28rem;margin:0 auto">
-        <div class="card p-4 mb-4" style="border-left:4px solid ${playerColor}">
-          <h2 class="font-black text-2xl" style="color:${playerColor}">${escapeHtml(currentPlayer.name)}</h2>
-          <p class="text-gray-500 text-sm mt-1">Final Score: ${currentPlayer.total}</p>
-        </div>
-
         <div class="glass rounded-xl p-3 mb-4 text-center">
           <p class="text-white text-sm font-medium">
             ${formatDate(game.date)} • ${formatTime(game.date)}${duration}

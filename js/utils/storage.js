@@ -25,10 +25,15 @@ export function saveCurrentGame() {
     savedAt: Date.now(),
     // Save play mode state
     mode: S.mode,
+    isBlitzMode: S.isBlitzMode,
+    blitzCategories: S.blitzCategories,
     dice: S.dice,
     held: S.held,
     rollCount: S.rollCount,
     turnStarted: S.turnStarted,
+    turnStartTime: S.turnStartTime,
+    turnTimeRemaining: S.turnTimeRemaining,
+    speedBonusEarned: S.speedBonusEarned,
     diceHistory: S.diceHistory
   };
   localStorage.setItem('yahtzeeSaved', JSON.stringify(gameState));
@@ -71,6 +76,14 @@ export function empty() {
  * @returns {boolean} True if game is complete
  */
 export function isGameComplete() {
+  // In blitz mode, only check the 6 selected categories
+  if (S.isBlitzMode && S.blitzCategories.length > 0) {
+    return S.game.every(p => {
+      return S.blitzCategories.every(catId => p.scores[catId] !== null);
+    });
+  }
+
+  // Standard game: check all categories
   return S.game.every(p => {
     const s = p.scores;
     return s.ones !== null && s.twos !== null && s.threes !== null &&

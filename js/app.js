@@ -4,11 +4,11 @@
  */
 
 import { S, resetDiceState, resetGameState } from './state.js';
-import { COLORS } from './constants.js';
+import { COLORS, UPPER, LOWER } from './constants.js';
 import { upTot, upBonus, loTot, grand, calcScore, getPossibleScores } from './utils/scoring.js';
 import { save, saveCurrentGame, clearSavedGame, empty, isGameComplete, createGameRecord } from './utils/storage.js';
 import { color, vibrate } from './utils/helpers.js';
-import { rollDice as rollDiceService, toggleHold as toggleHoldService, resetDiceForTurn, startTurn as startTurnService, setupShakeDetection, dieFace } from './services/dice.js';
+import { rollDice as rollDiceService, toggleHold as toggleHoldService, resetDiceForTurn, startTurn as startTurnService, setupShakeDetection, dieFace, stopBlitzTimer } from './services/dice.js';
 import { showToast } from './services/toast.js';
 import { showFireworks, startFireworksCanvas } from './services/fireworks.js';
 import { exportData as exportDataService, triggerImport as triggerImportService } from './services/export.js';
@@ -187,10 +187,35 @@ window.delH = (id) => {
   }
 };
 
+// ============================================
+// BLITZ MODE HELPERS
+// ============================================
+
+/**
+ * Generate 6 random categories for blitz mode
+ * @returns {string[]} Array of 6 category IDs
+ */
+function generateBlitzCategories() {
+  const allCategories = [
+    ...UPPER.map(c => c.id),
+    ...LOWER.map(c => c.id)
+  ];
+
+  // Shuffle and take first 6
+  const shuffled = allCategories.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 6);
+}
+
 // Game control
-window.startGameWithMode = (mode) => {
+window.toggleVirtualDiceExpanded = () => {
+  S.virtualDiceExpanded = !S.virtualDiceExpanded;
+  R();
+};
+
+window.startGameWithMode = (mode, isBlitz = false) => {
   if (S.game.length === 0) return;
   S.mode = mode;
+  S.isBlitzMode = isBlitz;
   S.start = Date.now();
   S.cur = 0;
   clearSavedGame();
@@ -198,6 +223,11 @@ window.startGameWithMode = (mode) => {
   if (mode === 'play') {
     resetDiceForTurn();
     setupShakeDetection(() => rollDiceService(R));
+
+    // Generate random categories for blitz mode
+    if (isBlitz) {
+      S.blitzCategories = generateBlitzCategories();
+    }
   }
 
   navigateToRouter('game');
@@ -210,10 +240,15 @@ window.resumeGame = () => {
     S.start = S.savedGame.start;
     if (S.savedGame.mode) {
       S.mode = S.savedGame.mode;
+      S.isBlitzMode = S.savedGame.isBlitzMode || false;
+      S.blitzCategories = S.savedGame.blitzCategories || [];
       S.dice = S.savedGame.dice || [1, 1, 1, 1, 1];
       S.held = S.savedGame.held || [false, false, false, false, false];
       S.rollCount = S.savedGame.rollCount || 0;
       S.turnStarted = S.savedGame.turnStarted || false;
+      S.turnStartTime = S.savedGame.turnStartTime || null;
+      S.turnTimeRemaining = S.savedGame.turnTimeRemaining || 15;
+      S.speedBonusEarned = S.savedGame.speedBonusEarned || false;
       S.diceHistory = S.savedGame.diceHistory || [];
       if (S.mode === 'play') {
         setupShakeDetection(() => rollDiceService(R));
@@ -234,6 +269,10 @@ window.discardSaved = () => {
 };
 
 window.pauseG = () => {
+  // Stop timer if in blitz mode
+  if (S.isBlitzMode) {
+    stopBlitzTimer();
+  }
   saveCurrentGame();
   S.game = [];
   S.cur = 0;
@@ -363,6 +402,9 @@ window.clr = (id) => {
 };
 
 window.addBonus = () => {
+  // Bonuses disabled in blitz mode
+  if (S.isBlitzMode) return;
+
   if (S.game[S.cur].scores.yahtzee === 50) {
     S.game[S.cur].scores.bonus += 100;
     S.bonusJustClaimed = true;
@@ -377,14 +419,23 @@ window.addBonus = () => {
 window.selectPlayScore = (categoryId, score) => {
   const cp = S.game[S.cur];
 
-  // Handle Yahtzee bonus
-  if (calcScore(S.dice, 'yahtzee') === 50 && cp.scores.yahtzee === 50) {
+  // Handle Yahtzee bonus (disabled in blitz mode)
+  if (!S.isBlitzMode && calcScore(S.dice, 'yahtzee') === 50 && cp.scores.yahtzee === 50) {
     cp.scores.bonus += 100;
     showToast('YAHTZEE BONUS! +100');
     showFireworks();
   }
 
-  cp.scores[categoryId] = score;
+  // Add speed bonus in blitz mode (scored within 5 seconds)
+  let actualScore = score;
+  if (S.isBlitzMode && S.turnTimeRemaining >= 15 && score !== null && score > 0) {
+    actualScore = score + 5;
+    S.speedBonusEarned = true;
+    showToast(`+5 Speed Bonus! ⚡ Total: ${actualScore}`);
+    vibrate([50, 30, 50]);
+  }
+
+  cp.scores[categoryId] = actualScore;
 
   if (isGameComplete()) {
     vibrate([100, 50, 100, 50, 200]);

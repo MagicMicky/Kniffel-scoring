@@ -223,6 +223,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
   margin-bottom: 1rem;
+  align-items: start;
 }
 
 /* Roll button */

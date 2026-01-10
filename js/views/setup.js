@@ -106,7 +106,10 @@ function playerSelectionList() {
 function savedGameBanner() {
   if (!S.savedGame) return '';
 
-  const modeIcon = S.savedGame.mode === 'play' ? '🎲' : '📝';
+  let modeIcon = S.savedGame.mode === 'play' ? '🎲' : '📝';
+  if (S.savedGame.isBlitzMode) {
+    modeIcon = '⚡';
+  }
   const players = S.savedGame.game.map(p => escapeHtml(p.name)).join(', ');
   const savedDate = new Date(S.savedGame.savedAt).toLocaleString();
 
@@ -136,6 +139,8 @@ function resumeGameSection() {
  */
 function gameModeButtons() {
   const disabled = S.game.length === 0 ? 'disabled' : '';
+  const isExpanded = S.virtualDiceExpanded;
+  const expandIcon = isExpanded ? '▲' : '▼';
 
   return `
     <div class="mode-select-container">
@@ -144,11 +149,36 @@ function gameModeButtons() {
         <div class="title">PHYSICAL DICE</div>
         <div class="desc">Roll real dice<br>Enter scores</div>
       </button>
-      <button class="game-mode-btn" onclick="startGameWithMode('play')" ${disabled}>
-        <div class="icon">📱</div>
-        <div class="title">VIRTUAL DICE</div>
-        <div class="desc">Roll on phone<br>Auto-scoring</div>
-      </button>
+
+      <div class="expandable-mode-container">
+        <button class="game-mode-btn expandable-header ${isExpanded ? 'expanded' : ''}"
+                onclick="startGameWithMode('play', false)" ${disabled}>
+          <div class="icon">📱</div>
+          <div class="title">VIRTUAL DICE</div>
+          <div class="desc">Roll on phone<br>Auto-scoring</div>
+          <span class="expand-icon" onclick="event.stopPropagation();toggleVirtualDiceExpanded()">${expandIcon}</span>
+        </button>
+
+        <div class="expandable-content ${isExpanded ? 'expanded' : ''}">
+          <button class="mode-variant-btn"
+                  onclick="startGameWithMode('play', false)" ${disabled}>
+            <div class="variant-icon">📱</div>
+            <div class="variant-info">
+              <div class="variant-title">Standard Game</div>
+              <div class="variant-desc">3 rolls • All 13 categories</div>
+            </div>
+          </button>
+
+          <button class="mode-variant-btn"
+                  onclick="startGameWithMode('play', true)" ${disabled}>
+            <div class="variant-icon">⚡</div>
+            <div class="variant-info">
+              <div class="variant-title">Blitz Mode</div>
+              <div class="variant-desc">2 rolls • 6 categories • 15s timer</div>
+            </div>
+          </button>
+        </div>
+      </div>
     </div>
   `;
 }

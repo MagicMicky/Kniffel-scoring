@@ -52,3 +52,110 @@
   border-radius: 9999px;
   flex-shrink: 0;
 }
+
+/* Expandable Mode Container */
+.expandable-mode-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-mode-btn.expandable-header {
+  position: relative;
+}
+
+.expand-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  transition: transform 0.3s ease;
+  padding: 0.25rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.expand-icon:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.game-mode-btn.expandable-header.expanded .expand-icon {
+  transform: rotate(180deg);
+}
+
+.expandable-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.expandable-content.expanded {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: 0.5rem;
+}
+
+/* Mode Variant Buttons */
+.mode-variant-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: var(--rLg);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 0.5rem;
+}
+
+.mode-variant-btn:last-child {
+  margin-bottom: 0;
+}
+
+.mode-variant-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.mode-variant-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.mode-variant-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.variant-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.variant-info {
+  flex: 1;
+  text-align: left;
+}
+
+.variant-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+.variant-desc {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}

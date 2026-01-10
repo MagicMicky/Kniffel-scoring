@@ -170,8 +170,14 @@
   padding: 0.5rem !important;
 }
 
-.blitz-mode .timer-value {
-  font-size: 1.25rem;
+/* Compact timer - reduce padding and margins */
+.blitz-mode .blitz-timer {
+  margin-bottom: 0.35rem;
+  padding: 0.35rem 0.5rem;
+}
+
+.blitz-mode .timer-header {
+  margin-bottom: 0.15rem;
 }
 
 .blitz-mode .timer-label {
@@ -180,29 +186,29 @@
 
 .blitz-mode .speed-bonus-indicator {
   font-size: 0.65rem;
-  margin: 0.15rem 0;
+  margin: 0.1rem 0;
 }
 
+.blitz-mode .timer-bar-container {
+  height: 6px;
+}
+
+/* Compact dice area */
 .blitz-mode .dice-area {
   padding: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
-.blitz-mode .die {
-  width: 2.5rem;
-  height: 2.5rem;
-  font-size: 1.5rem;
-}
-
-.blitz-mode .roll-btn {
-  padding: 0.625rem 1.25rem;
-  font-size: 0.875rem;
-}
-
+/* Reduce spacing between sections */
 .blitz-mode .score-section-card {
-  margin-top: 0.75rem !important;
+  margin-top: 0.5rem !important;
 }
 
 .blitz-mode .score-section-card:first-of-type {
   margin-top: 0 !important;
+}
+
+/* Reduce row padding in score sections */
+.blitz-mode .score-section-card .flex.items-center.justify-between {
+  padding: 0.5rem 1rem !important;
 }

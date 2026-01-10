@@ -25,8 +25,8 @@ export const S = {
   blitzCategories: [], // 6 randomly selected category IDs
   turnTimer: null, // Timer ID
   turnStartTime: null, // When turn started (timestamp)
-  turnTimeRemaining: 30, // Seconds remaining
-  speedBonusEarned: false, // Did player score within 15 seconds?
+  turnTimeRemaining: 20, // Seconds remaining
+  speedBonusEarned: false, // Did player score within 10 seconds?
   // Dice state for play mode
   dice: [1, 1, 1, 1, 1],
   held: [false, false, false, false, false],
@@ -66,7 +66,7 @@ export function resetGameState() {
   S.blitzCategories = [];
   S.turnTimer = null;
   S.turnStartTime = null;
-  S.turnTimeRemaining = 30;
+  S.turnTimeRemaining = 20;
   S.speedBonusEarned = false;
   S.dice = [1, 1, 1, 1, 1];
   S.held = [false, false, false, false, false];
@@ -97,6 +97,6 @@ export function resetDiceState() {
   S.rolling = false;
   S.turnStarted = false;
   S.turnStartTime = null;
-  S.turnTimeRemaining = 30;
+  S.turnTimeRemaining = 20;
   S.speedBonusEarned = false;
 }

@@ -247,7 +247,7 @@ window.resumeGame = () => {
       S.rollCount = S.savedGame.rollCount || 0;
       S.turnStarted = S.savedGame.turnStarted || false;
       S.turnStartTime = S.savedGame.turnStartTime || null;
-      S.turnTimeRemaining = S.savedGame.turnTimeRemaining || 30;
+      S.turnTimeRemaining = S.savedGame.turnTimeRemaining || 20;
       S.speedBonusEarned = S.savedGame.speedBonusEarned || false;
       S.diceHistory = S.savedGame.diceHistory || [];
       if (S.mode === 'play') {
@@ -423,12 +423,12 @@ window.selectPlayScore = (categoryId, score) => {
     showFireworks();
   }
 
-  // Add speed bonus in blitz mode (scored within 15 seconds)
+  // Add speed bonus in blitz mode (scored within 10 seconds)
   let actualScore = score;
-  if (S.isBlitzMode && S.turnTimeRemaining >= 15 && score !== null && score > 0) {
-    actualScore = score + 5;
+  if (S.isBlitzMode && S.turnTimeRemaining >= 10 && score !== null && score > 0) {
+    actualScore = score + 2;
     S.speedBonusEarned = true;
-    showToast(`+5 Speed Bonus! ⚡ Total: ${actualScore}`);
+    showToast(`+2 Speed Bonus! ⚡ Total: ${actualScore}`);
     vibrate([50, 30, 50]);
   }
 

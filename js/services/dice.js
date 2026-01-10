@@ -4,7 +4,7 @@
  */
 
 import { S, resetDiceState } from '../state.js';
-import { calcScore } from '../utils/scoring.js';
+import { calcScore, getPossibleScores } from '../utils/scoring.js';
 import { vibrate } from '../utils/helpers.js';
 import { showToast } from './toast.js';
 import { showFireworks } from './fireworks.js';
@@ -102,7 +102,7 @@ export function startTurn(render) {
  */
 function startBlitzTimer(render) {
   S.turnStartTime = Date.now();
-  S.turnTimeRemaining = 30;
+  S.turnTimeRemaining = 20;
   S.speedBonusEarned = false;
 
   // Clear any existing timer
@@ -113,18 +113,18 @@ function startBlitzTimer(render) {
   // Update timer every 100ms for smooth countdown
   S.turnTimer = setInterval(() => {
     const elapsed = (Date.now() - S.turnStartTime) / 1000;
-    S.turnTimeRemaining = Math.max(0, 30 - elapsed);
+    S.turnTimeRemaining = Math.max(0, 20 - elapsed);
 
     // Warning vibration at 10 seconds
     if (S.turnTimeRemaining <= 10 && S.turnTimeRemaining > 9.9) {
       vibrate([50, 50, 50]);
     }
 
-    // Time's up
+    // Time's up - auto-select best score
     if (S.turnTimeRemaining <= 0) {
       clearInterval(S.turnTimer);
       S.turnTimer = null;
-      showToast("⏰ Time's up! Select a score");
+      autoSelectBestScore();
     }
 
     render();
@@ -138,6 +138,43 @@ export function stopBlitzTimer() {
   if (S.turnTimer) {
     clearInterval(S.turnTimer);
     S.turnTimer = null;
+  }
+}
+
+/**
+ * Auto-select best available score when time runs out
+ */
+function autoSelectBestScore() {
+  const possibleScores = getPossibleScores(S.dice);
+  const currentPlayer = S.game[S.cur];
+
+  // Find best available score from blitz categories
+  let bestCategory = null;
+  let bestScore = -1;
+
+  S.blitzCategories.forEach(catId => {
+    if (currentPlayer.scores[catId] === null && possibleScores[catId] !== undefined) {
+      if (possibleScores[catId] > bestScore) {
+        bestScore = possibleScores[catId];
+        bestCategory = catId;
+      }
+    }
+  });
+
+  // If no valid score found, select first available category with 0
+  if (bestCategory === null) {
+    bestCategory = S.blitzCategories.find(catId => currentPlayer.scores[catId] === null);
+    bestScore = 0;
+  }
+
+  if (bestCategory) {
+    showToast("⏰ Time's up! Auto-scoring...");
+    vibrate([100, 50, 100]);
+
+    // Call the global selectPlayScore function
+    setTimeout(() => {
+      window.selectPlayScore(bestCategory, bestScore);
+    }, 500);
   }
 }
 

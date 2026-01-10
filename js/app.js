@@ -207,16 +207,9 @@ function generateBlitzCategories() {
 }
 
 // Game control
-window.handleBlitzModeChange = () => {
-  const select = document.getElementById('blitzModeSelect');
-  if (select) {
-    const isBlitz = select.value === 'blitz';
-    // Update the button to start the correct mode
-    const playBtn = document.querySelector('.game-mode-btn[onclick*="play"]');
-    if (playBtn) {
-      playBtn.setAttribute('onclick', `startGameWithMode('play', ${isBlitz})`);
-    }
-  }
+window.toggleVirtualDiceExpanded = () => {
+  S.virtualDiceExpanded = !S.virtualDiceExpanded;
+  R();
 };
 
 window.startGameWithMode = (mode, isBlitz = false) => {

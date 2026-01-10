@@ -16,6 +16,7 @@ export const S = {
   mgr: false,
   stats: null,
   sideMenuOpen: false,
+  virtualDiceExpanded: false, // Track if Virtual Dice mode options are expanded
   version: 'v1.0.0',
   // Game mode: 'score' (manual entry) or 'play' (with dice)
   mode: 'score',

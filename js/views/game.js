@@ -32,7 +32,7 @@ export function gameView() {
   const hasLowerCategories = !S.isBlitzMode || LOWER.some(c => S.blitzCategories.includes(c.id));
 
   return `
-    <div class="game-container">
+    <div class="game-container ${S.isBlitzMode ? 'blitz-mode' : ''}">
       <div class="game-sticky-header">
         ${gameHeader(isPlayMode)}
         ${playerCarousel(S.game, S.cur)}

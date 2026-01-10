@@ -423,12 +423,12 @@ window.selectPlayScore = (categoryId, score) => {
     showFireworks();
   }
 
-  // Add speed bonus in blitz mode (scored within 10 seconds)
+  // Add speed bonus in blitz mode (scored within 5 seconds)
   let actualScore = score;
-  if (S.isBlitzMode && S.turnTimeRemaining >= 10 && score !== null && score > 0) {
-    actualScore = score + 2;
+  if (S.isBlitzMode && S.turnTimeRemaining >= 15 && score !== null && score > 0) {
+    actualScore = score + 5;
     S.speedBonusEarned = true;
-    showToast(`+2 Speed Bonus! ⚡ Total: ${actualScore}`);
+    showToast(`+5 Speed Bonus! ⚡ Total: ${actualScore}`);
     vibrate([50, 30, 50]);
   }
 

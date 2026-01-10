@@ -78,10 +78,10 @@
 
 /* Blitz Mode Timer */
 .blitz-timer {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.75rem;
   background: rgba(0, 0, 0, 0.3);
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   border: 2px solid rgba(57, 198, 167, 0.4);
   transition: all 0.3s;
 }
@@ -163,4 +163,46 @@
     opacity: 0.8;
     text-shadow: 0 0 8px rgba(252, 211, 77, 1);
   }
+}
+
+/* Blitz Mode Compact Layout */
+.blitz-mode .p-3 {
+  padding: 0.5rem !important;
+}
+
+.blitz-mode .timer-value {
+  font-size: 1.25rem;
+}
+
+.blitz-mode .timer-label {
+  font-size: 0.75rem;
+}
+
+.blitz-mode .speed-bonus-indicator {
+  font-size: 0.65rem;
+  margin: 0.15rem 0;
+}
+
+.blitz-mode .dice-area {
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.blitz-mode .die {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.5rem;
+}
+
+.blitz-mode .roll-btn {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+}
+
+.blitz-mode .score-section-card {
+  margin-top: 0.75rem !important;
+}
+
+.blitz-mode .score-section-card:first-of-type {
+  margin-top: 0 !important;
 }

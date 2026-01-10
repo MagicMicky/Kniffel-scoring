@@ -68,33 +68,23 @@ export function gameView(options = {}) {
 /**
  * Render game view in review mode (for history)
  * @param {Object} game - Game data
- * @param {number} playerIndex - Current player index
+ * @param {number} playerIndex - Current player index (unused, kept for compatibility)
  * @returns {string} HTML string
  */
 function gameViewReview(game, playerIndex) {
   const players = game.players;
-  const currentPlayer = players[playerIndex];
-  const scores = currentPlayer.scores;
-
-  // Standings
-  const sortedPlayers = [...players].sort((a, b) => b.total - a.total);
-  const maxScore = sortedPlayers[0].total;
-  const standingsHtml = historyStandings(sortedPlayers, maxScore);
-
   const duration = game.dur ? ` • ${game.dur} minutes` : '';
 
-  return `
-    <div class="game-container">
-      <div class="game-sticky-header">
-        ${reviewHeader()}
-        ${playerCarousel(players, playerIndex, 'review')}
-      </div>
+  // Render all players' scorecards
+  const allPlayersScores = players.map((player, index) => {
+    const playerColor = color(player.pid);
+    const scores = player.scores;
 
-      <div class="p-3" style="max-width:28rem;margin:0 auto">
-        <div class="glass rounded-xl p-3 mb-4 text-center">
-          <p class="text-white text-sm font-medium">
-            ${formatDate(game.date)} • ${formatTime(game.date)}${duration}
-          </p>
+    return `
+      <div class="mb-6" style="scroll-margin-top: 120px;" id="player-${index}">
+        <div class="card p-4 mb-3" style="border-left:4px solid ${playerColor}">
+          <h2 class="font-black text-2xl" style="color:${playerColor}">${escapeHtml(player.name)}</h2>
+          <p class="text-gray-500 text-sm mt-1">Final Score: ${player.total}</p>
         </div>
 
         ${upperSection(scores, 'review')}
@@ -104,7 +94,7 @@ function gameViewReview(game, playerIndex) {
           <div class="flex justify-between items-center">
             <div>
               <p style="opacity:0.7" class="text-sm">Grand Total</p>
-              <p class="text-4xl font-black">${currentPlayer.total}</p>
+              <p class="text-4xl font-black">${player.total}</p>
             </div>
             <div class="text-sm" style="text-align:right;opacity:0.7">
               <p>Upper: ${upTot(scores)} + ${upBonus(scores)}</p>
@@ -112,8 +102,31 @@ function gameViewReview(game, playerIndex) {
             </div>
           </div>
         </div>
+      </div>
+    `;
+  }).join('<div class="divider my-6" style="border-top:2px dashed var(--border);opacity:0.3"></div>');
 
-        <div class="card p-4">
+  // Standings
+  const sortedPlayers = [...players].sort((a, b) => b.total - a.total);
+  const maxScore = sortedPlayers[0].total;
+  const standingsHtml = historyStandings(sortedPlayers, maxScore);
+
+  return `
+    <div class="game-container">
+      <div class="game-sticky-header">
+        ${reviewHeader()}
+      </div>
+
+      <div class="p-3" style="max-width:28rem;margin:0 auto">
+        <div class="glass rounded-xl p-3 mb-4 text-center">
+          <p class="text-white text-sm font-medium">
+            ${formatDate(game.date)} • ${formatTime(game.date)}${duration}
+          </p>
+        </div>
+
+        ${allPlayersScores}
+
+        <div class="card p-4 mt-6">
           <h3 class="font-bold mb-4 text-gray-800">📊 Final Standings</h3>
           ${standingsHtml}
         </div>

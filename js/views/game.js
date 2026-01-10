@@ -93,6 +93,9 @@ function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
   const upperTotal = upTot(scores);
   const bonusAchieved = upperTotal >= 63;
 
+  // In blitz mode, only show bonus if there are upper categories
+  const showBonus = !S.isBlitzMode || categories.length > 0;
+
   return `
     <div class="card score-section-card">
       <div class="flex items-center justify-between px-4 py-3 upper-gradient text-white">
@@ -100,11 +103,13 @@ function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
         <span class="font-black text-lg ${bonusAchieved ? 'opacity-100' : 'opacity-75'}">${upperTotal}/63</span>
       </div>
       ${rows}
-      <div class="flex items-center justify-between px-4 py-3"
-           style="background:var(--surface2);border-top:1px solid var(--border)">
-        <span class="font-bold text-blue-600">Upper Bonus</span>
-        <span class="font-black text-xl ${bonusClass}">${bonusText}</span>
-      </div>
+      ${showBonus ? `
+        <div class="flex items-center justify-between px-4 py-3"
+             style="background:var(--surface2);border-top:1px solid var(--border)">
+          <span class="font-bold text-blue-600">Upper Bonus</span>
+          <span class="font-black text-xl ${bonusClass}">${bonusText}</span>
+        </div>
+      ` : ''}
     </div>
   `;
 }
@@ -126,25 +131,30 @@ function lowerSection(scores, isPlayMode, possibleScores, canSelectScore) {
     }
   }).join('');
 
-  const yahtzeeBonus = isPlayMode
-    ? `<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">
-        <div>
-          <span class="font-bold text-yellow-800">Yahtzee Bonus</span>
-          <span class="text-yellow-600 text-xs ml-2">+100 each</span>
-        </div>
-        <span class="font-black text-xl text-yellow-600">+${scores.bonus}</span>
-       </div>`
-    : `<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">
-        <div>
-          <span class="font-bold text-yellow-800">Yahtzee Bonus</span>
-          <span class="text-yellow-600 text-xs ml-2">+100 each</span>
-        </div>
-        <div class="flex items-center gap-2">
+  // In blitz mode, only show yahtzee bonus if yahtzee is one of the selected categories
+  const hasYahtzee = !S.isBlitzMode || S.blitzCategories.includes('yahtzee');
+
+  const yahtzeeBonus = hasYahtzee
+    ? (isPlayMode
+      ? `<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">
+          <div>
+            <span class="font-bold text-yellow-800">Yahtzee Bonus</span>
+            <span class="text-yellow-600 text-xs ml-2">+100 each</span>
+          </div>
           <span class="font-black text-xl text-yellow-600">+${scores.bonus}</span>
-          <button class="btn btn-small ${scores.yahtzee === 50 ? 'btn-yellow' : 'btn-gray-dark'} font-bold"
-                  onclick="addBonus()" ${scores.yahtzee !== 50 ? 'disabled' : ''}>+100</button>
-        </div>
-       </div>`;
+         </div>`
+      : `<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">
+          <div>
+            <span class="font-bold text-yellow-800">Yahtzee Bonus</span>
+            <span class="text-yellow-600 text-xs ml-2">+100 each</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="font-black text-xl text-yellow-600">+${scores.bonus}</span>
+            <button class="btn btn-small ${scores.yahtzee === 50 ? 'btn-yellow' : 'btn-gray-dark'} font-bold"
+                    onclick="addBonus()" ${scores.yahtzee !== 50 ? 'disabled' : ''}>+100</button>
+          </div>
+         </div>`)
+    : '';
 
   const lowerTotal = loTot(scores);
 

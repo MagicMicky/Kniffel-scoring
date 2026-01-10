@@ -64,16 +64,22 @@
 
 .expand-icon {
   position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.875rem;
+  right: 0.75rem;
+  top: 0.75rem;
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.7);
   transition: transform 0.3s ease;
+  padding: 0.25rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.expand-icon:hover {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .game-mode-btn.expandable-header.expanded .expand-icon {
-  transform: translateY(-50%) rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .expandable-content {

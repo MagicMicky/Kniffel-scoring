@@ -152,11 +152,11 @@ function gameModeButtons() {
 
       <div class="expandable-mode-container">
         <button class="game-mode-btn expandable-header ${isExpanded ? 'expanded' : ''}"
-                onclick="toggleVirtualDiceExpanded()" ${disabled}>
+                onclick="startGameWithMode('play', false)" ${disabled}>
           <div class="icon">📱</div>
           <div class="title">VIRTUAL DICE</div>
           <div class="desc">Roll on phone<br>Auto-scoring</div>
-          <span class="expand-icon">${expandIcon}</span>
+          <span class="expand-icon" onclick="event.stopPropagation();toggleVirtualDiceExpanded()">${expandIcon}</span>
         </button>
 
         <div class="expandable-content ${isExpanded ? 'expanded' : ''}">

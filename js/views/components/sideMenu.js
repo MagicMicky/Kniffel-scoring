@@ -27,14 +27,17 @@ export function sideMenu() {
         <h2 class="text-xl font-black text-white">Menu</h2>
       </div>
       <div class="side-menu-content">
+        <button class="side-menu-item btn" onclick="navigateTo('leaderboard');toggleSideMenu()">
+          🏆 Leaderboard
+        </button>
+        <button class="side-menu-item btn" onclick="navigateTo('history');toggleSideMenu()">
+          📜 Game History
+        </button>
         <button class="side-menu-item btn" onclick="exportData();toggleSideMenu()">
           📥 Export Data
         </button>
         <button class="side-menu-item btn" onclick="triggerImport();toggleSideMenu()">
           📤 Import Data
-        </button>
-        <button class="side-menu-item btn" onclick="navigateTo('history');toggleSideMenu()">
-          📜 Game History
         </button>
         <button class="side-menu-item btn" onclick="forceUpdate()">
           🔄 Update App

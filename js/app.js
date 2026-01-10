@@ -18,6 +18,7 @@ import { setupView } from './views/setup.js';
 import { gameView } from './views/game.js';
 import { historyListView, historyDetailView } from './views/history.js';
 import { endScreenView, animateReveal, skipReveal as skipRevealFn } from './views/endScreen.js';
+import { leaderboardView } from './views/leaderboard.js';
 
 // ============================================
 // RENDER FUNCTION
@@ -48,6 +49,9 @@ function R() {
     } else {
       app.innerHTML = historyListView();
     }
+    lastRenderedPlayer = null;
+  } else if (S.view === 'leaderboard') {
+    app.innerHTML = leaderboardView();
     lastRenderedPlayer = null;
   } else if (S.view === 'endScreen') {
     app.innerHTML = endScreenView();

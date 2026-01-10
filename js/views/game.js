@@ -1,26 +1,40 @@
 /**
  * Game View
- * Main game screen with scoring
+ * Main game screen with scoring (supports both active gameplay and history review)
  */
 
 import { S } from '../state.js';
 import { UPPER, LOWER } from '../constants.js';
 import { upTot, upBonus, loTot, grand, getPossibleScores } from '../utils/scoring.js';
-import { color, escapeHtml } from '../utils/helpers.js';
+import { color, escapeHtml, formatDate, formatTime } from '../utils/helpers.js';
 import { playerCarousel } from './components/playerCard.js';
 import { diceArea } from './components/diceArea.js';
 import { picker } from './components/picker.js';
 import { modal } from './components/modal.js';
 import {
   upperScoreRow, lowerScoreRow,
-  upperScoreRowPlay, lowerScoreRowPlay
+  upperScoreRowPlay, lowerScoreRowPlay,
+  readOnlyScoreRow
 } from './components/scoreRow.js';
+import { historyStandings } from './components/standings.js';
 
 /**
  * Render the game view
+ * @param {Object} options - Options for rendering
+ * @param {string} options.mode - 'active' or 'review'
+ * @param {Object} options.game - Game data (for review mode)
+ * @param {number} options.playerIndex - Current player index (for review mode)
  * @returns {string} HTML string
  */
-export function gameView() {
+export function gameView(options = {}) {
+  const mode = options.mode || 'active';
+  const isReviewMode = mode === 'review';
+
+  if (isReviewMode) {
+    return gameViewReview(options.game, options.playerIndex);
+  }
+
+  // Active game mode (original logic)
   const currentPlayer = S.game[S.cur];
   const scores = currentPlayer.scores;
   const isPlayMode = S.mode === 'play';
@@ -52,6 +66,76 @@ export function gameView() {
 }
 
 /**
+ * Render game view in review mode (for history)
+ * @param {Object} game - Game data
+ * @param {number} playerIndex - Current player index (unused, kept for compatibility)
+ * @returns {string} HTML string
+ */
+function gameViewReview(game, playerIndex) {
+  const players = game.players;
+  const duration = game.dur ? ` • ${game.dur} minutes` : '';
+
+  // Render all players' scorecards
+  const allPlayersScores = players.map((player, index) => {
+    const playerColor = color(player.pid);
+    const scores = player.scores;
+
+    return `
+      <div class="mb-6" style="scroll-margin-top: 120px;" id="player-${index}">
+        <div class="card p-4 mb-3" style="border-left:4px solid ${playerColor}">
+          <h2 class="font-black text-2xl" style="color:${playerColor}">${escapeHtml(player.name)}</h2>
+          <p class="text-gray-500 text-sm mt-1">Final Score: ${player.total}</p>
+        </div>
+
+        ${upperSection(scores, 'review')}
+        ${lowerSection(scores, 'review')}
+
+        <div class="total-gradient text-white rounded-2xl shadow-lg p-5 mb-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <p style="opacity:0.7" class="text-sm">Grand Total</p>
+              <p class="text-4xl font-black">${player.total}</p>
+            </div>
+            <div class="text-sm" style="text-align:right;opacity:0.7">
+              <p>Upper: ${upTot(scores)} + ${upBonus(scores)}</p>
+              <p>Lower: ${loTot(scores)}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('<div class="divider my-6" style="border-top:2px dashed var(--border);opacity:0.3"></div>');
+
+  // Standings
+  const sortedPlayers = [...players].sort((a, b) => b.total - a.total);
+  const maxScore = sortedPlayers[0].total;
+  const standingsHtml = historyStandings(sortedPlayers, maxScore);
+
+  return `
+    <div class="game-container">
+      <div class="game-sticky-header">
+        ${reviewHeader()}
+      </div>
+
+      <div class="p-3" style="max-width:28rem;margin:0 auto">
+        <div class="glass rounded-xl p-3 mb-4 text-center">
+          <p class="text-white text-sm font-medium">
+            ${formatDate(game.date)} • ${formatTime(game.date)}${duration}
+          </p>
+        </div>
+
+        ${allPlayersScores}
+
+        <div class="card p-4 mt-6">
+          <h3 class="font-bold mb-4 text-gray-800">📊 Final Standings</h3>
+          ${standingsHtml}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
  * Create game header
  */
 function gameHeader(isPlayMode) {
@@ -73,15 +157,24 @@ function gameHeader(isPlayMode) {
 
 /**
  * Create upper section card
+ * @param {Object} scores - Player scores
+ * @param {boolean|string} isPlayMode - Play mode flag or mode string ('review')
+ * @param {Object} possibleScores - Possible scores for current dice
+ * @param {boolean} canSelectScore - Whether player can select a score
+ * @returns {string} HTML string
  */
 function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
-  // Filter categories for blitz mode
-  const categories = S.isBlitzMode
+  const isReviewMode = isPlayMode === 'review';
+
+  // Filter categories for blitz mode (not applicable in review mode)
+  const categories = (!isReviewMode && S.isBlitzMode)
     ? UPPER.filter(c => S.blitzCategories.includes(c.id))
     : UPPER;
 
   const rows = categories.map(c => {
-    if (isPlayMode) {
+    if (isReviewMode) {
+      return readOnlyScoreRow(c.name, scores[c.id], 'score-filled-blue');
+    } else if (isPlayMode) {
       return upperScoreRowPlay(c, scores[c.id], possibleScores[c.id], canSelectScore && scores[c.id] === null);
     } else {
       return upperScoreRow(c, scores[c.id]);
@@ -93,14 +186,22 @@ function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
   const upperTotal = upTot(scores);
   const bonusAchieved = upperTotal >= 63;
 
-  // Disable bonus display in blitz mode
-  const showBonus = !S.isBlitzMode;
+  // Disable bonus display in blitz mode (not in review mode)
+  const showBonus = isReviewMode || !S.isBlitzMode;
+
+  // Different header styling for review mode
+  const headerContent = isReviewMode
+    ? `<h2 class="font-black text-sm uppercase tracking-wide">Upper Section</h2>
+       <span class="text-sm px-2 py-1 rounded-full ${bonusAchieved ? 'glass" style="background:var(--link);color:var(--bg)' : 'glass'}">
+         ${upperTotal}/63
+       </span>`
+    : `<h2 class="font-black text-sm uppercase tracking-wide">Upper Section</h2>
+       <span class="font-black text-lg ${bonusAchieved ? 'opacity-100' : 'opacity-75'}">${upperTotal}/63</span>`;
 
   return `
     <div class="card score-section-card">
       <div class="flex items-center justify-between px-4 py-3 upper-gradient text-white">
-        <h2 class="font-black text-sm uppercase tracking-wide">Upper Section</h2>
-        <span class="font-black text-lg ${bonusAchieved ? 'opacity-100' : 'opacity-75'}">${upperTotal}/63</span>
+        ${headerContent}
       </div>
       ${rows}
       ${showBonus ? `
@@ -116,44 +217,62 @@ function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
 
 /**
  * Create lower section card
+ * @param {Object} scores - Player scores
+ * @param {boolean|string} isPlayMode - Play mode flag or mode string ('review')
+ * @param {Object} possibleScores - Possible scores for current dice
+ * @param {boolean} canSelectScore - Whether player can select a score
+ * @returns {string} HTML string
  */
 function lowerSection(scores, isPlayMode, possibleScores, canSelectScore) {
-  // Filter categories for blitz mode
-  const categories = S.isBlitzMode
+  const isReviewMode = isPlayMode === 'review';
+
+  // Filter categories for blitz mode (not applicable in review mode)
+  const categories = (!isReviewMode && S.isBlitzMode)
     ? LOWER.filter(c => S.blitzCategories.includes(c.id))
     : LOWER;
 
   const rows = categories.map(c => {
-    if (isPlayMode) {
+    if (isReviewMode) {
+      return readOnlyScoreRow(c.name, scores[c.id], 'score-filled-purple');
+    } else if (isPlayMode) {
       return lowerScoreRowPlay(c, scores[c.id], possibleScores[c.id], canSelectScore && scores[c.id] === null);
     } else {
       return lowerScoreRow(c, scores[c.id]);
     }
   }).join('');
 
-  // Disable Yahtzee bonus display in blitz mode
-  const hasYahtzee = !S.isBlitzMode;
+  // Disable Yahtzee bonus display in blitz mode (not in review mode)
+  const hasYahtzee = isReviewMode || !S.isBlitzMode;
 
   const yahtzeeBonus = hasYahtzee
-    ? (isPlayMode
-      ? `<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">
+    ? (isReviewMode
+      ? `<div class="flex items-center justify-between px-4 py-3"
+             style="background:var(--surface2);border-top:1px solid var(--border)">
           <div>
-            <span class="font-bold text-yellow-800">Yahtzee Bonus</span>
+            <span class="font-bold text-yellow-600">Yahtzee Bonus</span>
             <span class="text-yellow-600 text-xs ml-2">+100 each</span>
           </div>
-          <span class="font-black text-xl text-yellow-600">+${scores.bonus}</span>
+          <span class="font-black text-xl text-yellow-600">+${scores.bonus || 0}</span>
          </div>`
-      : `<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">
-          <div>
-            <span class="font-bold text-yellow-800">Yahtzee Bonus</span>
-            <span class="text-yellow-600 text-xs ml-2">+100 each</span>
-          </div>
-          <div class="flex items-center gap-2">
+      : (isPlayMode
+        ? `<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">
+            <div>
+              <span class="font-bold text-yellow-800">Yahtzee Bonus</span>
+              <span class="text-yellow-600 text-xs ml-2">+100 each</span>
+            </div>
             <span class="font-black text-xl text-yellow-600">+${scores.bonus}</span>
-            <button class="btn btn-small ${scores.yahtzee === 50 ? 'btn-yellow' : 'btn-gray-dark'} font-bold"
-                    onclick="addBonus()" ${scores.yahtzee !== 50 ? 'disabled' : ''}>+100</button>
-          </div>
-         </div>`)
+           </div>`
+        : `<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">
+            <div>
+              <span class="font-bold text-yellow-800">Yahtzee Bonus</span>
+              <span class="text-yellow-600 text-xs ml-2">+100 each</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="font-black text-xl text-yellow-600">+${scores.bonus}</span>
+              <button class="btn btn-small ${scores.yahtzee === 50 ? 'btn-yellow' : 'btn-gray-dark'} font-bold"
+                      onclick="addBonus()" ${scores.yahtzee !== 50 ? 'disabled' : ''}>+100</button>
+            </div>
+           </div>`))
     : '';
 
   const lowerTotal = loTot(scores);
@@ -166,6 +285,21 @@ function lowerSection(scores, isPlayMode, possibleScores, canSelectScore) {
       </div>
       ${rows}
       ${yahtzeeBonus}
+    </div>
+  `;
+}
+
+/**
+ * Create review header
+ */
+function reviewHeader() {
+  return `
+    <div class="header-gradient text-white p-3">
+      <div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">
+        <button class="btn-text text-white text-lg font-medium" onclick="closeHistoryDetail()">← Back</button>
+        <h1 class="font-black text-lg">📖 GAME REVIEW</h1>
+        <div class="text-xs" style="opacity:0.8">Read Only</div>
+      </div>
     </div>
   `;
 }

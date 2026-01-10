@@ -4,11 +4,8 @@
  */
 
 import { S } from '../state.js';
-import { UPPER, LOWER } from '../constants.js';
-import { upTot, upBonus, loTot } from '../utils/scoring.js';
 import { color, formatDate, formatTime, escapeHtml } from '../utils/helpers.js';
-import { readOnlyScoreRow } from './components/scoreRow.js';
-import { historyStandings } from './components/standings.js';
+import { gameView } from './game.js';
 
 /**
  * Render history list view
@@ -90,120 +87,17 @@ function historyGamesList() {
 
 /**
  * Render history detail view
+ * Uses the unified gameView component in review mode
  * @returns {string} HTML string
  */
 export function historyDetailView() {
   const game = S.selectedHistoryGame;
   if (!game) return '';
 
-  const players = game.players;
-  const currentPlayer = players[S.historyDetailPlayer];
-  const scores = currentPlayer.scores;
-
-  // Player tabs
-  const tabs = players.map((p, i) => {
-    const playerColor = color(p.pid);
-    const isActive = i === S.historyDetailPlayer;
-    const activeStyle = isActive ? `background:${playerColor}` : '';
-
-    return `
-      <button class="player-tab flex-shrink-0 ${isActive ? 'player-tab-active' : 'player-tab-inactive'}"
-              style="${activeStyle}" onclick="switchHistoryPlayer(${i})">
-        ${escapeHtml(p.name)}: ${p.total}
-      </button>
-    `;
-  }).join('');
-
-  // Upper section rows
-  const upperRows = UPPER.map(c => readOnlyScoreRow(c.name, scores[c.id], 'score-filled-blue')).join('');
-
-  // Lower section rows
-  const lowerRows = LOWER.map(c => readOnlyScoreRow(c.name, scores[c.id], 'score-filled-purple')).join('');
-
-  // Standings
-  const sortedPlayers = [...players].sort((a, b) => b.total - a.total);
-  const maxScore = sortedPlayers[0].total;
-  const standingsHtml = historyStandings(sortedPlayers, maxScore);
-
-  const duration = game.dur ? ` • ${game.dur} minutes` : '';
-  const playerColor = color(currentPlayer.pid);
-
-  return `
-    <div style="min-height:100vh;background:var(--bg);padding-bottom:6rem">
-      <div class="header-gradient text-white p-3 sticky">
-        <div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">
-          <button class="btn-text text-white text-lg font-medium" onclick="closeHistoryDetail()">← Back</button>
-          <h1 class="font-black text-lg">📖 GAME REVIEW</h1>
-          <div class="text-xs" style="opacity:0.8">Read Only</div>
-        </div>
-      </div>
-
-      <div class="sticky-tabs" style="background:var(--surface);box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);border-bottom:1px solid var(--border)">
-        <div class="flex overflow-x-auto py-2 px-2 gap-2" style="max-width:28rem;margin:0 auto">
-          ${tabs}
-        </div>
-      </div>
-
-      <div class="p-3" style="max-width:28rem;margin:0 auto">
-        <div class="card p-4 mb-4" style="border-left:4px solid ${playerColor}">
-          <h2 class="font-black text-2xl" style="color:${playerColor}">${escapeHtml(currentPlayer.name)}</h2>
-          <p class="text-gray-500 text-sm mt-1">Final Score: ${currentPlayer.total}</p>
-        </div>
-
-        <div class="glass rounded-xl p-3 mb-4 text-center">
-          <p class="text-white text-sm font-medium">
-            ${formatDate(game.date)} • ${formatTime(game.date)}${duration}
-          </p>
-        </div>
-
-        <div class="card mb-4">
-          <div class="upper-gradient text-white px-4 py-3 flex justify-between items-center">
-            <span class="font-bold">Upper Section</span>
-            <span class="text-sm px-2 py-1 rounded-full ${upTot(scores) >= 63 ? 'glass" style="background:var(--link);color:var(--bg)' : 'glass'}">
-              ${upTot(scores)}/63
-            </span>
-          </div>
-          ${upperRows}
-          <div class="flex items-center justify-between px-4 py-3"
-               style="background:var(--surface2);border-top:1px solid var(--border)">
-            <span class="font-bold text-blue-600">Upper Bonus</span>
-            <span class="font-black text-xl ${upBonus(scores) ? 'text-green-600' : 'text-gray-400'}">
-              ${upBonus(scores) ? '+35 ✓' : '0'}
-            </span>
-          </div>
-        </div>
-
-        <div class="card mb-4">
-          <div class="lower-gradient text-white px-4 py-3 font-bold">Lower Section</div>
-          ${lowerRows}
-          <div class="flex items-center justify-between px-4 py-3"
-               style="background:var(--surface2);border-top:1px solid var(--border)">
-            <div>
-              <span class="font-bold text-yellow-600">Yahtzee Bonus</span>
-              <span class="text-yellow-600 text-xs ml-2">+100 each</span>
-            </div>
-            <span class="font-black text-xl text-yellow-600">+${scores.bonus || 0}</span>
-          </div>
-        </div>
-
-        <div class="total-gradient text-white rounded-2xl shadow-lg p-5 mb-4">
-          <div class="flex justify-between items-center">
-            <div>
-              <p style="opacity:0.7" class="text-sm">Grand Total</p>
-              <p class="text-4xl font-black">${currentPlayer.total}</p>
-            </div>
-            <div class="text-sm" style="text-align:right;opacity:0.7">
-              <p>Upper: ${upTot(scores)} + ${upBonus(scores)}</p>
-              <p>Lower: ${loTot(scores)}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card p-4">
-          <h3 class="font-bold mb-4 text-gray-800">📊 Final Standings</h3>
-          ${standingsHtml}
-        </div>
-      </div>
-    </div>
-  `;
+  // Use the unified gameView component in review mode
+  return gameView({
+    mode: 'review',
+    game: game,
+    playerIndex: S.historyDetailPlayer
+  });
 }

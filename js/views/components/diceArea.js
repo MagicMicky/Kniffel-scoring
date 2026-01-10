@@ -16,12 +16,7 @@ export function diceArea() {
 
   if (!S.turnStarted) {
     const blitzHint = S.isBlitzMode
-      ? `<div class="text-yellow-300 text-xs mb-3" style="font-weight:600;line-height:1.4">
-          <div style="margin-bottom:0.25rem">⚡ Blitz Mode Rules:</div>
-          <div style="opacity:0.9">• 20 second timer starts when you begin</div>
-          <div style="opacity:0.9">• Only 2 rolls per turn</div>
-          <div style="opacity:0.9">• Score within 5 seconds = <span style="color:#FCD34D">+5 bonus!</span></div>
-        </div>`
+      ? '<p class="text-yellow-300 text-xs mb-2" style="font-weight:600">⚡ 20s timer • 2 rolls • Score in 5s = <span style="color:#FCD34D">+5 bonus!</span></p>'
       : '';
     return `
       <div class="dice-area">

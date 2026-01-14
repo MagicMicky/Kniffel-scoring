@@ -173,9 +173,9 @@ function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
 
   const rows = categories.map(c => {
     if (isReviewMode) {
-      return readOnlyScoreRow(c.name, scores[c.id], 'score-filled-blue');
+      return readOnlyScoreRow(c.name, scores[c.id], 'score-filled-blue', c.id, scores);
     } else if (isPlayMode) {
-      return upperScoreRowPlay(c, scores[c.id], possibleScores[c.id], canSelectScore && scores[c.id] === null);
+      return upperScoreRowPlay(c, scores[c.id], possibleScores[c.id], canSelectScore && scores[c.id] === null, scores);
     } else {
       return upperScoreRow(c, scores[c.id]);
     }
@@ -233,9 +233,9 @@ function lowerSection(scores, isPlayMode, possibleScores, canSelectScore) {
 
   const rows = categories.map(c => {
     if (isReviewMode) {
-      return readOnlyScoreRow(c.name, scores[c.id], 'score-filled-purple');
+      return readOnlyScoreRow(c.name, scores[c.id], 'score-filled-purple', c.id, scores);
     } else if (isPlayMode) {
-      return lowerScoreRowPlay(c, scores[c.id], possibleScores[c.id], canSelectScore && scores[c.id] === null);
+      return lowerScoreRowPlay(c, scores[c.id], possibleScores[c.id], canSelectScore && scores[c.id] === null, scores);
     } else {
       return lowerScoreRow(c, scores[c.id]);
     }

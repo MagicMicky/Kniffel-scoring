@@ -35,3 +35,20 @@ export const COLORS = [
   '#A78BFA',  // 7. Lavender - purple
   '#FB923C'   // 8. Peach - orange
 ];
+
+// Blitz mode timer configuration
+export const BLITZ_TIMER_DURATION = 15; // Total seconds per turn in blitz mode
+export const BLITZ_SPEED_BONUS_WINDOW = 5; // Seconds within which player must score to get speed bonus
+export const BLITZ_SPEED_BONUS_POINTS = 5; // Points awarded for speed bonus
+
+/**
+ * Check if speed bonus should be awarded in blitz mode
+ * @param {number} timeRemaining - Seconds remaining on the timer
+ * @returns {boolean} True if player scored fast enough to earn bonus
+ */
+export function shouldAwardSpeedBonus(timeRemaining) {
+  // Award bonus if time remaining is MORE than (total - bonus window)
+  // Example: If total is 15s and window is 5s, award if ≥10s remain (scored within first 5s)
+  const threshold = BLITZ_TIMER_DURATION - BLITZ_SPEED_BONUS_WINDOW;
+  return timeRemaining >= threshold;
+}

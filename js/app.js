@@ -4,9 +4,9 @@
  */
 
 import { S, resetDiceState, resetGameState } from './state.js';
-import { COLORS, UPPER, LOWER } from './constants.js';
+import { COLORS, UPPER, LOWER, BLITZ_TIMER_DURATION, BLITZ_SPEED_BONUS_POINTS, shouldAwardSpeedBonus } from './constants.js';
 import { upTot, upBonus, loTot, grand, calcScore, getPossibleScores } from './utils/scoring.js';
-import { save, saveCurrentGame, clearSavedGame, empty, isGameComplete, createGameRecord } from './utils/storage.js';
+import { save, saveCurrentGame, clearSavedGame, empty, isGameComplete, createGameRecord, ensureSpeedBonuses } from './utils/storage.js';
 import { color, vibrate } from './utils/helpers.js';
 import { rollDice as rollDiceService, toggleHold as toggleHoldService, resetDiceForTurn, startTurn as startTurnService, setupShakeDetection, dieFace, stopBlitzTimer } from './services/dice.js';
 import { showToast } from './services/toast.js';
@@ -257,6 +257,8 @@ window.startGameWithMode = (mode, isBlitz = false) => {
 window.resumeGame = () => {
   if (S.savedGame) {
     S.game = S.savedGame.game;
+    // Ensure backward compatibility with old saved games
+    S.game.forEach(player => ensureSpeedBonuses(player.scores));
     S.cur = S.savedGame.cur;
     S.start = S.savedGame.start;
     if (S.savedGame.mode) {
@@ -268,7 +270,7 @@ window.resumeGame = () => {
       S.rollCount = S.savedGame.rollCount || 0;
       S.turnStarted = S.savedGame.turnStarted || false;
       S.turnStartTime = S.savedGame.turnStartTime || null;
-      S.turnTimeRemaining = S.savedGame.turnTimeRemaining || 15;
+      S.turnTimeRemaining = S.savedGame.turnTimeRemaining || BLITZ_TIMER_DURATION;
       S.speedBonusEarned = S.savedGame.speedBonusEarned || false;
       S.diceHistory = S.savedGame.diceHistory || [];
       if (S.mode === 'play') {
@@ -447,16 +449,17 @@ window.selectPlayScore = (categoryId, score) => {
     showFireworks();
   }
 
-  // Add speed bonus in blitz mode (scored within 5 seconds)
-  let actualScore = score;
-  if (S.isBlitzMode && S.turnTimeRemaining >= 15 && score !== null && score > 0) {
-    actualScore = score + 5;
+  // Store base score
+  cp.scores[categoryId] = score;
+
+  // Track speed bonus separately in blitz mode (scored within time window)
+  if (S.isBlitzMode && shouldAwardSpeedBonus(S.turnTimeRemaining) && score !== null && score > 0) {
+    cp.scores.speedBonuses[categoryId] = true;
     S.speedBonusEarned = true;
-    showToast(`+5 Speed Bonus! ⚡ Total: ${actualScore}`);
+    const totalWithBonus = score + BLITZ_SPEED_BONUS_POINTS;
+    showToast(`+${BLITZ_SPEED_BONUS_POINTS} Speed Bonus! ⚡ Total: ${totalWithBonus}`);
     vibrate([50, 30, 50]);
   }
-
-  cp.scores[categoryId] = actualScore;
 
   if (isGameComplete()) {
     vibrate([100, 50, 100, 50, 200]);

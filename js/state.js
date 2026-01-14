@@ -3,13 +3,24 @@
  * Single source of truth for all app state
  */
 
+import { BLITZ_TIMER_DURATION } from './constants.js';
+import { ensureSpeedBonuses } from './utils/storage.js';
+
+// Load and migrate history data (ensure backward compatibility)
+const loadedHistory = JSON.parse(localStorage.getItem('yahtzeeH') || '[]');
+loadedHistory.forEach(game => {
+  if (game.players) {
+    game.players.forEach(p => ensureSpeedBonuses(p.scores));
+  }
+});
+
 // Global state object
 export const S = {
   view: 'setup',
   known: JSON.parse(localStorage.getItem('yahtzeeP') || '[]'),
   game: [],
   cur: 0,
-  history: JSON.parse(localStorage.getItem('yahtzeeH') || '[]'),
+  history: loadedHistory,
   savedGame: JSON.parse(localStorage.getItem('yahtzeeSaved') || 'null'),
   start: null,
   picker: null,
@@ -25,7 +36,7 @@ export const S = {
   blitzCategories: [], // 6 randomly selected category IDs
   turnTimer: null, // Timer ID
   turnStartTime: null, // When turn started (timestamp)
-  turnTimeRemaining: 15, // Seconds remaining
+  turnTimeRemaining: BLITZ_TIMER_DURATION, // Seconds remaining
   speedBonusEarned: false, // Did player score within 5 seconds?
   // Dice state for play mode
   dice: [1, 1, 1, 1, 1],
@@ -70,7 +81,7 @@ export function resetGameState() {
   S.blitzCategories = [];
   S.turnTimer = null;
   S.turnStartTime = null;
-  S.turnTimeRemaining = 15;
+  S.turnTimeRemaining = BLITZ_TIMER_DURATION;
   S.speedBonusEarned = false;
   S.dice = [1, 1, 1, 1, 1];
   S.held = [false, false, false, false, false];
@@ -101,6 +112,6 @@ export function resetDiceState() {
   S.rolling = false;
   S.turnStarted = false;
   S.turnStartTime = null;
-  S.turnTimeRemaining = 15;
+  S.turnTimeRemaining = BLITZ_TIMER_DURATION;
   S.speedBonusEarned = false;
 }

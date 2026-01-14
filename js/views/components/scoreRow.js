@@ -3,6 +3,8 @@
  * Renders individual score rows for upper and lower sections
  */
 
+import { hasSpeedBonus } from '../../utils/storage.js';
+
 /**
  * Create an upper section score row (Score Mode)
  * @param {Object} category - Category config {id, name, value}
@@ -65,16 +67,19 @@ export function lowerScoreRow(category, score) {
  * @param {number|null} currentScore - Current saved score
  * @param {number} possibleScore - Possible score with current dice
  * @param {boolean} canSelect - Whether player can select a score
+ * @param {Object} scores - Player scores object (for checking speed bonus)
  * @returns {string} HTML string
  */
-export function upperScoreRowPlay(category, currentScore, possibleScore, canSelect) {
+export function upperScoreRowPlay(category, currentScore, possibleScore, canSelect, scores) {
   if (currentScore !== null) {
+    const hasSB = scores && hasSpeedBonus(scores, category.id);
+    const speedBonusIndicator = hasSB ? ' ⚡' : '';
     return `
       <div class="flex items-center justify-between px-4 py-3">
         <span class="font-medium text-gray-800">${category.name}</span>
         <div class="flex items-center gap-2">
           <button class="clear-btn" onclick="clr('${category.id}')">✕</button>
-          <span class="score-btn score-filled-blue">${currentScore}</span>
+          <span class="score-btn score-filled-blue">${currentScore}${speedBonusIndicator}</span>
         </div>
       </div>
       <div class="divider"></div>
@@ -108,16 +113,19 @@ export function upperScoreRowPlay(category, currentScore, possibleScore, canSele
  * @param {number|null} currentScore - Current saved score
  * @param {number} possibleScore - Possible score with current dice
  * @param {boolean} canSelect - Whether player can select a score
+ * @param {Object} scores - Player scores object (for checking speed bonus)
  * @returns {string} HTML string
  */
-export function lowerScoreRowPlay(category, currentScore, possibleScore, canSelect) {
+export function lowerScoreRowPlay(category, currentScore, possibleScore, canSelect, scores) {
   if (currentScore !== null) {
+    const hasSB = scores && hasSpeedBonus(scores, category.id);
+    const speedBonusIndicator = hasSB ? ' ⚡' : '';
     return `
       <div class="flex items-center justify-between px-4 py-3">
         <span class="font-medium text-gray-800">${category.name}</span>
         <div class="flex items-center gap-2">
           <button class="clear-btn" onclick="clr('${category.id}')">✕</button>
-          <span class="score-btn score-filled-purple">${currentScore}</span>
+          <span class="score-btn score-filled-purple">${currentScore}${speedBonusIndicator}</span>
         </div>
       </div>
       <div class="divider"></div>
@@ -150,13 +158,17 @@ export function lowerScoreRowPlay(category, currentScore, possibleScore, canSele
  * @param {string} name - Category name
  * @param {number} score - Score value
  * @param {string} colorClass - CSS class for styling
+ * @param {string} categoryId - Category ID (optional, for speed bonus check)
+ * @param {Object} scores - Player scores object (optional, for speed bonus check)
  * @returns {string} HTML string
  */
-export function readOnlyScoreRow(name, score, colorClass) {
+export function readOnlyScoreRow(name, score, colorClass, categoryId = null, scores = null) {
+  const hasSB = categoryId && scores && hasSpeedBonus(scores, categoryId);
+  const speedBonusIndicator = hasSB ? ' ⚡' : '';
   return `
     <div class="flex items-center justify-between px-4 py-3">
       <span class="font-medium text-gray-800">${name}</span>
-      <span class="score-btn ${colorClass}">${score !== null ? score : 0}</span>
+      <span class="score-btn ${colorClass}">${score !== null ? score : 0}${speedBonusIndicator}</span>
     </div>
     <div class="divider"></div>
   `;

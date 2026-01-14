@@ -8,6 +8,7 @@ import { calcScore, getPossibleScores } from '../utils/scoring.js';
 import { vibrate } from '../utils/helpers.js';
 import { showToast } from './toast.js';
 import { showFireworks } from './fireworks.js';
+import { BLITZ_TIMER_DURATION } from '../constants.js';
 
 /**
  * Roll a single die
@@ -102,7 +103,7 @@ export function startTurn(render) {
  */
 function startBlitzTimer(render) {
   S.turnStartTime = Date.now();
-  S.turnTimeRemaining = 15;
+  S.turnTimeRemaining = BLITZ_TIMER_DURATION;
   S.speedBonusEarned = false;
 
   // Clear any existing timer
@@ -113,7 +114,7 @@ function startBlitzTimer(render) {
   // Update timer every 100ms for smooth countdown
   S.turnTimer = setInterval(() => {
     const elapsed = (Date.now() - S.turnStartTime) / 1000;
-    S.turnTimeRemaining = Math.max(0, 15 - elapsed);
+    S.turnTimeRemaining = Math.max(0, BLITZ_TIMER_DURATION - elapsed);
 
     // Warning vibration at 10 seconds
     if (S.turnTimeRemaining <= 10 && S.turnTimeRemaining > 9.9) {

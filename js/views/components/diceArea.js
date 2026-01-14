@@ -6,6 +6,7 @@
 import { S } from '../../state.js';
 import { dieFace } from '../../services/dice.js';
 import { calcScore } from '../../utils/scoring.js';
+import { BLITZ_TIMER_DURATION, BLITZ_SPEED_BONUS_WINDOW, BLITZ_SPEED_BONUS_POINTS, shouldAwardSpeedBonus } from '../../constants.js';
 
 /**
  * Create the dice area component
@@ -16,7 +17,7 @@ export function diceArea() {
 
   if (!S.turnStarted) {
     const blitzHint = S.isBlitzMode
-      ? '<p class="text-yellow-300 text-xs mb-2" style="font-weight:600">⚡ 15s timer • 2 rolls • Score in 5s = <span style="color:#FCD34D">+5 bonus!</span></p>'
+      ? `<p class="text-yellow-300 text-xs mb-2" style="font-weight:600">⚡ ${BLITZ_TIMER_DURATION}s timer • 2 rolls • Score in ${BLITZ_SPEED_BONUS_WINDOW}s = <span style="color:#FCD34D">+${BLITZ_SPEED_BONUS_POINTS} bonus!</span></p>`
       : '';
     return `
       <div class="dice-area">
@@ -88,15 +89,15 @@ export function diceArea() {
  */
 function blitzTimerDisplay() {
   const timeRemaining = Math.ceil(S.turnTimeRemaining);
-  const percentage = (S.turnTimeRemaining / 15) * 100;
+  const percentage = (S.turnTimeRemaining / BLITZ_TIMER_DURATION) * 100;
   const isWarning = timeRemaining <= 10;
   const warningClass = isWarning ? 'timer-warning' : '';
-  const speedBonusActive = S.turnTimeRemaining >= 15;
+  const speedBonusActive = shouldAwardSpeedBonus(S.turnTimeRemaining);
   const speedBonusClass = speedBonusActive ? 'speed-bonus-active' : '';
 
   // Show bonus indicator inline with timer label
   const timerLabel = speedBonusActive
-    ? '<span class="timer-label">⚡ Time <span class="speed-bonus-badge">+5 Bonus!</span></span>'
+    ? `<span class="timer-label">⚡ Time <span class="speed-bonus-badge">+${BLITZ_SPEED_BONUS_POINTS} Bonus!</span></span>`
     : '<span class="timer-label">⚡ Time Remaining</span>';
 
   return `

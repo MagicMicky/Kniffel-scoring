@@ -67,8 +67,33 @@ export function empty() {
     largeStraight: null,
     yahtzee: null,
     chance: null,
-    bonus: 0
+    bonus: 0,
+    speedBonuses: {} // Track which categories earned speed bonus (blitz mode)
   };
+}
+
+/**
+ * Ensure scores object has speedBonuses field (backward compatibility)
+ * @param {Object} scores - Player scores object
+ * @returns {Object} Scores object with speedBonuses
+ */
+export function ensureSpeedBonuses(scores) {
+  if (!scores.speedBonuses) {
+    scores.speedBonuses = {};
+  }
+  return scores;
+}
+
+/**
+ * Check if a category has a speed bonus
+ * @param {Object} scores - Player scores object
+ * @param {string} categoryId - Category ID to check
+ * @returns {boolean} True if category has speed bonus
+ */
+export function hasSpeedBonus(scores, categoryId) {
+  // Backward compatibility: if speedBonuses doesn't exist, return false
+  if (!scores.speedBonuses) return false;
+  return scores.speedBonuses[categoryId] === true;
 }
 
 /**

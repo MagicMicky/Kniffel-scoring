@@ -4,7 +4,7 @@
  */
 
 import { S, resetDiceState, resetGameState } from './state.js';
-import { COLORS, UPPER, LOWER } from './constants.js';
+import { COLORS, UPPER, LOWER, BLITZ_TIMER_DURATION, BLITZ_SPEED_BONUS_POINTS, shouldAwardSpeedBonus } from './constants.js';
 import { upTot, upBonus, loTot, grand, calcScore, getPossibleScores } from './utils/scoring.js';
 import { save, saveCurrentGame, clearSavedGame, empty, isGameComplete, createGameRecord } from './utils/storage.js';
 import { color, vibrate } from './utils/helpers.js';
@@ -268,7 +268,7 @@ window.resumeGame = () => {
       S.rollCount = S.savedGame.rollCount || 0;
       S.turnStarted = S.savedGame.turnStarted || false;
       S.turnStartTime = S.savedGame.turnStartTime || null;
-      S.turnTimeRemaining = S.savedGame.turnTimeRemaining || 15;
+      S.turnTimeRemaining = S.savedGame.turnTimeRemaining || BLITZ_TIMER_DURATION;
       S.speedBonusEarned = S.savedGame.speedBonusEarned || false;
       S.diceHistory = S.savedGame.diceHistory || [];
       if (S.mode === 'play') {
@@ -447,12 +447,12 @@ window.selectPlayScore = (categoryId, score) => {
     showFireworks();
   }
 
-  // Add speed bonus in blitz mode (scored within 5 seconds)
+  // Add speed bonus in blitz mode (scored within time window)
   let actualScore = score;
-  if (S.isBlitzMode && S.turnTimeRemaining >= 15 && score !== null && score > 0) {
-    actualScore = score + 5;
+  if (S.isBlitzMode && shouldAwardSpeedBonus(S.turnTimeRemaining) && score !== null && score > 0) {
+    actualScore = score + BLITZ_SPEED_BONUS_POINTS;
     S.speedBonusEarned = true;
-    showToast(`+5 Speed Bonus! ⚡ Total: ${actualScore}`);
+    showToast(`+${BLITZ_SPEED_BONUS_POINTS} Speed Bonus! ⚡ Total: ${actualScore}`);
     vibrate([50, 30, 50]);
   }
 

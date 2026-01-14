@@ -3,6 +3,8 @@
  * Single source of truth for all app state
  */
 
+import { BLITZ_TIMER_DURATION } from './constants.js';
+
 // Global state object
 export const S = {
   view: 'setup',
@@ -25,7 +27,7 @@ export const S = {
   blitzCategories: [], // 6 randomly selected category IDs
   turnTimer: null, // Timer ID
   turnStartTime: null, // When turn started (timestamp)
-  turnTimeRemaining: 15, // Seconds remaining
+  turnTimeRemaining: BLITZ_TIMER_DURATION, // Seconds remaining
   speedBonusEarned: false, // Did player score within 5 seconds?
   // Dice state for play mode
   dice: [1, 1, 1, 1, 1],
@@ -70,7 +72,7 @@ export function resetGameState() {
   S.blitzCategories = [];
   S.turnTimer = null;
   S.turnStartTime = null;
-  S.turnTimeRemaining = 15;
+  S.turnTimeRemaining = BLITZ_TIMER_DURATION;
   S.speedBonusEarned = false;
   S.dice = [1, 1, 1, 1, 1];
   S.held = [false, false, false, false, false];
@@ -101,6 +103,6 @@ export function resetDiceState() {
   S.rolling = false;
   S.turnStarted = false;
   S.turnStartTime = null;
-  S.turnTimeRemaining = 15;
+  S.turnTimeRemaining = BLITZ_TIMER_DURATION;
   S.speedBonusEarned = false;
 }

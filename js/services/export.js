@@ -5,6 +5,7 @@
 
 import { S } from '../state.js';
 import { showToast } from './toast.js';
+import { ensureSpeedBonuses } from '../utils/storage.js';
 
 /**
  * Export all data to JSON file
@@ -63,6 +64,8 @@ export function importData(jsonString, render) {
     let newHistoryCount = 0;
     for (const entry of data.history) {
       if (!existingHistoryIds.has(entry.id)) {
+        // Ensure backward compatibility with old games
+        entry.players.forEach(p => ensureSpeedBonuses(p.scores));
         history.push(entry);
         newHistoryCount++;
       }

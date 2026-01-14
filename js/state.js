@@ -4,6 +4,15 @@
  */
 
 import { BLITZ_TIMER_DURATION } from './constants.js';
+import { ensureSpeedBonuses } from './utils/storage.js';
+
+// Load and migrate history data (ensure backward compatibility)
+const loadedHistory = JSON.parse(localStorage.getItem('yahtzeeH') || '[]');
+loadedHistory.forEach(game => {
+  if (game.players) {
+    game.players.forEach(p => ensureSpeedBonuses(p.scores));
+  }
+});
 
 // Global state object
 export const S = {
@@ -11,7 +20,7 @@ export const S = {
   known: JSON.parse(localStorage.getItem('yahtzeeP') || '[]'),
   game: [],
   cur: 0,
-  history: JSON.parse(localStorage.getItem('yahtzeeH') || '[]'),
+  history: loadedHistory,
   savedGame: JSON.parse(localStorage.getItem('yahtzeeSaved') || 'null'),
   start: null,
   picker: null,

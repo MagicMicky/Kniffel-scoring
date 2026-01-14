@@ -4,6 +4,7 @@
  */
 
 import { S } from './state.js';
+import { ensureSpeedBonuses } from './utils/storage.js';
 
 // Store render callback
 let renderFn = null;
@@ -26,6 +27,8 @@ export function initRouter(render) {
       if (S.view === 'history' && event.state.gameId) {
         const game = S.history.find(h => h.id === event.state.gameId);
         if (game) {
+          // Ensure backward compatibility with old games
+          game.players.forEach(p => ensureSpeedBonuses(p.scores));
           S.selectedHistoryGame = game;
           S.historyDetailPlayer = 0;
         }
@@ -76,6 +79,8 @@ export function navigateTo(view) {
 export function navigateToHistoryDetail(gameId) {
   const game = S.history.find(h => h.id === gameId);
   if (game) {
+    // Ensure backward compatibility with old games
+    game.players.forEach(p => ensureSpeedBonuses(p.scores));
     S.selectedHistoryGame = game;
     S.historyDetailPlayer = 0;
     history.pushState({ view: 'history', gameId: gameId }, '', '#history-detail');

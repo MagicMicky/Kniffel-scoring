@@ -4,6 +4,7 @@
  */
 
 import { S } from '../state.js';
+import { BLITZ_SPEED_BONUS_POINTS } from '../constants.js';
 
 /**
  * Calculate upper section total
@@ -42,10 +43,16 @@ export function loTot(scores) {
 /**
  * Calculate grand total
  * @param {Object} scores - Player scores object
- * @returns {number} Grand total (upper + bonus + lower)
+ * @returns {number} Grand total (upper + bonus + lower + speed bonuses)
  */
 export function grand(scores) {
-  return upTot(scores) + upBonus(scores) + loTot(scores);
+  const baseTotal = upTot(scores) + upBonus(scores) + loTot(scores);
+
+  // Add speed bonuses (backward compatible - check if speedBonuses exists)
+  if (!scores.speedBonuses) return baseTotal;
+
+  const speedBonusCount = Object.keys(scores.speedBonuses).filter(key => scores.speedBonuses[key]).length;
+  return baseTotal + (speedBonusCount * BLITZ_SPEED_BONUS_POINTS);
 }
 
 /**

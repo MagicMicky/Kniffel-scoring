@@ -43,6 +43,33 @@ function noHistoryMessage() {
 }
 
 /**
+ * Get game mode badge info
+ * @param {Object} game - Game record
+ * @returns {Object} Badge info with icon, label, and cssClass
+ */
+function getModeBadge(game) {
+  if (game.isBlitzMode) {
+    return {
+      icon: '⚡',
+      label: 'Blitz',
+      cssClass: 'mode-badge-blitz'
+    };
+  } else if (game.mode === 'play') {
+    return {
+      icon: '🎲',
+      label: 'Play',
+      cssClass: 'mode-badge-play'
+    };
+  } else {
+    return {
+      icon: '📝',
+      label: 'Score',
+      cssClass: 'mode-badge-score'
+    };
+  }
+}
+
+/**
  * Create history games list
  */
 function historyGamesList() {
@@ -63,6 +90,7 @@ function historyGamesList() {
     }).join('');
 
     const duration = game.dur ? ` • ${game.dur}m` : '';
+    const modeBadge = getModeBadge(game);
 
     return `
       <div class="glass rounded-2xl p-4" style="cursor:pointer;transition:all 0.15s"
@@ -70,8 +98,13 @@ function historyGamesList() {
            onmouseover="this.style.background='rgba(255,255,255,0.15)'"
            onmouseout="this.style.background='rgba(255,255,255,0.1)'">
         <div class="flex justify-between items-start mb-3">
-          <div>
-            <p class="font-bold text-white">${formatDate(game.date)}</p>
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <p class="font-bold text-white">${formatDate(game.date)}</p>
+              <span class="mode-badge ${modeBadge.cssClass}">
+                ${modeBadge.icon} ${modeBadge.label}
+              </span>
+            </div>
             <p class="text-sm text-purple-200">${formatTime(game.date)}${duration}</p>
           </div>
           <button class="delete-btn" onclick="event.stopPropagation();delH(${game.id})">🗑️</button>

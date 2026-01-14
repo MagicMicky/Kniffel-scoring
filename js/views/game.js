@@ -66,6 +66,33 @@ export function gameView(options = {}) {
 }
 
 /**
+ * Get game mode badge info
+ * @param {Object} game - Game record
+ * @returns {Object} Badge info with icon, label, and cssClass
+ */
+function getModeBadge(game) {
+  if (game.isBlitzMode) {
+    return {
+      icon: '⚡',
+      label: 'Blitz Mode',
+      cssClass: 'mode-badge-blitz'
+    };
+  } else if (game.mode === 'play') {
+    return {
+      icon: '🎲',
+      label: 'Virtual Dice',
+      cssClass: 'mode-badge-play'
+    };
+  } else {
+    return {
+      icon: '📝',
+      label: 'Score Mode',
+      cssClass: 'mode-badge-score'
+    };
+  }
+}
+
+/**
  * Render game view in review mode (for history)
  * @param {Object} game - Game data
  * @param {number} playerIndex - Current player index (unused, kept for compatibility)
@@ -74,6 +101,7 @@ export function gameView(options = {}) {
 function gameViewReview(game, playerIndex) {
   const players = game.players;
   const duration = game.dur ? ` • ${game.dur} minutes` : '';
+  const modeBadge = getModeBadge(game);
 
   // Render all players' scorecards
   const allPlayersScores = players.map((player, index) => {
@@ -118,10 +146,15 @@ function gameViewReview(game, playerIndex) {
       </div>
 
       <div class="p-3" style="max-width:28rem;margin:0 auto">
-        <div class="glass rounded-xl p-3 mb-4 text-center">
-          <p class="text-white text-sm font-medium">
-            ${formatDate(game.date)} • ${formatTime(game.date)}${duration}
-          </p>
+        <div class="glass rounded-xl p-3 mb-4">
+          <div class="flex items-center justify-center gap-2 flex-wrap">
+            <p class="text-white text-sm font-medium">
+              ${formatDate(game.date)} • ${formatTime(game.date)}${duration}
+            </p>
+            <span class="mode-badge ${modeBadge.cssClass}">
+              ${modeBadge.icon} ${modeBadge.label}
+            </span>
+          </div>
         </div>
 
         ${allPlayersScores}

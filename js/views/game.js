@@ -71,6 +71,15 @@ export function gameView(options = {}) {
  * @returns {Object} Badge info with icon, label, and cssClass
  */
 function getModeBadge(game) {
+  // Check if mode is not set (undefined or null)
+  if (!game.mode && game.isBlitzMode !== true && game.isBlitzMode !== false) {
+    return {
+      icon: '❓',
+      label: 'Unknown Mode',
+      cssClass: 'mode-badge-unknown'
+    };
+  }
+
   if (game.isBlitzMode) {
     return {
       icon: '⚡',

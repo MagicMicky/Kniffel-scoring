@@ -50,6 +50,7 @@ export const S = {
   // History detail view
   selectedHistoryGame: null,
   historyDetailPlayer: 0,
+  editingGameMode: null, // ID of game whose mode is being edited
   // End screen state
   finishedGame: null,
   revealIndex: -1,

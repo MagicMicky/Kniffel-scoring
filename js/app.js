@@ -215,8 +215,14 @@ window.updateGameMode = (gameId, mode, isBlitzMode) => {
     game.isBlitzMode = isBlitzMode;
     save();
     showToast(`Game mode updated to ${isBlitzMode ? 'Blitz' : mode === 'play' ? 'Play' : 'Score'}`);
+    S.editingGameMode = null; // Close editor after update
     R();
   }
+};
+
+window.toggleModeEditor = (gameId) => {
+  S.editingGameMode = S.editingGameMode === gameId ? null : gameId;
+  R();
 };
 
 // ============================================

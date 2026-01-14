@@ -51,7 +51,9 @@ export const S = {
   // Track all dice rolls for fun stats (Play Mode only)
   diceHistory: [],
   // Leaderboard badge modal
-  selectedBadge: null
+  selectedBadge: null,
+  // Leaderboard tab selection: 'normal' or 'blitz'
+  leaderboardTab: 'normal'
 };
 
 /**

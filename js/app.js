@@ -137,6 +137,12 @@ window.closeBadgeInfo = () => {
   R();
 };
 
+// Leaderboard tab switching
+window.switchLeaderboardTab = (tab) => {
+  S.leaderboardTab = tab;
+  R();
+};
+
 // Side menu
 window.toggleSideMenu = () => {
   S.sideMenuOpen = !S.sideMenuOpen;

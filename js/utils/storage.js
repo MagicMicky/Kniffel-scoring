@@ -103,6 +103,8 @@ export function createGameRecord() {
     id: Date.now(),
     date: new Date().toISOString(),
     dur: S.start ? Math.round((Date.now() - S.start) / 60000) : null,
+    mode: S.mode, // 'score' or 'play'
+    isBlitzMode: S.isBlitzMode || false, // Blitz mode flag
     players: S.game.map(p => ({
       pid: p.id,
       name: p.name,

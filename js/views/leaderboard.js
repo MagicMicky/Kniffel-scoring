@@ -10,10 +10,21 @@ import { escapeHtml } from '../utils/helpers.js';
 /**
  * Calculate player statistics from history
  * @param {number} playerId - Player ID
+ * @param {string} modeFilter - Filter by mode: 'normal' (score + play without blitz) or 'blitz'
  * @returns {Object} Player statistics
  */
-function calculatePlayerStats(playerId) {
-  const games = S.history.filter(g => g.players.some(p => p.pid === playerId));
+function calculatePlayerStats(playerId, modeFilter = 'normal') {
+  // Filter games by mode
+  let games = S.history.filter(g => g.players.some(p => p.pid === playerId));
+
+  if (modeFilter === 'blitz') {
+    // Only blitz mode games
+    games = games.filter(g => g.isBlitzMode === true);
+  } else {
+    // Normal mode: score mode OR play mode without blitz (exclude blitz games)
+    games = games.filter(g => g.isBlitzMode !== true);
+  }
+
   const playerResults = games.map(g => g.players.find(p => p.pid === playerId)).filter(Boolean);
 
   if (playerResults.length === 0) {
@@ -147,15 +158,20 @@ export function leaderboardView() {
     return noGamesMessage();
   }
 
-  // Calculate stats for all players
+  // Calculate stats for all players using the selected tab mode
   const playerStats = S.known.map((player, index) => {
-    const stats = calculatePlayerStats(player.id);
+    const stats = calculatePlayerStats(player.id, S.leaderboardTab);
     return {
       ...player,
       ...stats,
       color: COLORS[index % COLORS.length]
     };
   }).filter(p => p.gamesPlayed > 0);
+
+  // Check if there are no games for this mode
+  if (playerStats.length === 0) {
+    return noGamesForModeMessage();
+  }
 
   // Sort by average score (primary) and win rate (secondary)
   playerStats.sort((a, b) => {
@@ -251,6 +267,16 @@ export function leaderboardView() {
     </div>
   ` : '';
 
+  // Tab labels with counts
+  const normalCount = S.known.reduce((sum, player) => {
+    const stats = calculatePlayerStats(player.id, 'normal');
+    return sum + stats.gamesPlayed;
+  }, 0);
+  const blitzCount = S.known.reduce((sum, player) => {
+    const stats = calculatePlayerStats(player.id, 'blitz');
+    return sum + stats.gamesPlayed;
+  }, 0);
+
   return `
     <div class="container" style="min-height:100vh">
       <div class="flex items-center justify-between mb-6">
@@ -261,9 +287,24 @@ export function leaderboardView() {
         <div style="width:4rem"></div>
       </div>
 
+      <div class="leaderboard-tabs mb-4">
+        <button
+          class="tab-btn ${S.leaderboardTab === 'normal' ? 'active' : ''}"
+          onclick="switchLeaderboardTab('normal')"
+        >
+          📝 Normal Mode ${normalCount > 0 ? `(${normalCount})` : ''}
+        </button>
+        <button
+          class="tab-btn ${S.leaderboardTab === 'blitz' ? 'active' : ''}"
+          onclick="switchLeaderboardTab('blitz')"
+        >
+          ⚡ Blitz Mode ${blitzCount > 0 ? `(${blitzCount})` : ''}
+        </button>
+      </div>
+
       <div class="glass rounded-2xl p-4 mb-4 text-center">
         <p class="text-purple-200 text-sm">
-          📈 Ranked by average score across all games
+          📈 Ranked by average score across ${S.leaderboardTab === 'blitz' ? 'blitz' : 'normal'} games
         </p>
       </div>
 
@@ -312,6 +353,59 @@ function noGamesMessage() {
         <p class="text-5xl mb-4">🎮</p>
         <p class="text-xl mb-2">No games played yet!</p>
         <p class="text-sm">Play some games to see the leaderboard</p>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Create no games for selected mode message
+ */
+function noGamesForModeMessage() {
+  const isBlitz = S.leaderboardTab === 'blitz';
+  const emoji = isBlitz ? '⚡' : '📝';
+  const modeName = isBlitz ? 'Blitz Mode' : 'Normal Mode';
+  const otherTab = isBlitz ? 'normal' : 'blitz';
+
+  // Tab labels with counts
+  const normalCount = S.known.reduce((sum, player) => {
+    const stats = calculatePlayerStats(player.id, 'normal');
+    return sum + stats.gamesPlayed;
+  }, 0);
+  const blitzCount = S.known.reduce((sum, player) => {
+    const stats = calculatePlayerStats(player.id, 'blitz');
+    return sum + stats.gamesPlayed;
+  }, 0);
+
+  return `
+    <div class="container" style="min-height:100vh">
+      <div class="flex items-center justify-between mb-6">
+        <button class="btn-text text-purple-200 text-lg font-medium" onclick="navigateTo('setup')">
+          ← Back
+        </button>
+        <h1 class="text-2xl font-black text-white">🏆 Leaderboard</h1>
+        <div style="width:4rem"></div>
+      </div>
+
+      <div class="leaderboard-tabs mb-4">
+        <button
+          class="tab-btn ${S.leaderboardTab === 'normal' ? 'active' : ''}"
+          onclick="switchLeaderboardTab('normal')"
+        >
+          📝 Normal Mode ${normalCount > 0 ? `(${normalCount})` : ''}
+        </button>
+        <button
+          class="tab-btn ${S.leaderboardTab === 'blitz' ? 'active' : ''}"
+          onclick="switchLeaderboardTab('blitz')"
+        >
+          ⚡ Blitz Mode ${blitzCount > 0 ? `(${blitzCount})` : ''}
+        </button>
+      </div>
+
+      <div class="text-center py-10 text-purple-200">
+        <p class="text-5xl mb-4">${emoji}</p>
+        <p class="text-xl mb-2">No ${modeName} games yet!</p>
+        <p class="text-sm">Play some ${modeName.toLowerCase()} games to see the leaderboard</p>
       </div>
     </div>
   `;

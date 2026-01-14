@@ -48,23 +48,36 @@ function noHistoryMessage() {
  * @returns {Object} Badge info with icon, label, and cssClass
  */
 function getModeBadge(game) {
+  // Check if mode is not set (undefined or null)
+  if (!game.mode && game.isBlitzMode !== true && game.isBlitzMode !== false) {
+    return {
+      icon: '❓',
+      label: 'Unknown',
+      cssClass: 'mode-badge-unknown',
+      needsUpdate: true
+    };
+  }
+
   if (game.isBlitzMode) {
     return {
       icon: '⚡',
       label: 'Blitz',
-      cssClass: 'mode-badge-blitz'
+      cssClass: 'mode-badge-blitz',
+      needsUpdate: false
     };
   } else if (game.mode === 'play') {
     return {
       icon: '🎲',
       label: 'Play',
-      cssClass: 'mode-badge-play'
+      cssClass: 'mode-badge-play',
+      needsUpdate: false
     };
   } else {
     return {
       icon: '📝',
       label: 'Score',
-      cssClass: 'mode-badge-score'
+      cssClass: 'mode-badge-score',
+      needsUpdate: false
     };
   }
 }
@@ -92,9 +105,31 @@ function historyGamesList() {
     const duration = game.dur ? ` • ${game.dur}m` : '';
     const modeBadge = getModeBadge(game);
 
+    // Mode selector for unknown modes
+    const modeSelector = modeBadge.needsUpdate ? `
+      <div class="mt-3 p-3 rounded-xl" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)" onclick="event.stopPropagation()">
+        <p class="text-xs text-purple-200 mb-2 text-center">❓ Select game mode:</p>
+        <div class="flex gap-2 justify-center">
+          <button class="mode-select-btn mode-badge-score" onclick="updateGameMode(${game.id}, 'score', false)">
+            📝 Score
+          </button>
+          <button class="mode-select-btn mode-badge-play" onclick="updateGameMode(${game.id}, 'play', false)">
+            🎲 Play
+          </button>
+          <button class="mode-select-btn mode-badge-blitz" onclick="updateGameMode(${game.id}, 'play', true)">
+            ⚡ Blitz
+          </button>
+        </div>
+      </div>
+    ` : `
+      <div class="text-center mt-3">
+        <span class="text-purple-200 text-xs">👁️ Tap to view details</span>
+      </div>
+    `;
+
     return `
       <div class="glass rounded-2xl p-4" style="cursor:pointer;transition:all 0.15s"
-           onclick="viewHistoryGame(${game.id})"
+           onclick="${modeBadge.needsUpdate ? '' : `viewHistoryGame(${game.id})`}"
            onmouseover="this.style.background='rgba(255,255,255,0.15)'"
            onmouseout="this.style.background='rgba(255,255,255,0.1)'">
         <div class="flex justify-between items-start mb-3">
@@ -110,9 +145,7 @@ function historyGamesList() {
           <button class="delete-btn" onclick="event.stopPropagation();delH(${game.id})">🗑️</button>
         </div>
         <div class="space-y-2">${playersList}</div>
-        <div class="text-center mt-3">
-          <span class="text-purple-200 text-xs">👁️ Tap to view details</span>
-        </div>
+        ${modeSelector}
       </div>
     `;
   }).join('');

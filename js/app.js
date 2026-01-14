@@ -7,7 +7,6 @@ import { S, resetDiceState, resetGameState } from './state.js';
 import { COLORS, UPPER, LOWER, BLITZ_TIMER_DURATION, BLITZ_SPEED_BONUS_POINTS, shouldAwardSpeedBonus } from './constants.js';
 import { upTot, upBonus, loTot, grand, calcScore, getPossibleScores } from './utils/scoring.js';
 import { save, saveCurrentGame, clearSavedGame, empty, isGameComplete, createGameRecord, ensureSpeedBonuses } from './utils/storage.js';
-import { runMigrations } from './utils/migrations.js';
 import { color, vibrate } from './utils/helpers.js';
 import { rollDice as rollDiceService, toggleHold as toggleHoldService, resetDiceForTurn, startTurn as startTurnService, setupShakeDetection, dieFace, stopBlitzTimer } from './services/dice.js';
 import { showToast } from './services/toast.js';
@@ -205,6 +204,17 @@ window.delH = (id) => {
   if (confirm('Delete game?')) {
     S.history = S.history.filter(x => x.id !== id);
     save();
+    R();
+  }
+};
+
+window.updateGameMode = (gameId, mode, isBlitzMode) => {
+  const game = S.history.find(g => g.id === gameId);
+  if (game) {
+    game.mode = mode;
+    game.isBlitzMode = isBlitzMode;
+    save();
+    showToast(`Game mode updated to ${isBlitzMode ? 'Blitz' : mode === 'play' ? 'Play' : 'Score'}`);
     R();
   }
 };
@@ -484,9 +494,6 @@ window.selectPlayScore = (categoryId, score) => {
 // ============================================
 // INITIALIZATION
 // ============================================
-
-// Run data migrations (upgrade old game formats)
-runMigrations();
 
 // Initialize router
 initRouter(R);

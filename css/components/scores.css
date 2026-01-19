@@ -10,6 +10,11 @@
   transition: all var(--transition-normal);
   position: relative;
   margin: 0 calc(var(--space-lg) * -1);
+  gap: var(--space-md);
+}
+
+.score-row-readonly {
+  padding: var(--space-md) var(--space-lg);
 }
 
 .score-row:hover {

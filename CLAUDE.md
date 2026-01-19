@@ -11,14 +11,15 @@ This document provides comprehensive instructions for managing, updating, and ma
 ## 📱 Table of Contents
 
 1. [Design System](#design-system)
-2. [Game Modes](#game-modes)
-3. [GitHub Pages Setup](#github-pages-setup)
-4. [Installing the PWA](#installing-the-pwa)
-5. [Updating the PWA](#updating-the-pwa)
-6. [Export & Import Data](#export--import-data)
-7. [Data Safety & localStorage](#data-safety--localstorage)
-8. [Troubleshooting](#troubleshooting)
-9. [Development Workflow](#development-workflow)
+2. [UX Patterns](#ux-patterns)
+3. [Game Modes](#game-modes)
+4. [GitHub Pages Setup](#github-pages-setup)
+5. [Installing the PWA](#installing-the-pwa)
+6. [Updating the PWA](#updating-the-pwa)
+7. [Export & Import Data](#export--import-data)
+8. [Data Safety & localStorage](#data-safety--localstorage)
+9. [Troubleshooting](#troubleshooting)
+10. [Development Workflow](#development-workflow)
 
 ---
 
@@ -45,6 +46,42 @@ When making UI changes or adding new features, consult **[DESIGN.md](DESIGN.md)*
 4. **Consistent Patterns** - Reuse existing components and tokens
 
 **Always reference [DESIGN.md](DESIGN.md) before making visual changes to ensure consistency.**
+
+---
+
+## 🎯 UX Patterns
+
+The Kniffel app follows user-centered interaction patterns that prioritize immediate feedback, intuitive controls, and delightful micro-interactions.
+
+### For Developers
+
+When implementing new features or modifying interactions, consult **[UX.md](UX.md)** for comprehensive guidelines:
+
+- **Touch Behavior** - Minimum tap targets, no-delay interactions
+- **Navigation Patterns** - Mode switching, screen flow, back navigation
+- **Game Flow** - Starting games, turn progression, completion
+- **Scoring Interface** - Entry methods, validation, display states
+- **Dice Interactions** - Rolling methods, holding, visual states
+- **Data Patterns** - Auto-save, recovery, export/import
+- **Feedback Patterns** - Success, error, loading states
+- **Confirmation Dialogs** - When to confirm vs when not to
+- **Accessibility** - Screen readers, keyboard nav, motion preferences
+
+### Key Principles
+
+1. **Immediate Feedback** - All interactions respond within 100ms
+2. **Proportional Response** - Small actions get subtle feedback, big actions get clear feedback
+3. **Auto-Save Everything** - Never ask users to manually save
+4. **Confirm Destructive Actions** - But don't interrupt gameplay flow
+5. **Touch-First Design** - 44×44px minimum, haptic feedback, gesture support
+6. **Accessibility by Default** - Focus indicators, contrast, keyboard support
+
+### Implementation Status
+
+- ✅ **7/8 patterns fully implemented** (Touch, Mode Switching, Auto-Save, Dice, Scores, Feedback, Confirmations)
+- ⚠️ **Accessibility partially implemented** (focus indicators present, ARIA support needed)
+
+**Always reference [UX.md](UX.md) before changing interaction patterns to maintain consistency.**
 
 ---
 

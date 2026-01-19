@@ -79,8 +79,8 @@ function playerSelectionList() {
     const playerColor = COLORS[i % COLORS.length];
 
     const cardStyle = isSelected
-      ? `background:linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);border:2px solid ${playerColor};box-shadow:0 2px 8px rgba(212,165,116,0.2)`
-      : `background:var(--bg-tertiary);border:2px solid var(--border-primary)`;
+      ? `background:linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);border-color:${playerColor};box-shadow:0 2px 8px rgba(212,165,116,0.2)`
+      : `background:var(--bg-tertiary)`;
 
     const orderButtons = isSelected
       ? `<button class="btn-icon-sm" onclick="event.stopPropagation();mv(${gameIndex},-1)">▲</button>
@@ -88,8 +88,8 @@ function playerSelectionList() {
       : '';
 
     return `
-      <div class="flex items-center gap-2 p-3"
-           style="${cardStyle};border-radius:var(--rSm);cursor:pointer;transition:all var(--transition-normal)"
+      <div class="player-row"
+           style="${cardStyle};cursor:pointer"
            onclick="tog(${p.id})">
         <div class="checkbox">${isSelected ? '<div class="checkbox-inner"></div>' : ''}</div>
         <div class="color-dot" style="background:${playerColor}"></div>
@@ -190,9 +190,9 @@ function gameModeButtons() {
  */
 function managerModal() {
   const playerList = S.known.map((p, i) => `
-    <div class="flex items-center gap-2 p-3" style="background:var(--bg-tertiary);border-radius:var(--rSm);border:2px solid var(--border-primary)">
+    <div class="player-row" style="background:var(--bg-tertiary)">
       <div class="color-dot" style="background:${COLORS[i % COLORS.length]}"></div>
-      <input type="text" class="input flex-1" value="${escapeHtml(p.name)}" onchange="ren(${p.id},this.value)">
+      <input type="text" class="input input-compact flex-1" value="${escapeHtml(p.name)}" onchange="ren(${p.id},this.value)">
       <button class="btn-danger btn-sm" onclick="del(${p.id})">Delete</button>
     </div>
   `).join('');
@@ -200,8 +200,8 @@ function managerModal() {
   return modal(`
     <h2 style="font-size:var(--font-size-h3);font-weight:var(--font-weight-black);color:var(--text);margin-bottom:var(--space-md);font-family:var(--font-body)">👥 Manage Players</h2>
     <div class="space-y-2" style="margin-bottom:var(--space-md)">${playerList}</div>
-    <div class="flex gap-2" style="margin-bottom:var(--space-md)">
-      <input type="text" id="np" class="input flex-1" placeholder="New player..."
+    <div class="player-row" style="background:var(--bg-tertiary);margin-bottom:var(--space-md)">
+      <input type="text" id="np" class="input input-compact flex-1" placeholder="New player..."
              onkeypress="if(event.key==='Enter')addP()">
       <button class="btn-primary btn-sm" onclick="addP()">Add</button>
     </div>

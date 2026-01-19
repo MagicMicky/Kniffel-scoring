@@ -10,6 +10,24 @@
   background: transparent;
   color: var(--text);
   transition: all var(--transition-normal);
+  line-height: 1.5;
+}
+
+/* Compact input variant for use in rows alongside other content */
+.input-compact {
+  padding: 0.5rem var(--space-md);
+}
+
+/* Player row - reusable container for player list items */
+.player-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: var(--rSm);
+  border: 2px solid var(--border-primary);
+  transition: all var(--transition-normal);
+  min-height: 3.5rem;
 }
 .input:hover {
   border-color: var(--border-subtle);

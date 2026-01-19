@@ -165,6 +165,77 @@
   --z-modal: 100;
   --z-menu: 1000;
   --z-toast: 9999;
+
+  /* ========================================
+     GUIDELINE ALIASES
+     Aliases to match original CSS guidelines exactly
+     while keeping improved implementation
+     ======================================== */
+
+  /* Typography Aliases (guideline names → implementation names) */
+  --text-display-xl: var(--font-size-h1);
+  --text-display-lg: var(--font-size-h2);
+  --text-display-md: var(--font-size-h3);
+  --text-display-sm: var(--font-size-number-md);
+  --text-display-xs: var(--font-size-number-sm);
+  --text-body: var(--font-size-body);
+  --text-body-sm: var(--font-size-small);
+  --text-caption: var(--font-size-tiny);
+
+  /* Font Weight Aliases */
+  --weight-regular: var(--font-weight-regular);
+  --weight-medium: var(--font-weight-medium);
+  --weight-bold: var(--font-weight-bold);
+  --weight-black: var(--font-weight-black);
+
+  /* Letter Spacing Aliases (tracking → letter-spacing) */
+  --tracking-tight: var(--letter-spacing-tight);
+  --tracking-snug: var(--letter-spacing-normal);
+  --tracking-normal: var(--letter-spacing-none);
+  --tracking-wide: var(--letter-spacing-slight);
+  --tracking-wider: var(--letter-spacing-wide);
+  --tracking-widest: var(--letter-spacing-wider);
+
+  /* Color Aliases */
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--error);
+
+  /* Overlay Aliases */
+  --overlay-hover: var(--hover-bg);
+  --overlay-active: var(--active-bg);
+  --overlay-subtle: var(--subtle-highlight);
+
+  /* Border Aliases */
+  --border-solid: var(--border-primary);
+  --border-faint: var(--border-accent);
+
+  /* Spacing - Additional Sizes */
+  --space-2xl: 32px;
+  --space-3xl: 40px;
+
+  /* Border Radius Aliases (full names → abbreviated) */
+  --radius-sm: var(--rSm);
+  --radius-md: var(--rMd);
+  --radius-lg: var(--rXl);  /* Note: guideline --radius-lg maps to --rXl (24px) */
+
+  /* Shadow Aliases and Separate Versions */
+  --shadow-card: var(--shadowMd);
+  --shadow-inset-card: var(--innerHighlight);
+
+  /* Separate button shadows (for guideline compliance) */
+  --shadow-button-base: 0 4px 12px rgba(212, 165, 116, 0.25);
+  --shadow-inset-button: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  --shadow-button-hover-base: 0 6px 20px rgba(212, 165, 116, 0.4);
+
+  /* Focus shadow */
+  --shadow-focus: 0 0 0 3px rgba(212, 165, 116, 0.15);
+
+  /* Motion Aliases (for those who prefer separate duration/easing) */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --easing: ease;
 }
 
 /* ========================================

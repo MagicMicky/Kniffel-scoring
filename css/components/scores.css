@@ -5,20 +5,38 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-md) 0;
+  padding: var(--space-md) var(--space-lg);
   border-bottom: 1px solid var(--border-accent);
   transition: all var(--transition-normal);
   position: relative;
+  margin: 0 calc(var(--space-lg) * -1);
 }
 
 .score-row:hover {
-  padding-left: var(--space-sm);
-  margin-left: calc(-1 * var(--space-sm));
+  padding-left: calc(var(--space-lg) + var(--space-sm));
   border-left: 3px solid var(--gold-primary);
 }
 
 .score-row:last-child {
   border-bottom: none;
+}
+
+/* Label and value styling for score rows */
+.score-row .label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-body);
+}
+
+.score-row .value {
+  color: var(--gold-pale);
+  font-size: var(--font-size-number-lg);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-display);
+  letter-spacing: var(--letter-spacing-normal);
+  min-width: 4rem;
+  text-align: right;
 }
 
 /* Score buttons */

@@ -158,3 +158,153 @@
   background: rgba(42, 32, 24, 0.85);
   border-color: var(--border-subtle);
 }
+
+/* Section Title Component - Small caps with bottom border */
+.section-title {
+  font-size: var(--font-size-tiny);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--gold-primary);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-subtle);
+  font-family: var(--font-body);
+}
+
+/* Score Section Headers */
+.score-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.12) 0%, rgba(212, 165, 116, 0.06) 100%);
+  border-bottom: 2px solid var(--border-primary);
+  margin: calc(var(--space-lg) * -1) calc(var(--space-lg) * -1) var(--space-md);
+}
+
+.score-section-header h2 {
+  font-size: var(--font-size-tiny);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--gold-primary);
+  font-family: var(--font-body);
+  margin: 0;
+}
+
+.score-section-header .section-progress {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+.score-section-header .section-progress.complete {
+  color: var(--gold-bright);
+}
+
+/* Score Section Footer (for totals/bonus) */
+.score-section-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(212, 165, 116, 0.05);
+  border-top: 2px solid var(--border-primary);
+  margin: var(--space-md) calc(var(--space-lg) * -1) calc(var(--space-lg) * -1);
+}
+
+.score-section-footer .label {
+  color: var(--text-secondary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-body);
+}
+
+.score-section-footer .value {
+  color: var(--gold-bright);
+  font-size: var(--font-size-number-sm);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-display);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+.score-section-footer .value.achieved {
+  color: var(--gold-bright);
+}
+
+.score-section-footer .value.not-achieved {
+  color: var(--muted);
+}
+
+/* Game header components */
+.game-header {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border-bottom: 2px solid var(--border-primary);
+  padding: var(--space-md) var(--space-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.game-header-content {
+  max-width: 28rem;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-header h1 {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--gold-primary);
+  font-family: var(--font-body);
+  margin: 0;
+}
+
+/* Total display card */
+.total-card {
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.2) 0%, rgba(212, 165, 116, 0.1) 100%);
+  border: 2px solid var(--gold-primary);
+  border-radius: var(--rMd);
+  padding: var(--space-lg);
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(212, 165, 116, 0.1);
+  margin: var(--space-lg) 0;
+}
+
+.total-card .label {
+  font-size: var(--font-size-small);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  margin-bottom: var(--space-xs);
+}
+
+.total-card .value {
+  font-size: var(--font-size-number-xl);
+  font-weight: var(--font-weight-black);
+  color: var(--gold-primary);
+  font-family: var(--font-display);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: 1;
+}
+
+.total-card .breakdown {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+  font-size: var(--font-size-small);
+  color: var(--muted);
+  font-family: var(--font-body);
+}
+

@@ -261,6 +261,79 @@ ScoreRow({
 
 ---
 
+### **PageHeader Component**
+
+**Location:** `js/components/ui.js`
+
+**Purpose:** Unified page headers with proper visual hierarchy
+
+**Design Philosophy:**
+- **Not all pages are hero pages** - Only home page gets large treatment
+- **Navigation pages** - Clean, compact headers (24px title)
+- **Working pages** - Minimal headers for maximum content space (20px title)
+- **Industry standard** - Follows iOS (44px) and Material Design (56px) app bar patterns
+
+**Header Hierarchy:**
+
+| Page Type | Title Size | Total Height | Purpose |
+|-----------|-----------|--------------|---------|
+| **Hero (Setup)** | 64px | ~200px | Welcome, make impression |
+| **Navigation** | 24px | ~60px | Utility, content-focused |
+| **Working (Game)** | 20px | ~48px | Minimal, sticky header |
+
+**Props:**
+```javascript
+{
+  title: string,           // Page title (default: 'SCHNITZEL')
+  subtitle: string,        // Optional subtitle/tagline
+  showLogo: boolean,       // Show logo (hero page only)
+  backButton: string,      // Back button onclick handler
+  rightButton: object,     // { text, onClick, variant, size }
+  className: string
+}
+```
+
+**Usage:**
+
+```javascript
+import { PageHeader } from './components/ui.js';
+
+// Hero page (Setup)
+PageHeader({
+  title: 'SCHNITZEL',
+  subtitle: 'Your Travel Yahtzee Companion',
+  showLogo: true
+})
+
+// Navigation page (History, Leaderboard)
+PageHeader({
+  title: '📜 History',
+  backButton: 'navigateTo(\'setup\')'
+})
+
+// Working page (Game) - uses custom .game-header styles
+// See game.js for implementation
+```
+
+**Design Rationale:**
+
+1. **Premium Simplicity** - Restraint over decoration
+2. **Content First** - Headers don't compete with main content
+3. **Mobile Standards** - Follows iOS/Material Design patterns
+4. **Consistency** - All navigation pages have same structure
+
+**Anti-Patterns:**
+
+❌ **DON'T:** Use large display fonts (56px+) for navigation headers
+❌ **DON'T:** Make sticky headers bulky (wastes screen space)
+❌ **DON'T:** Treat every page like a landing page
+
+✅ **DO:** Keep utility pages clean and compact
+✅ **DO:** Reserve hero treatment for home/welcome screens
+✅ **DO:** Minimize sticky header height
+
+---
+
 ### **Badge Component**
 
 **Location:** `js/components/ui.js`

@@ -24,6 +24,10 @@
   --font-size-number-md: 28px;
   --font-size-number-sm: 24px;
 
+  /* Font Sizes - App UI */
+  --font-size-page-title: 24px;  /* Navigation page headers */
+  --font-size-app-bar: 20px;     /* Compact headers (game, sticky) */
+
   /* Font Weights */
   --font-weight-regular: 400;
   --font-weight-medium: 500;

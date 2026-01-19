@@ -298,3 +298,60 @@
   transform: none;
   box-shadow: none;
 }
+
+/* Button size modifiers */
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: var(--font-size-small);
+}
+
+/* Icon button */
+.btn-icon {
+  background: transparent;
+  border: 2px solid var(--border-primary);
+  border-radius: var(--rSm);
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  color: var(--gold-primary);
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+}
+.btn-icon:hover {
+  background: var(--hover-bg);
+  border-color: var(--gold-primary);
+}
+.btn-icon:active {
+  transform: scale(0.95);
+  background: var(--active-bg);
+}
+
+/* Small icon button */
+.btn-icon-sm {
+  background: transparent;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--rSm);
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  font-family: var(--font-body);
+}
+.btn-icon-sm:hover {
+  background: var(--hover-bg);
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+}
+.btn-icon-sm:active {
+  transform: scale(0.9);
+}
+

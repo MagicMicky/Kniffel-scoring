@@ -460,17 +460,17 @@ function playerDetailsModal(player) {
  */
 function bonusReminderBanner() {
   return `
-    <div style="margin: 1rem 0 1rem 0; padding: 1rem; border-radius: 0.75rem; text-align: center;
-                background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
-                border: 2px solid #FBBF24; box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+    <div class="card" style="margin: 1rem 0 1rem 0; padding: 1rem; text-align: center;
+                background: linear-gradient(135deg, rgba(230, 184, 115, 0.3) 0%, rgba(218, 168, 94, 0.3) 100%);
+                border: 2px solid var(--gold-primary); box-shadow: 0 4px 20px var(--focusRing);
                 animation: pulse 1.5s ease-in-out infinite;">
-      <div style="font-size: 1.25rem; font-weight: 800; color: #78350F; margin-bottom: 0.25rem;">
+      <div style="font-size: 1.25rem; font-weight: 800; color: var(--gold-bright); margin-bottom: 0.25rem;">
         ✅ Bonus Claimed! +100
       </div>
-      <div style="font-size: 0.875rem; color: #92400E; font-weight: 600;">
+      <div style="font-size: 0.875rem; color: var(--text); font-weight: 600;">
         ⬇️ Now score your roll in any category below ⬇️
       </div>
-      <div style="font-size: 0.75rem; color: #92400E; opacity: 0.8; margin-top: 0.25rem;">
+      <div style="font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem;">
         (Use as joker: Chance, 3/4 of a kind, etc.)
       </div>
     </div>

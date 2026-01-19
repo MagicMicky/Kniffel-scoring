@@ -17,7 +17,7 @@ export function diceArea() {
 
   if (!S.turnStarted) {
     const blitzHint = S.isBlitzMode
-      ? `<p class="text-yellow-300 text-xs mb-2" style="font-weight:600">⚡ ${BLITZ_TIMER_DURATION}s timer • 2 rolls • Score in ${BLITZ_SPEED_BONUS_WINDOW}s = <span style="color:#FCD34D">+${BLITZ_SPEED_BONUS_POINTS} bonus!</span></p>`
+      ? `<p class="text-xs mb-2" style="font-weight:600;color:var(--gold-bright)">⚡ ${BLITZ_TIMER_DURATION}s timer • 2 rolls • Score in ${BLITZ_SPEED_BONUS_WINDOW}s = <span style="color:var(--gold-pale)">+${BLITZ_SPEED_BONUS_POINTS} bonus!</span></p>`
       : '';
     return `
       <div class="dice-area">
@@ -119,17 +119,17 @@ function blitzTimerDisplay() {
  */
 function bonusYahtzeeBanner() {
   return `
-    <div style="margin: 1rem 0; padding: 1rem; border-radius: 0.75rem; text-align: center;
-                background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
-                border: 2px solid #FBBF24; box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+    <div class="card" style="margin: 1rem 0; padding: 1rem; text-align: center;
+                background: linear-gradient(135deg, rgba(230, 184, 115, 0.3) 0%, rgba(218, 168, 94, 0.3) 100%);
+                border: 2px solid var(--gold-primary); box-shadow: 0 4px 20px var(--focusRing);
                 animation: pulse 1.5s ease-in-out infinite;">
-      <div style="font-size: 1.5rem; font-weight: 800; color: #78350F; margin-bottom: 0.25rem;">
+      <div style="font-size: 1.5rem; font-weight: 800; color: var(--gold-bright); margin-bottom: 0.25rem;">
         🎉 BONUS YAHTZEE! 🎉
       </div>
-      <div style="font-size: 0.875rem; color: #92400E; font-weight: 600; margin-bottom: 0.5rem;">
+      <div style="font-size: 0.875rem; color: var(--text); font-weight: 600; margin-bottom: 0.5rem;">
         +100 points added automatically!
       </div>
-      <div style="font-size: 0.75rem; color: #92400E; opacity: 0.9;">
+      <div style="font-size: 0.75rem; color: var(--muted);">
         ⬇️ Now select where to score these dice below ⬇️
       </div>
     </div>

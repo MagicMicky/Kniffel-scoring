@@ -34,11 +34,11 @@ export function setupView() {
       ${sideMenu()}
       <div class="text-center mb-6">
         <div class="mb-2">
-          <img src="icon-192-v2.png" alt="Schnitzel"
-               style="width:96px;height:96px;margin:0 auto;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
+          <img src="icon-192-v2.png" alt="Kniffel"
+               style="width:96px;height:96px;margin:0 auto;border-radius:var(--rMd);box-shadow:0 4px 12px rgba(0,0,0,0.3)">
         </div>
-        <h1 class="text-4xl font-black text-white">SCHNITZEL</h1>
-        <p class="text-purple-200 text-sm">your Yahtzee companion app</p>
+        <h1 style="font-family:var(--font-display);font-size:3rem;font-weight:var(--font-weight-black);color:var(--gold-primary);letter-spacing:var(--letter-spacing-tight)">Kniffel</h1>
+        <p style="font-family:var(--font-body);font-size:var(--font-size-small);color:var(--gold-muted);letter-spacing:var(--letter-spacing-wider);text-transform:uppercase">Craft Game Lounge</p>
       </div>
       ${savedGameBanner()}
       ${resumeButton}

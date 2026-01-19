@@ -99,7 +99,7 @@
 .shadow-md { box-shadow: var(--shadowMd); }
 .shadow-lg { box-shadow: var(--shadowLg); }
 
-/* Mode Badges */
+/* Mode Badges - Craft Game Lounge */
 .mode-badge {
   display: inline-flex;
   align-items: center;
@@ -110,30 +110,31 @@
   font-weight: 600;
   white-space: nowrap;
   border: 1px solid;
+  font-family: var(--font-body);
 }
 
 .mode-badge-blitz {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2));
-  color: rgb(251, 191, 36);
-  border-color: rgba(251, 191, 36, 0.4);
+  background: linear-gradient(135deg, rgba(230, 184, 115, 0.2), rgba(218, 168, 94, 0.2));
+  color: var(--gold-bright);
+  border-color: rgba(230, 184, 115, 0.4);
 }
 
 .mode-badge-play {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.2));
-  color: rgb(196, 181, 253);
-  border-color: rgba(168, 85, 247, 0.4);
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.2), rgba(201, 179, 151, 0.2));
+  color: var(--gold-primary);
+  border-color: rgba(212, 165, 116, 0.4);
 }
 
 .mode-badge-score {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2));
-  color: rgb(147, 197, 253);
-  border-color: rgba(96, 165, 250, 0.4);
+  background: linear-gradient(135deg, rgba(184, 149, 109, 0.2), rgba(166, 124, 82, 0.2));
+  color: var(--gold-muted);
+  border-color: rgba(184, 149, 109, 0.4);
 }
 
 .mode-badge-unknown {
-  background: linear-gradient(135deg, rgba(156, 163, 175, 0.2), rgba(209, 213, 219, 0.2));
-  color: rgb(209, 213, 219);
-  border-color: rgba(156, 163, 175, 0.4);
+  background: linear-gradient(135deg, rgba(139, 115, 85, 0.2), rgba(61, 47, 32, 0.2));
+  color: var(--gold-brown);
+  border-color: rgba(139, 115, 85, 0.4);
 }
 
 /* Mode Selection Buttons */
@@ -147,6 +148,7 @@
   transition: all 0.2s ease;
   background: transparent;
   flex: 1;
+  font-family: var(--font-body);
 }
 
 .mode-select-btn:hover {
@@ -159,13 +161,13 @@
 }
 
 .mode-select-btn.mode-badge-blitz:hover {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(251, 191, 36, 0.3));
+  background: linear-gradient(135deg, rgba(230, 184, 115, 0.3), rgba(218, 168, 94, 0.3));
 }
 
 .mode-select-btn.mode-badge-play:hover {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.3));
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.3), rgba(201, 179, 151, 0.3));
 }
 
 .mode-select-btn.mode-badge-score:hover {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(96, 165, 250, 0.3));
+  background: linear-gradient(135deg, rgba(184, 149, 109, 0.3), rgba(166, 124, 82, 0.3));
 }

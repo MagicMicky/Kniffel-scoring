@@ -135,7 +135,7 @@
 .speed-bonus-badge {
   font-size: 0.7rem;
   font-weight: 800;
-  color: #FCD34D;
+  color: var(--gold-bright);
   animation: bonus-glow 1.5s ease-in-out infinite;
   margin-left: 0.25rem;
 }
@@ -161,7 +161,7 @@
 }
 
 .timer-warning .timer-bar {
-  background: linear-gradient(90deg, #EF4444 0%, var(--error) 100%);
+  background: linear-gradient(90deg, var(--error) 0%, var(--error) 100%);
 }
 
 @keyframes timer-pulse {
@@ -178,11 +178,11 @@
 @keyframes bonus-glow {
   0%, 100% {
     opacity: 1;
-    text-shadow: 0 0 4px rgba(252, 211, 77, 0.6);
+    text-shadow: 0 0 4px var(--focusRing);
   }
   50% {
     opacity: 0.8;
-    text-shadow: 0 0 8px rgba(252, 211, 77, 1);
+    text-shadow: 0 0 8px var(--focusRingStrong);
   }
 }
 

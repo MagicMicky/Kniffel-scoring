@@ -331,10 +331,10 @@ function finishConfirmModal() {
       <p style="color:var(--text-secondary);font-family:var(--font-body)">All scores have been entered.</p>
     </div>
     <div class="flex flex-col gap-3">
-      <button class="btn-primary" onclick="confirmFinish()">
+      <button class="btn-primary w-full" onclick="confirmFinish()">
         🏆 Reveal Winners!
       </button>
-      <button class="btn-secondary" onclick="S.finishModal=false;R()">
+      <button class="btn-secondary w-full" onclick="S.finishModal=false;R()">
         Keep Playing
       </button>
     </div>
@@ -360,10 +360,10 @@ function earlyFinishModal() {
       <p style="color:var(--muted);font-size:var(--font-size-small);font-family:var(--font-body)">Are you sure you want to finish early?</p>
     </div>
     <div class="flex flex-col gap-3">
-      <button class="btn-primary" onclick="confirmEarlyFinish()">
+      <button class="btn-primary w-full" onclick="confirmEarlyFinish()">
         Finish Anyway
       </button>
-      <button class="btn-secondary" onclick="S.earlyFinishModal=false;R()">
+      <button class="btn-secondary w-full" onclick="S.earlyFinishModal=false;R()">
         Keep Playing
       </button>
     </div>

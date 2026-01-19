@@ -37,7 +37,6 @@
   padding: 1rem 1.75rem;
   border-radius: var(--rSm);
   font-size: var(--font-size-body);
-  width: 100%;
   box-shadow: var(--shadow-button);
   border: none;
   font-family: var(--font-body);
@@ -63,7 +62,6 @@
   padding: 1rem 1.75rem;
   border-radius: var(--rSm);
   font-size: var(--font-size-body);
-  width: 100%;
   box-shadow: var(--shadow-button);
   border: none;
 }
@@ -84,7 +82,6 @@
   padding: 1rem 1.75rem;
   border-radius: var(--rSm);
   font-size: var(--font-size-body);
-  width: 100%;
   border: 2px solid var(--border-primary);
 }
 .btn-secondary:hover {
@@ -103,7 +100,6 @@
   padding: 1rem 1.75rem;
   border-radius: var(--rSm);
   font-size: var(--font-size-body);
-  width: 100%;
   border: 2px solid rgba(230, 115, 115, 0.3);
 }
 .btn-danger:hover {

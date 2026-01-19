@@ -209,3 +209,65 @@ export function Grid({
 
   return `<div class="${classes}">${children}</div>`;
 }
+
+/**
+ * PageHeader Component
+ * Unified header for all pages
+ * @param {Object} options
+ * @param {string} [options.title='SCHNITZEL'] - Page title
+ * @param {string} [options.subtitle] - Optional subtitle/tagline
+ * @param {string} [options.backButton] - Back button onclick handler (if omitted, no back button)
+ * @param {string} [options.rightButton] - Right button config { text, onClick, variant }
+ * @param {boolean} [options.showLogo=false] - Show logo icon (only for home page)
+ * @param {string} [options.className=''] - Additional classes
+ * @returns {string} HTML string
+ */
+export function PageHeader({
+  title = 'SCHNITZEL',
+  subtitle = '',
+  backButton = '',
+  rightButton = null,
+  showLogo = false,
+  className = ''
+}) {
+  const classes = ['page-header', className].filter(Boolean).join(' ');
+
+  // Home page style (with logo)
+  if (showLogo) {
+    return `
+      <div class="${classes}">
+        <div class="app-header">
+          <div>
+            <img src="icon-192-v2.png" alt="SCHNITZEL" class="app-logo">
+          </div>
+          <h1 class="app-title">${escapeHtml(title)}</h1>
+          ${subtitle ? `<p class="app-tagline">${escapeHtml(subtitle)}</p>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  // Inner page style (simple header bar)
+  const leftButton = backButton
+    ? Button({ text: '← Back', variant: 'text', onClick: backButton, className: 'text-gold' })
+    : '<div class="header-spacer"></div>';
+
+  const rightButtonHtml = rightButton
+    ? Button({
+        text: rightButton.text,
+        variant: rightButton.variant || 'primary',
+        size: rightButton.size || 'sm',
+        onClick: rightButton.onClick
+      })
+    : '<div class="header-spacer"></div>';
+
+  return `
+    <div class="${classes}">
+      <div class="page-header-bar">
+        ${leftButton}
+        <h1 class="page-title">${title}</h1>
+        ${rightButtonHtml}
+      </div>
+    </div>
+  `;
+}

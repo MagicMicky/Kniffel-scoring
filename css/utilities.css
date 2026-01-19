@@ -472,3 +472,71 @@
 .stats-grid-2col {
   grid-template-columns: repeat(2, 1fr);
 }
+
+/* ========================================
+   PAGE HEADERS
+   Unified header component styles
+   ======================================== */
+
+.page-header {
+  margin-bottom: var(--space-lg);
+}
+
+.page-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) 0;
+  gap: var(--space-md);
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-black);
+  color: var(--gold-primary);
+  text-align: center;
+  margin: 0;
+  flex: 1;
+}
+
+.header-spacer {
+  width: 4rem;
+  flex-shrink: 0;
+}
+
+/* Text gold utility for back buttons */
+.text-gold {
+  color: var(--gold-muted) !important;
+}
+
+.text-gold:hover {
+  color: var(--gold-primary) !important;
+}
+
+/* Game header (in-game specific) */
+.game-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-primary);
+  border-bottom: 2px solid var(--border-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.game-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.game-header-content h1 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-black);
+  color: var(--gold-primary);
+  margin: 0;
+}

@@ -10,7 +10,7 @@ import { escapeHtml } from '../utils/helpers.js';
 import { hamburgerButton, sideMenu } from './components/sideMenu.js';
 import { modal } from './components/modal.js';
 import { upTot, grand, upBonus, loTot } from '../utils/scoring.js';
-import { Button, InfoBox } from '../components/ui.js';
+import { Button, InfoBox, PageHeader } from '../components/ui.js';
 
 /**
  * Render the setup view
@@ -34,13 +34,11 @@ export function setupView() {
     <div class="container container-fullheight p-md">
       ${hamburgerButton()}
       ${sideMenu()}
-      <div class="app-header">
-        <div>
-          <img src="icon-192-v2.png" alt="SCHNITZEL" class="app-logo">
-        </div>
-        <h1 class="app-title">SCHNITZEL</h1>
-        <p class="app-tagline">Your Travel Yahtzee Companion</p>
-      </div>
+      ${PageHeader({
+        title: 'SCHNITZEL',
+        subtitle: 'Your Travel Yahtzee Companion',
+        showLogo: true
+      })}
       ${savedGameBanner()}
       ${resumeButton}
       <div class="card mb-lg">

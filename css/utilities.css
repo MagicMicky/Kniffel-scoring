@@ -3,12 +3,6 @@
 /* Text alignment */
 .text-center { text-align: center; }
 
-/* Margin utilities */
-.mb-2 { margin-bottom: 0.5rem; }
-.mb-4 { margin-bottom: 1rem; }
-.mb-6 { margin-bottom: 1.5rem; }
-.mt-4 { margin-top: 1rem; }
-
 /* Padding utilities */
 .p-3 { padding: 0.75rem; }
 .p-4 { padding: 1rem; }
@@ -56,16 +50,6 @@
 .rounded-lg { border-radius: var(--rLg); }
 .rounded-xl { border-radius: var(--rXl); }
 .rounded-full { border-radius: var(--rPill); }
-
-/* Font sizes */
-.text-xs { font-size: 0.75rem; }
-.text-sm { font-size: 0.875rem; }
-.text-lg { font-size: 1.125rem; }
-.text-xl { font-size: 1.25rem; }
-.text-2xl { font-size: 1.5rem; }
-.text-3xl { font-size: 1.875rem; }
-.text-4xl { font-size: 2.25rem; }
-.text-5xl { font-size: 3rem; }
 
 /* Font weights */
 .font-medium { font-weight: 500; }
@@ -175,8 +159,8 @@
 }
 
 /* ========================================
-   GUIDELINE-COMPLIANT UTILITIES
-   Token-based utilities matching CSS guidelines
+   DESIGN TOKEN UTILITIES
+   Semantic utilities using design system tokens
    ======================================== */
 
 /* Text Colors (using design tokens) */
@@ -185,28 +169,28 @@
 .text-accent { color: var(--text-accent); }
 .text-gold { color: var(--gold-primary); }
 .text-gold-bright { color: var(--gold-bright); }
-.text-success { color: var(--color-success); }
-.text-danger { color: var(--color-danger); }
+.text-success { color: var(--success); }
+.text-danger { color: var(--error); }
 
 /* Font Families (already exist, kept for completeness) */
 .font-display { font-family: var(--font-display); }
 .font-body { font-family: var(--font-body); }
 
 /* Font Weights (already exist, kept for completeness) */
-.font-regular { font-weight: var(--weight-regular); }
-.font-medium { font-weight: var(--weight-medium); }
-.font-bold { font-weight: var(--weight-bold); }
-.font-black { font-weight: var(--weight-black); }
+.font-regular { font-weight: var(--font-weight-regular); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-black { font-weight: var(--font-weight-black); }
 
 /* Text Sizes (token-based, alternative to Tailwind rem-based) */
-.text-size-xs { font-size: var(--text-caption); }
-.text-size-sm { font-size: var(--text-body-sm); }
-.text-size-base { font-size: var(--text-body); }
-.text-size-lg { font-size: var(--text-display-xs); }
-.text-size-xl { font-size: var(--text-display-sm); }
-.text-size-2xl { font-size: var(--text-display-md); }
-.text-size-3xl { font-size: var(--text-display-lg); }
-.text-size-4xl { font-size: var(--text-display-xl); }
+.text-size-xs { font-size: var(--font-size-tiny); }
+.text-size-sm { font-size: var(--font-size-small); }
+.text-size-base { font-size: var(--font-size-body); }
+.text-size-lg { font-size: var(--font-size-number-sm); }
+.text-size-xl { font-size: var(--font-size-number-md); }
+.text-size-2xl { font-size: var(--font-size-h3); }
+.text-size-3xl { font-size: var(--font-size-h2); }
+.text-size-4xl { font-size: var(--font-size-h1); }
 
 /* Spacing Utilities (token-based, alternative to Tailwind) */
 .mt-xs { margin-top: var(--space-xs); }
@@ -239,14 +223,8 @@
 
 /* Uppercase Label Utility */
 .label {
-  font-size: var(--text-caption);
-  font-weight: var(--weight-bold);
+  font-size: var(--font-size-tiny);
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
-  letter-spacing: var(--tracking-wider);
+  letter-spacing: var(--letter-spacing-wide);
 }
-
-/* Note: Tailwind-style utilities (.text-xs, .text-sm, .mb-2, .mb-4, etc.)
-   remain available above for backward compatibility.
-
-   New code should prefer token-based utilities (.text-size-xs, .mb-sm, etc.)
-   for consistency with the design system. */

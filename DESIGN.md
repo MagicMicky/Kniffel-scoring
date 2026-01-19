@@ -151,9 +151,11 @@ https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfai
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--radius-sm` | 8px | Dice, small elements |
-| `--radius-md` | 12px | Buttons, stats, inputs |
-| `--radius-lg` | 24px | Cards, modals |
+| `--rSm` | 8px | Dice, small elements |
+| `--rMd` | 12px | Buttons, stats, inputs |
+| `--rLg` | 16px | Large cards |
+| `--rXl` | 24px | Modals, hero elements |
+| `--rPill` | 999px | Fully rounded badges |
 
 ---
 
@@ -161,11 +163,12 @@ https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfai
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--shadow-card` | `0 8px 24px rgba(0, 0, 0, 0.6)` | Elevated cards |
-| `--shadow-button` | `0 4px 12px rgba(212, 165, 116, 0.25)` | Primary buttons |
-| `--shadow-button-hover` | `0 6px 20px rgba(212, 165, 116, 0.4)` | Button hover |
-| `--shadow-inset` | `inset 0 1px 0 rgba(212, 165, 116, 0.1)` | Card top highlight |
-| `--shadow-inset-button` | `inset 0 1px 0 rgba(255, 255, 255, 0.2)` | Button shine |
+| `--shadowSm` | `0 4px 12px rgba(212, 165, 116, 0.25)` | Small elements |
+| `--shadowMd` | `0 8px 24px rgba(0, 0, 0, 0.6)` | Elevated cards |
+| `--shadowLg` | `0 20px 50px rgba(0, 0, 0, 0.38)` | Dramatic depth |
+| `--innerHighlight` | `inset 0 1px 0 rgba(212, 165, 116, 0.1)` | Card top highlight |
+| `--shadow-button` | Combined shadow | Primary buttons (outer + inset) |
+| `--shadow-button-hover` | Combined shadow | Button hover state |
 
 ---
 

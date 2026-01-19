@@ -325,16 +325,16 @@ function reviewHeader() {
  */
 function finishConfirmModal() {
   return modal(`
-    <div class="text-center mb-4">
-      <div class="text-5xl mb-3">🎉</div>
-      <h3 class="text-2xl font-black text-gray-800 mb-2">Game Complete!</h3>
-      <p class="text-gray-600">All scores have been entered.</p>
+    <div class="text-center" style="margin-bottom:var(--space-lg)">
+      <div style="font-size:4rem;margin-bottom:var(--space-md)">🎉</div>
+      <h3 style="font-size:var(--font-size-h3);font-weight:var(--font-weight-black);color:var(--text);margin-bottom:var(--space-xs);font-family:var(--font-body)">Game Complete!</h3>
+      <p style="color:var(--text-secondary);font-family:var(--font-body)">All scores have been entered.</p>
     </div>
     <div class="flex flex-col gap-3">
-      <button class="btn btn-green font-bold py-4 px-4 rounded-xl w-full text-lg" onclick="confirmFinish()">
+      <button class="btn-primary" onclick="confirmFinish()">
         🏆 Reveal Winners!
       </button>
-      <button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.finishModal=false;R()">
+      <button class="btn-secondary" onclick="S.finishModal=false;R()">
         Keep Playing
       </button>
     </div>
@@ -351,19 +351,19 @@ function earlyFinishModal() {
   }, 0);
 
   return modal(`
-    <div class="text-center mb-4">
-      <div class="text-5xl mb-3">⚠️</div>
-      <h3 class="text-2xl font-black text-gray-800 mb-2">Game Not Complete</h3>
-      <p class="text-gray-600 mb-2">
-        There are still <span class="font-bold text-red-600">${emptyCount} empty scores</span>.
+    <div class="text-center" style="margin-bottom:var(--space-lg)">
+      <div style="font-size:4rem;margin-bottom:var(--space-md)">⚠️</div>
+      <h3 style="font-size:var(--font-size-h3);font-weight:var(--font-weight-black);color:var(--text);margin-bottom:var(--space-xs);font-family:var(--font-body)">Game Not Complete</h3>
+      <p style="color:var(--text-secondary);margin-bottom:var(--space-xs);font-family:var(--font-body)">
+        There are still <span style="font-weight:var(--font-weight-bold);color:var(--error)">${emptyCount} empty scores</span>.
       </p>
-      <p class="text-gray-500 text-sm">Are you sure you want to finish early?</p>
+      <p style="color:var(--muted);font-size:var(--font-size-small);font-family:var(--font-body)">Are you sure you want to finish early?</p>
     </div>
     <div class="flex flex-col gap-3">
-      <button class="btn btn-orange font-bold py-4 px-4 rounded-xl w-full text-lg" onclick="confirmEarlyFinish()">
+      <button class="btn-primary" onclick="confirmEarlyFinish()">
         Finish Anyway
       </button>
-      <button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.earlyFinishModal=false;R()">
+      <button class="btn-secondary" onclick="S.earlyFinishModal=false;R()">
         Keep Playing
       </button>
     </div>
@@ -384,44 +384,43 @@ function playerDetailsModal(player) {
   const playerColor = color(player.id);
 
   return modal(`
-    <button class="btn-text text-white text-sm" style="position:absolute;top:1rem;right:1rem;opacity:0.8"
+    <button class="btn-text" style="position:absolute;top:var(--space-md);right:var(--space-md)"
             onclick="S.playerDetailsModal=false;R()">✕</button>
-    <div class="text-center mb-6">
-      <h3 class="text-3xl font-black mb-2">${escapeHtml(player.name)}</h3>
-      <p class="text-white" style="opacity:0.8">Player Details</p>
+    <div class="text-center" style="margin-bottom:var(--space-lg)">
+      <h3 style="font-size:var(--font-size-h2);font-weight:var(--font-weight-black);color:var(--text);margin-bottom:var(--space-xs);font-family:var(--font-display)">${escapeHtml(player.name)}</h3>
+      <p style="color:var(--text-secondary);font-family:var(--font-body)">Player Details</p>
     </div>
-    <div class="flex flex-col gap-4"
-         style="background:rgba(255,255,255,0.1);border-radius:1rem;padding:1.5rem;backdrop-filter:blur(10px)">
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9">Grand Total</span>
-        <span class="text-4xl font-black">${grandTotal}</span>
+    <div class="box" style="padding:var(--space-lg)">
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-md)">
+        <span style="color:var(--text-secondary);font-family:var(--font-body)">Grand Total</span>
+        <span style="font-size:var(--font-size-h2);font-weight:var(--font-weight-black);color:var(--gold-bright);font-family:var(--font-display);letter-spacing:var(--letter-spacing-tight)">${grandTotal}</span>
       </div>
-      <div class="divider" style="background:rgba(255,255,255,0.2)"></div>
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9">Upper Section</span>
-        <span class="text-2xl font-bold">${upperTotal}</span>
+      <div class="accent-line"></div>
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-sm)">
+        <span style="color:var(--text-secondary);font-family:var(--font-body)">Upper Section</span>
+        <span style="font-size:var(--font-size-number-md);font-weight:var(--font-weight-bold);color:var(--gold-pale);font-family:var(--font-display)">${upperTotal}</span>
       </div>
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9;padding-left:1rem">Base Score</span>
-        <span class="text-xl">${upperTotal}</span>
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-sm);padding-left:var(--space-md)">
+        <span style="color:var(--muted);font-size:var(--font-size-small);font-family:var(--font-body)">Base Score</span>
+        <span style="font-size:var(--font-size-body);color:var(--text-secondary);font-family:var(--font-display)">${upperTotal}</span>
       </div>
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9;padding-left:1rem">Bonus</span>
-        <span class="text-xl">${upperBonusVal ? '+35 ✓' : '0'}</span>
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-md);padding-left:var(--space-md)">
+        <span style="color:var(--muted);font-size:var(--font-size-small);font-family:var(--font-body)">Bonus</span>
+        <span style="font-size:var(--font-size-body);color:var(--text-secondary);font-family:var(--font-display)">${upperBonusVal ? '+35 ✓' : '0'}</span>
       </div>
-      <div class="divider" style="background:rgba(255,255,255,0.2)"></div>
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9">Lower Section</span>
-        <span class="text-2xl font-bold">${lowerTotal}</span>
+      <div class="accent-line"></div>
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-sm)">
+        <span style="color:var(--text-secondary);font-family:var(--font-body)">Lower Section</span>
+        <span style="font-size:var(--font-size-number-md);font-weight:var(--font-weight-bold);color:var(--gold-pale);font-family:var(--font-display)">${lowerTotal}</span>
       </div>
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9;padding-left:1rem">Yahtzee Bonus</span>
-        <span class="text-xl">+${scores.bonus || 0}</span>
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-md);padding-left:var(--space-md)">
+        <span style="color:var(--muted);font-size:var(--font-size-small);font-family:var(--font-body)">Yahtzee Bonus</span>
+        <span style="font-size:var(--font-size-body);color:var(--text-secondary);font-family:var(--font-display)">+${scores.bonus || 0}</span>
       </div>
-      <div class="divider" style="background:rgba(255,255,255,0.2)"></div>
+      <div class="accent-line"></div>
       <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9">Progress</span>
-        <span class="text-xl font-bold">${filledScores}/${totalScores}</span>
+        <span style="color:var(--text-secondary);font-family:var(--font-body)">Progress</span>
+        <span style="font-size:var(--font-size-number-sm);font-weight:var(--font-weight-bold);color:var(--gold-primary);font-family:var(--font-display)">${filledScores}/${totalScores}</span>
       </div>
     </div>
   `, 'S.playerDetailsModal=false;R()', '',

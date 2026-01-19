@@ -50,11 +50,12 @@
 .overflow-x-auto { overflow-x: auto; }
 .whitespace-nowrap { white-space: nowrap; }
 
-/* Border radius */
-.rounded-lg { border-radius: 0.5rem; }
-.rounded-xl { border-radius: 0.75rem; }
-.rounded-2xl { border-radius: 1rem; }
-.rounded-full { border-radius: 9999px; }
+/* Border radius - use CSS variables for consistency */
+.rounded-sm { border-radius: var(--rSm); }
+.rounded-md { border-radius: var(--rMd); }
+.rounded-lg { border-radius: var(--rLg); }
+.rounded-xl { border-radius: var(--rXl); }
+.rounded-full { border-radius: var(--rPill); }
 
 /* Font sizes */
 .text-xs { font-size: 0.75rem; }
@@ -71,25 +72,26 @@
 .font-bold { font-weight: 700; }
 .font-black { font-weight: 900; }
 
-/* Text colors - mapped to design tokens */
+/* Text colors - mapped to Craft Game Lounge theme */
 .text-white { color: var(--text); }
 .text-gray-400 { color: var(--muted); }
-.text-gray-500 { color: var(--muted); }
-.text-gray-600 { color: var(--border); }
+.text-gray-500 { color: var(--text-secondary); }
+.text-gray-600 { color: var(--text-secondary); }
 .text-gray-800 { color: var(--text); }
-.text-purple-200 { color: var(--link); }
-.text-purple-600 { color: var(--accent); }
-.text-purple-700 { color: var(--accentDark); }
-.text-blue-600 { color: var(--link); }
-.text-blue-700 { color: var(--linkHover); }
-.text-blue-800 { color: var(--accent); }
-.text-green-600 { color: var(--link); }
-.text-green-700 { color: var(--linkHover); }
+.text-purple-200 { color: var(--gold-muted); }
+.text-purple-600 { color: var(--gold-primary); }
+.text-purple-700 { color: var(--gold-brown); }
+.text-blue-600 { color: var(--gold-bright); }
+.text-blue-700 { color: var(--gold-primary); }
+.text-blue-800 { color: var(--gold-brown); }
+.text-green-600 { color: var(--gold-bright); }
+.text-green-700 { color: var(--gold-primary); }
+.text-yellow-300 { color: var(--gold-pale); }
+.text-yellow-400 { color: var(--gold-pale); }
+.text-yellow-600 { color: var(--gold-primary); }
+.text-yellow-800 { color: var(--gold-brown); }
 .text-red-400 { color: var(--error); }
 .text-red-500 { color: var(--error); }
-.text-yellow-400 { color: var(--linkHover); }
-.text-yellow-600 { color: var(--accent); }
-.text-yellow-800 { color: var(--accentDark); }
 
 /* Background colors */
 .bg-gray-100 { background-color: var(--surface2); }
@@ -99,7 +101,7 @@
 .shadow-md { box-shadow: var(--shadowMd); }
 .shadow-lg { box-shadow: var(--shadowLg); }
 
-/* Mode Badges */
+/* Mode Badges - Craft Game Lounge */
 .mode-badge {
   display: inline-flex;
   align-items: center;
@@ -110,43 +112,45 @@
   font-weight: 600;
   white-space: nowrap;
   border: 1px solid;
+  font-family: var(--font-body);
 }
 
 .mode-badge-blitz {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.2));
-  color: rgb(251, 191, 36);
-  border-color: rgba(251, 191, 36, 0.4);
+  background: linear-gradient(135deg, rgba(230, 184, 115, 0.2), rgba(218, 168, 94, 0.2));
+  color: var(--gold-bright);
+  border-color: rgba(230, 184, 115, 0.4);
 }
 
 .mode-badge-play {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.2));
-  color: rgb(196, 181, 253);
-  border-color: rgba(168, 85, 247, 0.4);
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.2), rgba(201, 179, 151, 0.2));
+  color: var(--gold-primary);
+  border-color: rgba(212, 165, 116, 0.4);
 }
 
 .mode-badge-score {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.2));
-  color: rgb(147, 197, 253);
-  border-color: rgba(96, 165, 250, 0.4);
+  background: linear-gradient(135deg, rgba(184, 149, 109, 0.2), rgba(166, 124, 82, 0.2));
+  color: var(--gold-muted);
+  border-color: rgba(184, 149, 109, 0.4);
 }
 
 .mode-badge-unknown {
-  background: linear-gradient(135deg, rgba(156, 163, 175, 0.2), rgba(209, 213, 219, 0.2));
-  color: rgb(209, 213, 219);
-  border-color: rgba(156, 163, 175, 0.4);
+  background: linear-gradient(135deg, rgba(139, 115, 85, 0.2), rgba(61, 47, 32, 0.2));
+  color: var(--gold-brown);
+  border-color: rgba(139, 115, 85, 0.4);
 }
 
 /* Mode Selection Buttons */
 .mode-select-btn {
   padding: 0.5rem 0.875rem;
   border: 1px solid;
-  border-radius: 0.5rem;
+  border-radius: var(--rSm);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   background: transparent;
   flex: 1;
+  font-family: var(--font-body);
 }
 
 .mode-select-btn:hover {
@@ -159,13 +163,13 @@
 }
 
 .mode-select-btn.mode-badge-blitz:hover {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.3), rgba(251, 191, 36, 0.3));
+  background: linear-gradient(135deg, rgba(230, 184, 115, 0.3), rgba(218, 168, 94, 0.3));
 }
 
 .mode-select-btn.mode-badge-play:hover {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.3));
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.3), rgba(201, 179, 151, 0.3));
 }
 
 .mode-select-btn.mode-badge-score:hover {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(96, 165, 250, 0.3));
+  background: linear-gradient(135deg, rgba(184, 149, 109, 0.3), rgba(166, 124, 82, 0.3));
 }

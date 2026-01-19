@@ -1,23 +1,42 @@
-/* Form Components */
+/* Form Components - Craft Game Lounge */
 
 .input {
   border: 2px solid var(--border);
-  border-radius: var(--rMd);
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  width: 100%;
-  font-family: inherit;
-  background: var(--surface2);
+  border-radius: var(--rSm);
+  padding: var(--space-md) var(--space-md);
+  font-size: var(--font-size-body);
+  min-width: 0;
+  font-family: var(--font-body);
+  background: transparent;
   color: var(--text);
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
+  line-height: 1.5;
+}
+
+/* Compact input variant for use in rows alongside other content */
+.input-compact {
+  padding: 0.5rem var(--space-md);
+}
+
+/* Player row - reusable container for player list items */
+.player-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: var(--rSm);
+  border: 2px solid var(--border-primary);
+  transition: all var(--transition-normal);
+  min-height: 3.5rem;
 }
 .input:hover {
-  border-color: var(--borderAccent);
+  border-color: var(--border-subtle);
+  background: var(--hover-bg);
 }
 .input:focus {
   outline: none;
-  border-color: var(--borderFocus);
-  box-shadow: 0 0 0 2px var(--focusRing), 0 0 12px var(--focusRing);
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 0 3px var(--focusRing);
 }
 
 .checkbox {
@@ -105,7 +124,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  border-radius: var(--rLg);
+  border-radius: var(--rSm);
   border: 2px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
   cursor: pointer;

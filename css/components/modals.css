@@ -1,25 +1,43 @@
-/* Modal Components */
+/* Modal Components - Craft Game Lounge */
 
 .modal-overlay {
   position: fixed;
   inset: 0;
   background: var(--scrim);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 50;
-  padding: 1rem;
+  padding: var(--space-md);
 }
 
 .modal {
-  background: var(--surface2);
-  border-radius: var(--rLg);
-  padding: 1.25rem;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border-radius: var(--rMd);
+  padding: var(--space-lg);
   width: 100%;
   max-width: 24rem;
   max-height: 80vh;
   overflow: auto;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadowLg);
+  border: 2px solid var(--border-primary);
+  box-shadow: var(--shadowLg), var(--innerHighlight);
+  position: relative;
+}
+
+/* Modal accent line */
+.modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--space-lg);
+  right: var(--space-lg);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gold-primary) 50%,
+    transparent 100%
+  );
+  opacity: 0.5;
 }

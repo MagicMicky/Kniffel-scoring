@@ -20,32 +20,32 @@ export function setupView() {
     : playerSelectionList();
 
   const playOrder = S.game.length > 0
-    ? `<div class="glass rounded-xl p-3 mt-4">
-        <p class="text-sm text-purple-200 mb-1">Play order:</p>
-        <p class="font-medium text-white">${S.game.map(p => escapeHtml(p.name)).join(' → ')}</p>
+    ? `<div class="session-info" style="margin-top:var(--space-md)">
+        <span class="session-label">Play order:</span>
+        <span class="session-value">${S.game.map(p => escapeHtml(p.name)).join(' → ')}</span>
        </div>`
     : '';
 
   const resumeButton = S.savedGame ? resumeGameSection() : '';
 
   return `
-    <div class="container" style="min-height:100vh">
+    <div class="container" style="min-height:100vh;padding:var(--space-xl) var(--space-md)">
       ${hamburgerButton()}
       ${sideMenu()}
-      <div class="text-center mb-6">
-        <div class="mb-2">
-          <img src="icon-192-v2.png" alt="Schnitzel"
-               style="width:96px;height:96px;margin:0 auto;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,0.3)">
+      <div class="text-center" style="margin-bottom:var(--space-xl)">
+        <div style="margin-bottom:var(--space-md)">
+          <img src="icon-192-v2.png" alt="SCHNITZEL"
+               style="width:96px;height:96px;margin:0 auto;border-radius:var(--rMd);box-shadow:0 4px 12px rgba(0,0,0,0.3)">
         </div>
-        <h1 class="text-4xl font-black text-white">SCHNITZEL</h1>
-        <p class="text-purple-200 text-sm">your Yahtzee companion app</p>
+        <h1 style="font-family:var(--font-display);font-size:var(--font-size-h1);font-weight:var(--font-weight-black);color:var(--gold-primary);letter-spacing:var(--letter-spacing-tight);line-height:1">SCHNITZEL</h1>
+        <p style="font-family:var(--font-body);font-size:var(--font-size-small);color:var(--gold-muted);letter-spacing:var(--letter-spacing-wider);text-transform:uppercase;margin-top:var(--space-xs)">Your Travel Yahtzee Companion</p>
       </div>
       ${savedGameBanner()}
       ${resumeButton}
-      <div class="glass rounded-2xl p-5 mb-4">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold text-white">Select Players</h2>
-          <button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">⚙️</button>
+      <div class="card" style="margin-bottom:var(--space-lg)">
+        <div class="flex justify-between items-center" style="margin-bottom:var(--space-md)">
+          <h2 class="section-title" style="margin:0;padding:0;border:none">Select Players</h2>
+          <button class="btn-icon" onclick="S.mgr=true;R()">⚙️</button>
         </div>
         <div class="space-y-2">${playerList}</div>
         ${playOrder}
@@ -62,9 +62,9 @@ export function setupView() {
  */
 function noPlayersMessage() {
   return `
-    <div class="text-center py-5 text-purple-200">
-      <p class="mb-2">No players yet!</p>
-      <button class="btn btn-small glass text-white" onclick="S.mgr=true;R()">+ Add Players</button>
+    <div class="text-center" style="padding:var(--space-lg) 0;color:var(--text-secondary)">
+      <p style="margin-bottom:var(--space-md)">No players yet!</p>
+      <button class="btn-secondary" onclick="S.mgr=true;R()">+ Add Players</button>
     </div>
   `;
 }
@@ -78,22 +78,24 @@ function playerSelectionList() {
     const gameIndex = S.game.findIndex(g => g.id === p.id);
     const playerColor = COLORS[i % COLORS.length];
 
-    const selectedStyle = isSelected ? `box-shadow:0 0 0 2px ${playerColor};` : '';
-    const cardClass = isSelected ? 'glass-dark' : 'glass';
+    const cardStyle = isSelected
+      ? `background:linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);border-color:${playerColor};box-shadow:0 2px 8px rgba(212,165,116,0.2)`
+      : `background:var(--bg-tertiary)`;
 
     const orderButtons = isSelected
-      ? `<button class="order-btn" onclick="event.stopPropagation();mv(${gameIndex},-1)">▲</button>
-         <button class="order-btn" onclick="event.stopPropagation();mv(${gameIndex},1)">▼</button>`
+      ? `<button class="btn-icon-sm" onclick="event.stopPropagation();mv(${gameIndex},-1)">▲</button>
+         <button class="btn-icon-sm" onclick="event.stopPropagation();mv(${gameIndex},1)">▼</button>`
       : '';
 
     return `
-      <div class="flex items-center gap-2 rounded-xl p-3 ${cardClass}"
-           style="${selectedStyle}" onclick="tog(${p.id})">
+      <div class="player-row"
+           style="${cardStyle};cursor:pointer"
+           onclick="tog(${p.id})">
         <div class="checkbox">${isSelected ? '<div class="checkbox-inner"></div>' : ''}</div>
         <div class="color-dot" style="background:${playerColor}"></div>
-        <span class="flex-1 font-medium text-white">${escapeHtml(p.name)}</span>
+        <span class="flex-1 font-medium" style="color:var(--text);font-family:var(--font-body)">${escapeHtml(p.name)}</span>
         ${orderButtons}
-        <button class="btn btn-small glass text-white text-xs"
+        <button class="btn-icon-sm" style="font-size:0.75rem"
                 onclick="event.stopPropagation();S.stats=S.known.find(x=>x.id===${p.id});R()">📊</button>
       </div>
     `;
@@ -114,10 +116,10 @@ function savedGameBanner() {
   const savedDate = new Date(S.savedGame.savedAt).toLocaleString();
 
   return `
-    <div class="glass rounded-2xl p-4 mb-2">
-      <p class="text-white font-bold mb-2">📌 Paused Game ${modeIcon}</p>
-      <p class="text-purple-200 text-sm">${players}</p>
-      <p class="text-purple-200 text-xs mt-1">${savedDate}</p>
+    <div class="box" style="margin-bottom:var(--space-md);background:linear-gradient(135deg, rgba(230, 184, 115, 0.1) 0%, rgba(212, 165, 116, 0.05) 100%)">
+      <p style="color:var(--text);font-weight:var(--font-weight-bold);margin-bottom:var(--space-xs);font-family:var(--font-body)">📌 Paused Game ${modeIcon}</p>
+      <p style="color:var(--text-secondary);font-size:var(--font-size-small);font-family:var(--font-body)">${players}</p>
+      <p style="color:var(--muted);font-size:var(--font-size-tiny);margin-top:var(--space-xs);font-family:var(--font-body)">${savedDate}</p>
     </div>
   `;
 }
@@ -127,9 +129,9 @@ function savedGameBanner() {
  */
 function resumeGameSection() {
   return `
-    <div class="grid grid-cols-2 gap-2 mb-4">
-      <button class="btn btn-secondary" style="padding:0.5rem;" onclick="discardSaved()">🗑️ Discard</button>
-      <button class="btn btn-resume" style="padding:0.5rem;" onclick="resumeGame()">▶️ RESUME</button>
+    <div class="grid grid-cols-2 gap-2" style="margin-bottom:var(--space-md)">
+      <button class="btn-secondary" onclick="discardSaved()">🗑️ Discard</button>
+      <button class="btn-primary" onclick="resumeGame()">▶️ Resume</button>
     </div>
   `;
 }
@@ -146,16 +148,16 @@ function gameModeButtons() {
     <div class="mode-select-container">
       <button class="game-mode-btn" onclick="startGameWithMode('score')" ${disabled}>
         <div class="icon">🎲</div>
-        <div class="title">PHYSICAL DICE</div>
-        <div class="desc">Roll real dice<br>Enter scores</div>
+        <div class="title">Physical Dice</div>
+        <div class="desc">Roll real dice • Enter scores</div>
       </button>
 
       <div class="expandable-mode-container">
         <button class="game-mode-btn expandable-header ${isExpanded ? 'expanded' : ''}"
                 onclick="startGameWithMode('play', false)" ${disabled}>
           <div class="icon">📱</div>
-          <div class="title">VIRTUAL DICE</div>
-          <div class="desc">Roll on phone<br>Auto-scoring</div>
+          <div class="title">Virtual Dice</div>
+          <div class="desc">Roll on phone • Auto-scoring</div>
           <span class="expand-icon" onclick="event.stopPropagation();toggleVirtualDiceExpanded()">${expandIcon}</span>
         </button>
 
@@ -188,22 +190,22 @@ function gameModeButtons() {
  */
 function managerModal() {
   const playerList = S.known.map((p, i) => `
-    <div class="flex items-center gap-2 bg-gray-50 rounded-xl p-3">
+    <div class="player-row" style="background:var(--bg-tertiary)">
       <div class="color-dot" style="background:${COLORS[i % COLORS.length]}"></div>
-      <input type="text" class="input flex-1" value="${escapeHtml(p.name)}" onchange="ren(${p.id},this.value)">
-      <button class="delete-btn" onclick="del(${p.id})">Delete</button>
+      <input type="text" class="input input-compact flex-1" value="${escapeHtml(p.name)}" onchange="ren(${p.id},this.value)">
+      <button class="btn-danger btn-sm" onclick="del(${p.id})">Delete</button>
     </div>
   `).join('');
 
   return modal(`
-    <h2 class="text-xl font-black text-gray-800 mb-4">👥 Manage Players</h2>
-    <div class="space-y-2 mb-4">${playerList}</div>
-    <div class="flex gap-2 mb-4">
-      <input type="text" id="np" class="input flex-1" placeholder="New player..."
+    <h2 style="font-size:var(--font-size-h3);font-weight:var(--font-weight-black);color:var(--text);margin-bottom:var(--space-md);font-family:var(--font-body)">👥 Manage Players</h2>
+    <div class="space-y-2" style="margin-bottom:var(--space-md)">${playerList}</div>
+    <div class="player-row" style="background:var(--bg-tertiary);margin-bottom:var(--space-md)">
+      <input type="text" id="np" class="input input-compact flex-1" placeholder="New player..."
              onkeypress="if(event.key==='Enter')addP()">
-      <button class="btn btn-blue btn-small text-white" onclick="addP()">Add</button>
+      <button class="btn-primary btn-sm" onclick="addP()">Add</button>
     </div>
-    <button class="btn btn-green font-bold py-3 px-4 rounded-xl w-full" onclick="S.mgr=false;save();R()">
+    <button class="btn-primary w-full" onclick="S.mgr=false;save();R()">
       Done
     </button>
   `, 'S.mgr=false;save();R()');
@@ -225,37 +227,39 @@ function statsModal() {
   const yahtzees = results.reduce((a, r) => a + (r.scores.yahtzee === 50 ? 1 : 0) + (r.scores.bonus / 100), 0);
 
   const statsContent = results.length === 0
-    ? '<p class="text-center text-gray-400 py-5">No games yet</p>'
+    ? '<p class="text-center" style="color:var(--muted);padding:var(--space-lg) 0">No games yet</p>'
     : `
-      <div class="grid grid-cols-2 gap-3 mb-4">
-        <div style="background:var(--surface2);border:1px solid var(--border)" class="rounded-xl p-4 text-center">
-          <div class="text-3xl font-black text-blue-600">${results.length}</div>
-          <div class="text-xs text-gray-500">Games</div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-label">Games</div>
+          <div class="stat-value">${results.length}</div>
         </div>
-        <div style="background:var(--surface2);border:1px solid var(--border)" class="rounded-xl p-4 text-center">
-          <div class="text-3xl font-black text-yellow-600">${wins}</div>
-          <div class="text-xs text-gray-500">Wins (${results.length ? Math.round(wins / results.length * 100) : 0}%)</div>
+        <div class="stat">
+          <div class="stat-label">Wins</div>
+          <div class="stat-value">${wins}</div>
         </div>
-        <div style="background:var(--surface2);border:1px solid var(--border)" class="rounded-xl p-4 text-center">
-          <div class="text-3xl font-black text-green-600">${highScore}</div>
-          <div class="text-xs text-gray-500">High Score</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border)" class="rounded-xl p-4 text-center">
-          <div class="text-3xl font-black text-purple-600">${avgScore}</div>
-          <div class="text-xs text-gray-500">Average</div>
+        <div class="stat">
+          <div class="stat-label">High Score</div>
+          <div class="stat-value">${highScore}</div>
         </div>
       </div>
-      <div style="background:var(--surface2);border:1px solid var(--border)" class="rounded-xl p-4 text-center mb-4">
-        <div class="text-3xl font-black text-red-500">🎲 ${yahtzees}</div>
-        <div class="text-xs text-gray-500">Yahtzees</div>
+      <div class="stats" style="grid-template-columns:repeat(2, 1fr)">
+        <div class="stat">
+          <div class="stat-label">Average</div>
+          <div class="stat-value">${avgScore}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Yahtzees</div>
+          <div class="stat-value">🎲 ${yahtzees}</div>
+        </div>
       </div>
     `;
 
   return modal(`
-    <h2 class="text-2xl font-black text-white mb-1">${escapeHtml(p.name)}</h2>
-    <p class="text-gray-500 text-sm mb-4">Statistics</p>
+    <h2 style="font-size:var(--font-size-h3);font-weight:var(--font-weight-black);color:var(--text);margin-bottom:var(--space-xs);font-family:var(--font-display)">${escapeHtml(p.name)}</h2>
+    <p style="color:var(--text-secondary);font-size:var(--font-size-small);margin-bottom:var(--space-lg);font-family:var(--font-body)">Statistics</p>
     ${statsContent}
-    <button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.stats=null;R()">
+    <button class="btn-secondary w-full" style="margin-top:var(--space-lg)" onclick="S.stats=null;R()">
       Close
     </button>
   `, 'S.stats=null;R()');

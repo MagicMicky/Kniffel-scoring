@@ -24,16 +24,16 @@ export const LOWER = [
   { id: 'chance', name: 'Chance', type: 'sum', max: 30 },
 ];
 
-// Player colors - diverse palette for up to 8 players with clear differentiation
+// Player colors - warm gold and brown palette matching Craft Game Lounge theme
 export const COLORS = [
-  '#39C6A7',  // 1. Jade (accent) - primary brand
-  '#7AE7D0',  // 2. Sky jade (link) - bright cyan
-  '#F4B24A',  // 3. Amber (warning) - warm yellow
-  '#FB7185',  // 4. Coral (error) - pink/salmon
-  '#34D399',  // 5. Emerald (success) - bright green
-  '#22D3EE',  // 6. Aqua - turquoise
-  '#A78BFA',  // 7. Lavender - purple
-  '#FB923C'   // 8. Peach - orange
+  '#d4a574',  // 1. Gold Primary - main gold
+  '#e6b873',  // 2. Gold Bright - brighter gold
+  '#c9b397',  // 3. Gold Muted - muted gold
+  '#b8956d',  // 4. Bronze - deeper bronze
+  '#a67c52',  // 5. Caramel - warm caramel
+  '#8b7355',  // 6. Brown Gold - brown-gold
+  '#daa85e',  // 7. Amber Gold - amber variation
+  '#bd9968'   // 8. Copper Gold - copper tone
 ];
 
 // Blitz mode timer configuration

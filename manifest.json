@@ -1,11 +1,11 @@
 {
-  "name": "Schnitzel",
-  "short_name": "Schnitzel",
-  "description": "Your Yahtzee companion app",
+  "name": "Kniffel",
+  "short_name": "Kniffel",
+  "description": "Craft Game Lounge - Premium Yahtzee companion",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#0D1A14",
-  "theme_color": "#0D1A14",
+  "background_color": "#1a1512",
+  "theme_color": "#1a1512",
   "orientation": "portrait",
   "icons": [
     {

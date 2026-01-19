@@ -47,11 +47,11 @@ export function gameView(options = {}) {
 
   return `
     <div class="game-container ${S.isBlitzMode ? 'blitz-mode' : ''}">
-      <div class="game-sticky-header">
-        ${gameHeader(isPlayMode)}
+      ${gameHeader(isPlayMode)}
+      <div style="position:sticky;top:calc(52px);z-index:99;background:var(--bg-primary);border-bottom:2px solid var(--border-primary);box-shadow:0 4px 12px rgba(0,0,0,0.4)">
         ${playerCarousel(S.game, S.cur)}
       </div>
-      <div class="p-3" style="max-width:28rem;margin:0 auto">
+      <div style="padding:var(--space-md);max-width:28rem;margin:0 auto">
         ${diceArea()}
         ${S.bonusJustClaimed && !isPlayMode ? bonusReminderBanner() : ''}
         ${hasUpperCategories ? upperSection(scores, isPlayMode, possibleScores, canSelectScore) : ''}
@@ -118,30 +118,26 @@ function gameViewReview(game, playerIndex) {
     const scores = player.scores;
 
     return `
-      <div class="mb-6" style="scroll-margin-top: 120px;" id="player-${index}">
-        <div class="card p-4 mb-3" style="border-left:4px solid ${playerColor}">
-          <h2 class="font-black text-2xl" style="color:${playerColor}">${escapeHtml(player.name)}</h2>
-          <p class="text-gray-500 text-sm mt-1">Final Score: ${player.total}</p>
+      <div style="margin-bottom:var(--space-xl);scroll-margin-top:120px;" id="player-${index}">
+        <div class="box" style="border-left:4px solid ${playerColor};margin-bottom:var(--space-md)">
+          <h2 style="color:${playerColor};font-family:var(--font-display);font-size:var(--font-size-h3);font-weight:var(--font-weight-black);margin-bottom:var(--space-xs)">${escapeHtml(player.name)}</h2>
+          <p style="color:var(--muted);font-size:var(--font-size-small)">Final Score: ${player.total}</p>
         </div>
 
         ${upperSection(scores, 'review')}
         ${lowerSection(scores, 'review')}
 
-        <div class="total-gradient text-white rounded-2xl shadow-lg p-5 mb-4">
-          <div class="flex justify-between items-center">
-            <div>
-              <p style="opacity:0.7" class="text-sm">Grand Total</p>
-              <p class="text-4xl font-black">${player.total}</p>
-            </div>
-            <div class="text-sm" style="text-align:right;opacity:0.7">
-              <p>Upper: ${upTot(scores)} + ${upBonus(scores)}</p>
-              <p>Lower: ${loTot(scores)}</p>
-            </div>
+        <div class="total-card">
+          <div class="label">Grand Total</div>
+          <div class="value">${player.total}</div>
+          <div class="breakdown">
+            <span>Upper: ${upTot(scores)} + ${upBonus(scores)}</span>
+            <span>Lower: ${loTot(scores)}</span>
           </div>
         </div>
       </div>
     `;
-  }).join('<div class="divider my-6" style="border-top:2px dashed var(--border);opacity:0.3"></div>');
+  }).join('<div class="accent-line" style="margin:var(--space-xl) 0"></div>');
 
   // Standings
   const sortedPlayers = [...players].sort((a, b) => b.total - a.total);
@@ -154,22 +150,20 @@ function gameViewReview(game, playerIndex) {
         ${reviewHeader()}
       </div>
 
-      <div class="p-3" style="max-width:28rem;margin:0 auto">
-        <div class="glass rounded-xl p-3 mb-4">
-          <div class="flex items-center justify-center gap-2 flex-wrap">
-            <p class="text-white text-sm font-medium">
-              ${formatDate(game.date)} • ${formatTime(game.date)}${duration}
-            </p>
-            <span class="mode-badge ${modeBadge.cssClass}">
-              ${modeBadge.icon} ${modeBadge.label}
-            </span>
-          </div>
+      <div style="padding:var(--space-md);max-width:28rem;margin:0 auto">
+        <div class="session-info" style="margin-bottom:var(--space-md);flex-wrap:wrap;justify-content:center;gap:var(--space-sm)">
+          <span class="session-value">
+            ${formatDate(game.date)} • ${formatTime(game.date)}${duration}
+          </span>
+          <span class="mode-badge ${modeBadge.cssClass}">
+            ${modeBadge.icon} ${modeBadge.label}
+          </span>
         </div>
 
         ${allPlayersScores}
 
-        <div class="card p-4 mt-6">
-          <h3 class="font-bold mb-4 text-gray-800">📊 Final Standings</h3>
+        <div class="card" style="margin-top:var(--space-xl)">
+          <h3 class="section-title">📊 Final Standings</h3>
           ${standingsHtml}
         </div>
       </div>
@@ -181,17 +175,12 @@ function gameViewReview(game, playerIndex) {
  * Create game header
  */
 function gameHeader(isPlayMode) {
-  let title = isPlayMode ? '🎲 SCHNITZEL' : '📝 SCHNITZEL';
-  if (S.isBlitzMode) {
-    title = '⚡ BLITZ MODE';
-  }
-
   return `
-    <div class="header-gradient text-white p-3">
-      <div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">
-        <button class="btn-text text-white text-lg font-medium" onclick="pauseG()">← Back</button>
-        <h1 class="font-black text-lg">${title}</h1>
-        <button class="btn btn-small btn-green" onclick="finishG()">Finish ✓</button>
+    <div class="game-header">
+      <div class="game-header-content">
+        <button class="btn-text" onclick="pauseG()">← Back</button>
+        <h1>SCHNITZEL</h1>
+        <button class="btn-sm btn-primary" onclick="finishG()">Finish</button>
       </div>
     </div>
   `;
@@ -223,34 +212,27 @@ function upperSection(scores, isPlayMode, possibleScores, canSelectScore) {
     }
   }).join('');
 
-  const bonusClass = upBonus(scores) ? 'text-green-600' : 'text-gray-400';
-  const bonusText = upBonus(scores) ? '+35 ✓' : '0';
+  const bonusValue = upBonus(scores);
+  const bonusText = bonusValue ? '+35' : '0';
+  const bonusClass = bonusValue ? 'achieved' : 'not-achieved';
   const upperTotal = upTot(scores);
   const bonusAchieved = upperTotal >= 63;
+  const progressClass = bonusAchieved ? 'complete' : '';
 
   // Disable bonus display in blitz mode (not in review mode)
   const showBonus = isReviewMode || !S.isBlitzMode;
 
-  // Different header styling for review mode
-  const headerContent = isReviewMode
-    ? `<h2 class="font-black text-sm uppercase tracking-wide">Upper Section</h2>
-       <span class="text-sm px-2 py-1 rounded-full ${bonusAchieved ? 'glass" style="background:var(--link);color:var(--bg)' : 'glass'}">
-         ${upperTotal}/63
-       </span>`
-    : `<h2 class="font-black text-sm uppercase tracking-wide">Upper Section</h2>
-       <span class="font-black text-lg ${bonusAchieved ? 'opacity-100' : 'opacity-75'}">${upperTotal}/63</span>`;
-
   return `
-    <div class="card score-section-card">
-      <div class="flex items-center justify-between px-4 py-3 upper-gradient text-white">
-        ${headerContent}
+    <div class="card">
+      <div class="score-section-header">
+        <h2>Upper Section</h2>
+        <span class="section-progress ${progressClass}">${upperTotal}/63</span>
       </div>
       ${rows}
       ${showBonus ? `
-        <div class="flex items-center justify-between px-4 py-3"
-             style="background:var(--surface2);border-top:1px solid var(--border)">
-          <span class="font-bold text-blue-600">Upper Bonus</span>
-          <span class="font-black text-xl ${bonusClass}">${bonusText}</span>
+        <div class="score-section-footer">
+          <span class="label">Upper Bonus</span>
+          <span class="value ${bonusClass}">${bonusText}</span>
         </div>
       ` : ''}
     </div>
@@ -285,45 +267,37 @@ function lowerSection(scores, isPlayMode, possibleScores, canSelectScore) {
 
   // Disable Yahtzee bonus display in blitz mode (not in review mode)
   const hasYahtzee = isReviewMode || !S.isBlitzMode;
+  const bonusAmount = scores.bonus || 0;
 
   const yahtzeeBonus = hasYahtzee
-    ? (isReviewMode
-      ? `<div class="flex items-center justify-between px-4 py-3"
-             style="background:var(--surface2);border-top:1px solid var(--border)">
+    ? (isReviewMode || isPlayMode
+      ? `<div class="score-section-footer">
           <div>
-            <span class="font-bold text-yellow-600">Yahtzee Bonus</span>
-            <span class="text-yellow-600 text-xs ml-2">+100 each</span>
+            <span class="label">Yahtzee Bonus</span>
+            <span class="label" style="font-size:0.75rem;opacity:0.7;margin-left:0.5rem">+100 each</span>
           </div>
-          <span class="font-black text-xl text-yellow-600">+${scores.bonus || 0}</span>
+          <span class="value">+${bonusAmount}</span>
          </div>`
-      : (isPlayMode
-        ? `<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">
-            <div>
-              <span class="font-bold text-yellow-800">Yahtzee Bonus</span>
-              <span class="text-yellow-600 text-xs ml-2">+100 each</span>
-            </div>
-            <span class="font-black text-xl text-yellow-600">+${scores.bonus}</span>
-           </div>`
-        : `<div class="flex items-center justify-between px-4 py-3 bg-yellow-50">
-            <div>
-              <span class="font-bold text-yellow-800">Yahtzee Bonus</span>
-              <span class="text-yellow-600 text-xs ml-2">+100 each</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="font-black text-xl text-yellow-600">+${scores.bonus}</span>
-              <button class="btn btn-small ${scores.yahtzee === 50 ? 'btn-yellow' : 'btn-gray-dark'} font-bold"
-                      onclick="addBonus()" ${scores.yahtzee !== 50 ? 'disabled' : ''}>+100</button>
-            </div>
-           </div>`))
+      : `<div class="score-section-footer">
+          <div>
+            <span class="label">Yahtzee Bonus</span>
+            <span class="label" style="font-size:0.75rem;opacity:0.7;margin-left:0.5rem">+100 each</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.75rem">
+            <span class="value">+${bonusAmount}</span>
+            <button class="btn-sm ${scores.yahtzee === 50 ? 'btn-primary' : 'btn-secondary'}"
+                    onclick="addBonus()" ${scores.yahtzee !== 50 ? 'disabled' : ''}>+100</button>
+          </div>
+         </div>`)
     : '';
 
   const lowerTotal = loTot(scores);
 
   return `
-    <div class="card score-section-card" style="margin-top: 1.5rem;">
-      <div class="flex items-center justify-between px-4 py-3 lower-gradient text-white">
-        <h2 class="font-black text-sm uppercase tracking-wide">Lower Section</h2>
-        <span class="font-black text-lg">${lowerTotal}</span>
+    <div class="card" style="margin-top: var(--space-lg);">
+      <div class="score-section-header">
+        <h2>Lower Section</h2>
+        <span class="section-progress">${lowerTotal}</span>
       </div>
       ${rows}
       ${yahtzeeBonus}
@@ -336,11 +310,11 @@ function lowerSection(scores, isPlayMode, possibleScores, canSelectScore) {
  */
 function reviewHeader() {
   return `
-    <div class="header-gradient text-white p-3">
-      <div class="flex justify-between items-center" style="max-width:28rem;margin:0 auto">
-        <button class="btn-text text-white text-lg font-medium" onclick="closeHistoryDetail()">← Back</button>
-        <h1 class="font-black text-lg">📖 GAME REVIEW</h1>
-        <div class="text-xs" style="opacity:0.8">Read Only</div>
+    <div class="game-header">
+      <div class="game-header-content">
+        <button class="btn-text" onclick="closeHistoryDetail()">← Back</button>
+        <h1>Review</h1>
+        <div style="width:4rem"></div>
       </div>
     </div>
   `;
@@ -351,16 +325,16 @@ function reviewHeader() {
  */
 function finishConfirmModal() {
   return modal(`
-    <div class="text-center mb-4">
-      <div class="text-5xl mb-3">🎉</div>
-      <h3 class="text-2xl font-black text-gray-800 mb-2">Game Complete!</h3>
-      <p class="text-gray-600">All scores have been entered.</p>
+    <div class="text-center" style="margin-bottom:var(--space-lg)">
+      <div style="font-size:4rem;margin-bottom:var(--space-md)">🎉</div>
+      <h3 style="font-size:var(--font-size-h3);font-weight:var(--font-weight-black);color:var(--text);margin-bottom:var(--space-xs);font-family:var(--font-body)">Game Complete!</h3>
+      <p style="color:var(--text-secondary);font-family:var(--font-body)">All scores have been entered.</p>
     </div>
     <div class="flex flex-col gap-3">
-      <button class="btn btn-green font-bold py-4 px-4 rounded-xl w-full text-lg" onclick="confirmFinish()">
+      <button class="btn-primary w-full" onclick="confirmFinish()">
         🏆 Reveal Winners!
       </button>
-      <button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.finishModal=false;R()">
+      <button class="btn-secondary w-full" onclick="S.finishModal=false;R()">
         Keep Playing
       </button>
     </div>
@@ -377,19 +351,19 @@ function earlyFinishModal() {
   }, 0);
 
   return modal(`
-    <div class="text-center mb-4">
-      <div class="text-5xl mb-3">⚠️</div>
-      <h3 class="text-2xl font-black text-gray-800 mb-2">Game Not Complete</h3>
-      <p class="text-gray-600 mb-2">
-        There are still <span class="font-bold text-red-600">${emptyCount} empty scores</span>.
+    <div class="text-center" style="margin-bottom:var(--space-lg)">
+      <div style="font-size:4rem;margin-bottom:var(--space-md)">⚠️</div>
+      <h3 style="font-size:var(--font-size-h3);font-weight:var(--font-weight-black);color:var(--text);margin-bottom:var(--space-xs);font-family:var(--font-body)">Game Not Complete</h3>
+      <p style="color:var(--text-secondary);margin-bottom:var(--space-xs);font-family:var(--font-body)">
+        There are still <span style="font-weight:var(--font-weight-bold);color:var(--error)">${emptyCount} empty scores</span>.
       </p>
-      <p class="text-gray-500 text-sm">Are you sure you want to finish early?</p>
+      <p style="color:var(--muted);font-size:var(--font-size-small);font-family:var(--font-body)">Are you sure you want to finish early?</p>
     </div>
     <div class="flex flex-col gap-3">
-      <button class="btn btn-orange font-bold py-4 px-4 rounded-xl w-full text-lg" onclick="confirmEarlyFinish()">
+      <button class="btn-primary w-full" onclick="confirmEarlyFinish()">
         Finish Anyway
       </button>
-      <button class="btn btn-gray font-medium py-3 px-4 rounded-xl w-full" onclick="S.earlyFinishModal=false;R()">
+      <button class="btn-secondary w-full" onclick="S.earlyFinishModal=false;R()">
         Keep Playing
       </button>
     </div>
@@ -410,44 +384,43 @@ function playerDetailsModal(player) {
   const playerColor = color(player.id);
 
   return modal(`
-    <button class="btn-text text-white text-sm" style="position:absolute;top:1rem;right:1rem;opacity:0.8"
+    <button class="btn-text" style="position:absolute;top:var(--space-md);right:var(--space-md)"
             onclick="S.playerDetailsModal=false;R()">✕</button>
-    <div class="text-center mb-6">
-      <h3 class="text-3xl font-black mb-2">${escapeHtml(player.name)}</h3>
-      <p class="text-white" style="opacity:0.8">Player Details</p>
+    <div class="text-center" style="margin-bottom:var(--space-lg)">
+      <h3 style="font-size:var(--font-size-h2);font-weight:var(--font-weight-black);color:var(--text);margin-bottom:var(--space-xs);font-family:var(--font-display)">${escapeHtml(player.name)}</h3>
+      <p style="color:var(--text-secondary);font-family:var(--font-body)">Player Details</p>
     </div>
-    <div class="flex flex-col gap-4"
-         style="background:rgba(255,255,255,0.1);border-radius:1rem;padding:1.5rem;backdrop-filter:blur(10px)">
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9">Grand Total</span>
-        <span class="text-4xl font-black">${grandTotal}</span>
+    <div class="box" style="padding:var(--space-lg)">
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-md)">
+        <span style="color:var(--text-secondary);font-family:var(--font-body)">Grand Total</span>
+        <span style="font-size:var(--font-size-h2);font-weight:var(--font-weight-black);color:var(--gold-bright);font-family:var(--font-display);letter-spacing:var(--letter-spacing-tight)">${grandTotal}</span>
       </div>
-      <div class="divider" style="background:rgba(255,255,255,0.2)"></div>
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9">Upper Section</span>
-        <span class="text-2xl font-bold">${upperTotal}</span>
+      <div class="accent-line"></div>
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-sm)">
+        <span style="color:var(--text-secondary);font-family:var(--font-body)">Upper Section</span>
+        <span style="font-size:var(--font-size-number-md);font-weight:var(--font-weight-bold);color:var(--gold-pale);font-family:var(--font-display)">${upperTotal}</span>
       </div>
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9;padding-left:1rem">Base Score</span>
-        <span class="text-xl">${upperTotal}</span>
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-sm);padding-left:var(--space-md)">
+        <span style="color:var(--muted);font-size:var(--font-size-small);font-family:var(--font-body)">Base Score</span>
+        <span style="font-size:var(--font-size-body);color:var(--text-secondary);font-family:var(--font-display)">${upperTotal}</span>
       </div>
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9;padding-left:1rem">Bonus</span>
-        <span class="text-xl">${upperBonusVal ? '+35 ✓' : '0'}</span>
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-md);padding-left:var(--space-md)">
+        <span style="color:var(--muted);font-size:var(--font-size-small);font-family:var(--font-body)">Bonus</span>
+        <span style="font-size:var(--font-size-body);color:var(--text-secondary);font-family:var(--font-display)">${upperBonusVal ? '+35 ✓' : '0'}</span>
       </div>
-      <div class="divider" style="background:rgba(255,255,255,0.2)"></div>
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9">Lower Section</span>
-        <span class="text-2xl font-bold">${lowerTotal}</span>
+      <div class="accent-line"></div>
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-sm)">
+        <span style="color:var(--text-secondary);font-family:var(--font-body)">Lower Section</span>
+        <span style="font-size:var(--font-size-number-md);font-weight:var(--font-weight-bold);color:var(--gold-pale);font-family:var(--font-display)">${lowerTotal}</span>
       </div>
-      <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9;padding-left:1rem">Yahtzee Bonus</span>
-        <span class="text-xl">+${scores.bonus || 0}</span>
+      <div class="flex justify-between items-center" style="margin-bottom:var(--space-md);padding-left:var(--space-md)">
+        <span style="color:var(--muted);font-size:var(--font-size-small);font-family:var(--font-body)">Yahtzee Bonus</span>
+        <span style="font-size:var(--font-size-body);color:var(--text-secondary);font-family:var(--font-display)">+${scores.bonus || 0}</span>
       </div>
-      <div class="divider" style="background:rgba(255,255,255,0.2)"></div>
+      <div class="accent-line"></div>
       <div class="flex justify-between items-center">
-        <span class="text-white" style="opacity:0.9">Progress</span>
-        <span class="text-xl font-bold">${filledScores}/${totalScores}</span>
+        <span style="color:var(--text-secondary);font-family:var(--font-body)">Progress</span>
+        <span style="font-size:var(--font-size-number-sm);font-weight:var(--font-weight-bold);color:var(--gold-primary);font-family:var(--font-display)">${filledScores}/${totalScores}</span>
       </div>
     </div>
   `, 'S.playerDetailsModal=false;R()', '',
@@ -460,17 +433,17 @@ function playerDetailsModal(player) {
  */
 function bonusReminderBanner() {
   return `
-    <div style="margin: 1rem 0 1rem 0; padding: 1rem; border-radius: 0.75rem; text-align: center;
-                background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
-                border: 2px solid #FBBF24; box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+    <div class="card" style="margin: 1rem 0 1rem 0; padding: 1rem; text-align: center;
+                background: linear-gradient(135deg, rgba(230, 184, 115, 0.3) 0%, rgba(218, 168, 94, 0.3) 100%);
+                border: 2px solid var(--gold-primary); box-shadow: 0 4px 20px var(--focusRing);
                 animation: pulse 1.5s ease-in-out infinite;">
-      <div style="font-size: 1.25rem; font-weight: 800; color: #78350F; margin-bottom: 0.25rem;">
+      <div style="font-size: 1.25rem; font-weight: 800; color: var(--gold-bright); margin-bottom: 0.25rem;">
         ✅ Bonus Claimed! +100
       </div>
-      <div style="font-size: 0.875rem; color: #92400E; font-weight: 600;">
+      <div style="font-size: 0.875rem; color: var(--text); font-weight: 600;">
         ⬇️ Now score your roll in any category below ⬇️
       </div>
-      <div style="font-size: 0.75rem; color: #92400E; opacity: 0.8; margin-top: 0.25rem;">
+      <div style="font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem;">
         (Use as joker: Chance, 3/4 of a kind, etc.)
       </div>
     </div>

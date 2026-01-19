@@ -1,4 +1,4 @@
-/* Menu Components - Hamburger and Side Menu */
+/* Menu Components - Craft Game Lounge */
 
 /* Hamburger menu button */
 .hamburger-btn {
@@ -8,22 +8,22 @@
   z-index: 1000;
   width: 44px;
   height: 44px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--rMd);
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-primary);
+  border-radius: var(--rSm);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
   box-shadow: var(--shadowSm);
-  color: var(--text);
+  color: var(--gold-primary);
   font-size: 1.25rem;
 }
 
 .hamburger-btn:hover {
-  background: var(--surface2Hover);
-  border-color: var(--borderAccent);
+  background: var(--hover-bg);
+  border-color: var(--gold-primary);
 }
 
 .hamburger-btn:active {
@@ -37,8 +37,8 @@
   right: 0;
   bottom: 0;
   width: 280px;
-  background: var(--surface);
-  border-left: 1px solid var(--border);
+  background: var(--bg-secondary);
+  border-left: 2px solid var(--border-primary);
   box-shadow: var(--shadowLg);
   z-index: 999;
   transform: translateX(100%);
@@ -68,7 +68,7 @@
 
 .side-menu-header {
   padding: 1.5rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .side-menu-content {
@@ -76,20 +76,22 @@
 }
 
 .side-menu-item {
-  background: var(--surface2);
+  background: transparent;
   color: var(--text);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   padding: 1rem;
-  border-radius: var(--rMd);
+  border-radius: var(--rSm);
   width: 100%;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border-primary);
   margin-bottom: 0.75rem;
   text-align: left;
+  font-family: var(--font-body);
+  transition: all var(--transition-normal);
 }
 
 .side-menu-item:hover {
-  background: var(--surface2Hover);
-  border-color: var(--borderAccent);
+  background: var(--hover-bg);
+  border-color: var(--gold-primary);
 }
 
 .side-menu-footer {
@@ -97,7 +99,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  border-top: 1px solid var(--border);
-  background: var(--surface);
+  border-top: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
   padding-bottom: env(safe-area-inset-bottom);
 }
+

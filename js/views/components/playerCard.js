@@ -19,7 +19,7 @@ export function activePlayerCard(player, mode = 'active') {
 
   return `
     <div class="player-card player-card-active"
-         style="background:linear-gradient(135deg, ${playerColor} 0%, ${playerColor}dd 100%)"
+         style="border-left-color:${playerColor}"
          ${onClick}>
       <div class="player-card-header">
         <h3 class="player-name">${escapeHtml(player.name)}</h3>

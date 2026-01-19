@@ -10,14 +10,136 @@ This document provides comprehensive instructions for managing, updating, and ma
 
 ## 📱 Table of Contents
 
-1. [Game Modes](#game-modes)
-2. [GitHub Pages Setup](#github-pages-setup)
-3. [Installing the PWA](#installing-the-pwa)
-4. [Updating the PWA](#updating-the-pwa)
-5. [Export & Import Data](#export--import-data)
-6. [Data Safety & localStorage](#data-safety--localstorage)
-7. [Troubleshooting](#troubleshooting)
-8. [Development Workflow](#development-workflow)
+1. [Design System](#design-system)
+2. [CSS Reference](#css-reference)
+3. [UX Patterns](#ux-patterns)
+4. [Game Modes](#game-modes)
+5. [GitHub Pages Setup](#github-pages-setup)
+6. [Installing the PWA](#installing-the-pwa)
+7. [Updating the PWA](#updating-the-pwa)
+8. [Export & Import Data](#export--import-data)
+9. [Data Safety & localStorage](#data-safety--localstorage)
+10. [Troubleshooting](#troubleshooting)
+11. [Development Workflow](#development-workflow)
+
+---
+
+## 🎨 Design System
+
+The Kniffel app follows the **"Craft Game Lounge"** design system - a modern board game café aesthetic that balances contemporary design with warm, inviting atmosphere.
+
+### For Developers
+
+When making UI changes or adding new features, consult **[DESIGN.md](DESIGN.md)** for comprehensive guidelines:
+
+- **Color tokens** - All colors, backgrounds, and semantic colors
+- **Typography** - Font families, sizes, weights, and usage rules
+- **Components** - Cards, buttons, score rows, dice display, etc.
+- **Spacing & Layout** - Consistent spacing scale and layout patterns
+- **Motion** - Animation timing and interaction patterns
+- **Anti-patterns** - What NOT to do
+
+### Key Principles
+
+1. **Contemporary Warmth** - Clean, sophisticated design with cozy feel
+2. **Premium Simplicity** - Upscale through restraint, not decoration
+3. **Typographic Hierarchy** - Let typography create visual interest
+4. **Consistent Patterns** - Reuse existing components and tokens
+
+**Always reference [DESIGN.md](DESIGN.md) before making visual changes to ensure consistency.**
+
+---
+
+## 📐 CSS Reference
+
+Complete technical CSS documentation including all custom properties, component patterns, and implementation details.
+
+### For Developers
+
+When implementing components or debugging styles, consult **[CSS.md](CSS.md)** for technical specifications:
+
+- **CSS Custom Properties** - All tokens with actual variable names
+- **Architecture** - File organization and import order
+- **Component Patterns** - Card, button, score row, dice implementations
+- **Utility Classes** - Layout, spacing, typography utilities
+- **Color Mappings** - Legacy Tailwind-style classes mapped to theme
+- **Naming Conventions** - When to use abbreviations vs full names
+- **Browser Support** - Features used and compatibility
+
+### Implementation Status
+
+**✅ Implemented:**
+- All design tokens as CSS variables
+- Modular component architecture
+- Utility-first CSS system
+- Responsive breakpoints
+- PWA-safe area insets
+
+**⚠️ Missing (should be added):**
+- Z-index CSS variables (currently hardcoded)
+- `@media (prefers-reduced-motion)` support
+- `:focus-visible` for keyboard navigation
+- `@media (prefers-contrast: high)` support
+
+### Quick Reference
+
+```css
+/* Typography */
+--font-display: 'Playfair Display', serif;
+--font-body: 'DM Sans', sans-serif;
+
+/* Colors */
+--gold-primary: #d4a574;
+--gold-bright: #e6b873;
+--text-primary: #f5ede3;
+--bg-primary: #1a1512;
+
+/* Spacing */
+--space-xs: 6px;   --space-sm: 12px;
+--space-md: 20px;  --space-lg: 28px;
+
+/* Radius & Shadows */
+--rSm: 8px;  --rMd: 12px;  --rLg: 16px;
+--shadowMd: 0 8px 24px rgba(0, 0, 0, 0.6);
+```
+
+**Always reference [CSS.md](CSS.md) for complete variable listings and component implementations.**
+
+---
+
+## 🎯 UX Patterns
+
+The Kniffel app follows user-centered interaction patterns that prioritize immediate feedback, intuitive controls, and delightful micro-interactions.
+
+### For Developers
+
+When implementing new features or modifying interactions, consult **[UX.md](UX.md)** for comprehensive guidelines:
+
+- **Touch Behavior** - Minimum tap targets, no-delay interactions
+- **Navigation Patterns** - Mode switching, screen flow, back navigation
+- **Game Flow** - Starting games, turn progression, completion
+- **Scoring Interface** - Entry methods, validation, display states
+- **Dice Interactions** - Rolling methods, holding, visual states
+- **Data Patterns** - Auto-save, recovery, export/import
+- **Feedback Patterns** - Success, error, loading states
+- **Confirmation Dialogs** - When to confirm vs when not to
+- **Accessibility** - Screen readers, keyboard nav, motion preferences
+
+### Key Principles
+
+1. **Immediate Feedback** - All interactions respond within 100ms
+2. **Proportional Response** - Small actions get subtle feedback, big actions get clear feedback
+3. **Auto-Save Everything** - Never ask users to manually save
+4. **Confirm Destructive Actions** - But don't interrupt gameplay flow
+5. **Touch-First Design** - 44×44px minimum, haptic feedback, gesture support
+6. **Accessibility by Default** - Focus indicators, contrast, keyboard support
+
+### Implementation Status
+
+- ✅ **7/8 patterns fully implemented** (Touch, Mode Switching, Auto-Save, Dice, Scores, Feedback, Confirmations)
+- ⚠️ **Accessibility partially implemented** (focus indicators present, ARIA support needed)
+
+**Always reference [UX.md](UX.md) before changing interaction patterns to maintain consistency.**
 
 ---
 

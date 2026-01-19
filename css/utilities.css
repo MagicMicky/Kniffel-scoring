@@ -3,12 +3,6 @@
 /* Text alignment */
 .text-center { text-align: center; }
 
-/* Margin utilities */
-.mb-2 { margin-bottom: 0.5rem; }
-.mb-4 { margin-bottom: 1rem; }
-.mb-6 { margin-bottom: 1.5rem; }
-.mt-4 { margin-top: 1rem; }
-
 /* Padding utilities */
 .p-3 { padding: 0.75rem; }
 .p-4 { padding: 1rem; }
@@ -56,16 +50,6 @@
 .rounded-lg { border-radius: var(--rLg); }
 .rounded-xl { border-radius: var(--rXl); }
 .rounded-full { border-radius: var(--rPill); }
-
-/* Font sizes */
-.text-xs { font-size: 0.75rem; }
-.text-sm { font-size: 0.875rem; }
-.text-lg { font-size: 1.125rem; }
-.text-xl { font-size: 1.25rem; }
-.text-2xl { font-size: 1.5rem; }
-.text-3xl { font-size: 1.875rem; }
-.text-4xl { font-size: 2.25rem; }
-.text-5xl { font-size: 3rem; }
 
 /* Font weights */
 .font-medium { font-weight: 500; }
@@ -172,4 +156,75 @@
 
 .mode-select-btn.mode-badge-score:hover {
   background: linear-gradient(135deg, rgba(184, 149, 109, 0.3), rgba(166, 124, 82, 0.3));
+}
+
+/* ========================================
+   DESIGN TOKEN UTILITIES
+   Semantic utilities using design system tokens
+   ======================================== */
+
+/* Text Colors (using design tokens) */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-accent { color: var(--text-accent); }
+.text-gold { color: var(--gold-primary); }
+.text-gold-bright { color: var(--gold-bright); }
+.text-success { color: var(--success); }
+.text-danger { color: var(--error); }
+
+/* Font Families (already exist, kept for completeness) */
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+
+/* Font Weights (already exist, kept for completeness) */
+.font-regular { font-weight: var(--font-weight-regular); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-black { font-weight: var(--font-weight-black); }
+
+/* Text Sizes (token-based, alternative to Tailwind rem-based) */
+.text-size-xs { font-size: var(--font-size-tiny); }
+.text-size-sm { font-size: var(--font-size-small); }
+.text-size-base { font-size: var(--font-size-body); }
+.text-size-lg { font-size: var(--font-size-number-sm); }
+.text-size-xl { font-size: var(--font-size-number-md); }
+.text-size-2xl { font-size: var(--font-size-h3); }
+.text-size-3xl { font-size: var(--font-size-h2); }
+.text-size-4xl { font-size: var(--font-size-h1); }
+
+/* Spacing Utilities (token-based, alternative to Tailwind) */
+.mt-xs { margin-top: var(--space-xs); }
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mt-lg { margin-top: var(--space-lg); }
+.mt-xl { margin-top: var(--space-xl); }
+.mt-2xl { margin-top: var(--space-2xl); }
+.mt-3xl { margin-top: var(--space-3xl); }
+
+.mb-xs { margin-bottom: var(--space-xs); }
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }
+.mb-xl { margin-bottom: var(--space-xl); }
+.mb-2xl { margin-bottom: var(--space-2xl); }
+.mb-3xl { margin-bottom: var(--space-3xl); }
+
+.ml-xs { margin-left: var(--space-xs); }
+.ml-sm { margin-left: var(--space-sm); }
+.ml-md { margin-left: var(--space-md); }
+.ml-lg { margin-left: var(--space-lg); }
+.ml-xl { margin-left: var(--space-xl); }
+
+.mr-xs { margin-right: var(--space-xs); }
+.mr-sm { margin-right: var(--space-sm); }
+.mr-md { margin-right: var(--space-md); }
+.mr-lg { margin-right: var(--space-lg); }
+.mr-xl { margin-right: var(--space-xl); }
+
+/* Uppercase Label Utility */
+.label {
+  font-size: var(--font-size-tiny);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
 }

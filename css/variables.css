@@ -5,8 +5,8 @@
 
 :root {
   /* Typography */
-  --font-display: 'Playfair Display', serif;
-  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
 
   /* Font Sizes - Headlines */
   --font-size-h1: 64px;
@@ -33,6 +33,8 @@
   /* Letter Spacing */
   --letter-spacing-tight: -2px;
   --letter-spacing-normal: -1px;
+  --letter-spacing-none: 0;
+  --letter-spacing-slight: 0.5px;
   --letter-spacing-wide: 2px;
   --letter-spacing-wider: 3px;
 
@@ -121,6 +123,8 @@
   --space-md: 20px;
   --space-lg: 28px;
   --space-xl: 40px;
+  --space-2xl: 32px;
+  --space-3xl: 40px;
 
   /* Legacy spacing mappings */
   --s1: 4px;
@@ -153,4 +157,24 @@
   --transition-fast: 0.15s ease;
   --transition-normal: 0.2s ease;
   --transition-slow: 0.3s ease;
+
+  /* Z-Index Scale */
+  --z-base: 0;
+  --z-elevated: 1;
+  --z-overlay: 10;
+  --z-sticky: 20;
+  --z-modal-backdrop: 50;
+  --z-modal: 100;
+  --z-menu: 1000;
+  --z-toast: 9999;
+}
+
+/* ========================================
+   ACCESSIBILITY - HIGH CONTRAST MODE
+   ======================================== */
+@media (prefers-contrast: high) {
+  :root {
+    --border-accent: rgba(212, 165, 116, 0.3);
+    --border-subtle: rgba(212, 165, 116, 0.4);
+  }
 }

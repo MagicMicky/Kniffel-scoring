@@ -352,3 +352,44 @@
   transform: scale(0.9);
 }
 
+/* ========================================
+   ACCESSIBILITY - FOCUS-VISIBLE
+   Hide focus outline for mouse, show for keyboard
+   ======================================== */
+
+/* Hide focus for mouse users */
+.btn:focus:not(:focus-visible),
+.btn-primary:focus:not(:focus-visible),
+.btn-secondary:focus:not(:focus-visible),
+.btn-danger:focus:not(:focus-visible),
+.btn-resume:focus:not(:focus-visible),
+.btn-text:focus:not(:focus-visible),
+.game-mode-btn:focus:not(:focus-visible),
+.roll-btn:focus:not(:focus-visible),
+.btn-icon:focus:not(:focus-visible),
+.btn-icon-sm:focus:not(:focus-visible),
+.clear-btn:focus:not(:focus-visible),
+.order-btn:focus:not(:focus-visible),
+.delete-btn:focus:not(:focus-visible),
+.mode-variant-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Show focus only for keyboard users */
+.btn:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-danger:focus-visible,
+.btn-resume:focus-visible,
+.btn-text:focus-visible,
+.game-mode-btn:focus-visible,
+.roll-btn:focus-visible,
+.btn-icon:focus-visible,
+.btn-icon-sm:focus-visible,
+.clear-btn:focus-visible,
+.order-btn:focus-visible,
+.delete-btn:focus-visible,
+.mode-variant-btn:focus-visible {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
+}

@@ -216,3 +216,21 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
   font-family: var(--font-body);
 }
+
+/* ========================================
+   ACCESSIBILITY - FOCUS-VISIBLE
+   Hide focus outline for mouse, show for keyboard
+   ======================================== */
+
+/* Hide focus for mouse users */
+.score-btn:focus:not(:focus-visible),
+.score-btn-play:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Show focus only for keyboard users */
+.score-btn:focus-visible,
+.score-btn-play:focus-visible {
+  outline: 2px solid var(--gold-primary);
+  outline-offset: 2px;
+}

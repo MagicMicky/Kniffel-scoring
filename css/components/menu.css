@@ -5,7 +5,7 @@
   position: fixed;
   top: calc(env(safe-area-inset-top) + 1rem);
   right: 1rem;
-  z-index: 1000;
+  z-index: var(--z-menu);
   width: 44px;
   height: 44px;
   background: var(--bg-secondary);
@@ -40,7 +40,7 @@
   background: var(--bg-secondary);
   border-left: 2px solid var(--border-primary);
   box-shadow: var(--shadowLg);
-  z-index: 999;
+  z-index: calc(var(--z-menu) - 1);
   transform: translateX(100%);
   transition: transform 0.3s ease;
   padding-top: env(safe-area-inset-top);
@@ -55,7 +55,7 @@
   position: fixed;
   inset: 0;
   background: var(--scrim);
-  z-index: 998;
+  z-index: calc(var(--z-menu) - 2);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;

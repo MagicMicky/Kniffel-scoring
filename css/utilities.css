@@ -72,25 +72,26 @@
 .font-bold { font-weight: 700; }
 .font-black { font-weight: 900; }
 
-/* Text colors - mapped to design tokens */
+/* Text colors - mapped to Craft Game Lounge theme */
 .text-white { color: var(--text); }
 .text-gray-400 { color: var(--muted); }
-.text-gray-500 { color: var(--muted); }
-.text-gray-600 { color: var(--border); }
+.text-gray-500 { color: var(--text-secondary); }
+.text-gray-600 { color: var(--text-secondary); }
 .text-gray-800 { color: var(--text); }
-.text-purple-200 { color: var(--link); }
-.text-purple-600 { color: var(--accent); }
-.text-purple-700 { color: var(--accentDark); }
-.text-blue-600 { color: var(--link); }
-.text-blue-700 { color: var(--linkHover); }
-.text-blue-800 { color: var(--accent); }
-.text-green-600 { color: var(--link); }
-.text-green-700 { color: var(--linkHover); }
+.text-purple-200 { color: var(--gold-muted); }
+.text-purple-600 { color: var(--gold-primary); }
+.text-purple-700 { color: var(--gold-brown); }
+.text-blue-600 { color: var(--gold-bright); }
+.text-blue-700 { color: var(--gold-primary); }
+.text-blue-800 { color: var(--gold-brown); }
+.text-green-600 { color: var(--gold-bright); }
+.text-green-700 { color: var(--gold-primary); }
+.text-yellow-300 { color: var(--gold-pale); }
+.text-yellow-400 { color: var(--gold-pale); }
+.text-yellow-600 { color: var(--gold-primary); }
+.text-yellow-800 { color: var(--gold-brown); }
 .text-red-400 { color: var(--error); }
 .text-red-500 { color: var(--error); }
-.text-yellow-400 { color: var(--linkHover); }
-.text-yellow-600 { color: var(--accent); }
-.text-yellow-800 { color: var(--accentDark); }
 
 /* Background colors */
 .bg-gray-100 { background-color: var(--surface2); }

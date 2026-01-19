@@ -1,106 +1,154 @@
-/* Score Components */
+/* Score Components - Craft Game Lounge */
+
+/* Score row styling with left border accent on hover */
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--border-accent);
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.score-row:hover {
+  padding-left: var(--space-sm);
+  margin-left: calc(-1 * var(--space-sm));
+  border-left: 3px solid var(--gold-primary);
+}
+
+.score-row:last-child {
+  border-bottom: none;
+}
 
 /* Score buttons */
 .score-btn {
   min-width: 4rem;
   padding: 0.5rem 1rem;
-  border-radius: var(--rMd);
-  font-weight: 700;
+  border-radius: var(--rSm);
+  font-weight: var(--font-weight-bold);
   font-size: 1.125rem;
   border: none;
   cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
+  transition: all var(--transition-normal);
+  font-family: var(--font-display);
+  letter-spacing: var(--letter-spacing-normal);
 }
 
 .score-btn:active { transform: scale(0.95); }
 .score-btn:hover { opacity: 0.9; }
 
 .score-filled-blue {
-  background-color: rgba(122, 231, 208, 0.15);
-  color: var(--link);
-  border: 1px solid var(--link);
+  background-color: rgba(212, 165, 116, 0.15);
+  color: var(--gold-bright);
+  border: 1px solid var(--gold-bright);
 }
 
 .score-filled-purple {
-  background-color: var(--accentSubtle);
-  color: var(--accent);
-  border: 1px solid var(--accent);
+  background-color: var(--stat-bg-overlay);
+  color: var(--gold-primary);
+  border: 1px solid var(--gold-primary);
 }
 
 .score-empty {
-  background-color: var(--surface2);
+  background-color: transparent;
   color: var(--muted);
   border: 2px dashed var(--border);
 }
 
 .score-empty:hover {
-  background-color: var(--surface2Hover);
-  border-color: var(--borderAccent);
+  background-color: var(--hover-bg);
+  border-color: var(--border-subtle);
 }
 
 /* Picker buttons */
 .picker-btn {
-  background-color: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--rMd);
+  background-color: transparent;
+  border: 2px solid var(--border);
+  border-radius: var(--rSm);
   padding: 0.75rem;
   cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
+  transition: all var(--transition-normal);
+  font-family: var(--font-body);
+  color: var(--text);
 }
 
-.picker-btn:hover { background-color: var(--surface2Hover); }
-.picker-btn:active { background-color: var(--surface2Pressed); transform: scale(0.95); }
+.picker-btn:hover {
+  background-color: var(--hover-bg);
+  border-color: var(--border-subtle);
+}
+.picker-btn:active {
+  background-color: var(--active-bg);
+  transform: scale(0.95);
+}
 
 .picker-btn-green {
-  background-color: rgba(122, 231, 208, 0.12);
-  border: 2px solid var(--link);
-  border-radius: var(--rMd);
+  background-color: rgba(212, 165, 116, 0.12);
+  border: 2px solid var(--gold-bright);
+  border-radius: var(--rSm);
   cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
+  transition: all var(--transition-normal);
+  font-family: var(--font-body);
+  color: var(--gold-bright);
 }
 
-.picker-btn-green:hover { background-color: rgba(122, 231, 208, 0.2); }
-.picker-btn-green:active { background-color: rgba(122, 231, 208, 0.3); transform: scale(0.95); }
+.picker-btn-green:hover {
+  background-color: rgba(212, 165, 116, 0.2);
+}
+.picker-btn-green:active {
+  background-color: rgba(212, 165, 116, 0.3);
+  transform: scale(0.95);
+}
 
 .picker-btn-red {
-  background-color: rgba(251, 113, 133, 0.12);
+  background-color: rgba(230, 115, 115, 0.12);
   border: 2px solid var(--error);
-  border-radius: var(--rMd);
+  border-radius: var(--rSm);
   cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
+  transition: all var(--transition-normal);
+  font-family: var(--font-body);
+  color: var(--error);
 }
 
-.picker-btn-red:hover { background-color: rgba(251, 113, 133, 0.2); }
-.picker-btn-red:active { background-color: rgba(251, 113, 133, 0.3); transform: scale(0.95); }
+.picker-btn-red:hover {
+  background-color: rgba(230, 115, 115, 0.2);
+}
+.picker-btn-red:active {
+  background-color: rgba(230, 115, 115, 0.3);
+  transform: scale(0.95);
+}
 
 .picker-btn-purple {
-  background-color: var(--accentSubtle);
-  border: 1px solid var(--accent);
+  background-color: var(--stat-bg-overlay);
+  border: 2px solid var(--gold-primary);
   border-radius: var(--rSm);
   padding: 0.5rem;
   cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
+  transition: all var(--transition-normal);
+  font-family: var(--font-body);
+  color: var(--gold-primary);
 }
 
-.picker-btn-purple:hover { background-color: rgba(57, 198, 167, 0.2); }
-.picker-btn-purple:active { background-color: rgba(57, 198, 167, 0.3); transform: scale(0.95); }
+.picker-btn-purple:hover {
+  background-color: var(--hover-bg);
+}
+.picker-btn-purple:active {
+  background-color: var(--active-bg);
+  transform: scale(0.95);
+}
 
 /* Play mode category button */
 .score-btn-play {
   min-width: 4rem;
   padding: 0.5rem 1rem;
-  border-radius: 0.75rem;
-  font-weight: 700;
+  border-radius: var(--rSm);
+  font-weight: var(--font-weight-bold);
   font-size: 1.125rem;
   border: none;
   cursor: pointer;
-  transition: all 0.15s;
-  font-family: inherit;
+  transition: all var(--transition-normal);
+  font-family: var(--font-display);
+  letter-spacing: var(--letter-spacing-normal);
 }
 
 .score-btn-play:active {
@@ -113,39 +161,40 @@
 }
 
 .score-available {
-  background: rgba(57, 198, 167, 0.15);
-  color: var(--link);
-  border: 2px solid var(--link);
+  background: rgba(212, 165, 116, 0.15);
+  color: var(--gold-bright);
+  border: 2px solid var(--gold-bright);
 }
 
 .score-zero-only {
-  background: rgba(251, 113, 133, 0.15);
+  background: rgba(230, 115, 115, 0.15);
   color: var(--error);
   border: 2px dashed var(--error);
 }
 
 /* Score suggestion styles */
 .score-suggestion {
-  background: rgba(57, 198, 167, 0.15);
-  border: 2px solid var(--link);
+  background: rgba(212, 165, 116, 0.15);
+  border: 2px solid var(--gold-bright);
 }
 
 .score-suggestion-text {
-  color: var(--link);
-  font-weight: 700;
+  color: var(--gold-bright);
+  font-weight: var(--font-weight-bold);
   font-size: 0.75rem;
 }
 
 /* Standing bars */
 .standing-bar-end {
   height: 3.5rem;
-  border-radius: 0.75rem;
+  border-radius: var(--rSm);
   display: flex;
   align-items: center;
-  padding: 0 0.75rem;
-  color: white;
-  font-weight: 700;
+  padding: 0 var(--space-md);
+  color: var(--onAccent);
+  font-weight: var(--font-weight-bold);
   font-size: 1rem;
   transition: width 1s ease-out;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  font-family: var(--font-body);
 }

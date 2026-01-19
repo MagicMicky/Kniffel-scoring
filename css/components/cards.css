@@ -1,13 +1,114 @@
-/* Card Components */
+/* Card Components - Craft Game Lounge */
 
 .card {
-  background: var(--surface);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
   border-radius: var(--rLg);
   box-shadow: var(--shadowMd), var(--innerHighlight);
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 2px solid var(--border-primary);
+  padding: var(--space-lg);
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+/* Single top accent line */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--space-lg);
+  right: var(--space-lg);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gold-primary) 50%,
+    transparent 100%
+  );
+  opacity: 0.5;
+}
+
+.card:hover {
+  border-color: var(--border-subtle);
 }
 
 .score-section-card {
   min-height: 28rem;
+}
+
+/* Stats Grid Component */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0;
+}
+
+.stat {
+  background: var(--stat-bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--rSm);
+  padding: var(--space-md);
+  text-align: center;
+  transition: all var(--transition-normal);
+}
+
+.stat:hover {
+  background: var(--hover-bg);
+  border-color: var(--border-subtle);
+  transform: translateY(-2px);
+}
+
+.stat-label {
+  font-size: var(--font-size-tiny);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold-brown);
+  margin-bottom: var(--space-xs);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-body);
+}
+
+.stat-value {
+  font-size: var(--font-size-number-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--gold-primary);
+  font-family: var(--font-display);
+  letter-spacing: var(--letter-spacing-normal);
+}
+
+/* Accent line divider */
+.accent-line {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gold-primary) 50%,
+    transparent 100%
+  );
+  margin: var(--space-xl) 0;
+  opacity: 0.3;
+}
+
+/* Session info card */
+.session-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-md);
+  background: var(--card-bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--rSm);
+  margin-top: var(--space-lg);
+  font-size: var(--font-size-small);
+}
+
+.session-label {
+  color: var(--gold-brown);
+  font-weight: var(--font-weight-medium);
+}
+
+.session-value {
+  color: var(--gold-primary);
+  font-weight: var(--font-weight-bold);
 }

@@ -1,53 +1,128 @@
-/* CSS Custom Properties - Design System */
+/* CSS Custom Properties - Craft Game Lounge Design System */
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap');
+
 :root {
-  /* Surfaces */
-  --bg: #0D1A14;
-  --surface: #13231C;
-  --surface2: #182C24;
-  --border: #2A4A3A;
+  /* Typography */
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
 
-  /* Text & icons */
-  --text: #E6F3ED;
-  --muted: #A9C5B9;
-  --icon: #A9C5B9;
-  --onAccent: #0B1611;
-  --onLink: #0B1611;
+  /* Font Sizes - Headlines */
+  --font-size-h1: 64px;
+  --font-size-h2: 48px;
+  --font-size-h3: 32px;
 
-  /* Brand / interaction */
-  --accent: #39C6A7;
-  --accentDark: #2DA589;
-  --link: #7AE7D0;
-  --linkHover: #5DD4B8;
+  /* Font Sizes - Body */
+  --font-size-body: 15px;
+  --font-size-small: 13px;
+  --font-size-tiny: 11px;
 
-  /* Status */
-  --success: #34D399;
-  --warning: #F4B24A;
-  --error: #FB7185;
+  /* Font Sizes - Numbers */
+  --font-size-number-xl: 56px;
+  --font-size-number-lg: 32px;
+  --font-size-number-md: 28px;
+  --font-size-number-sm: 24px;
 
-  /* State colors */
-  --surfaceHover: #1F2E27;
-  --surfacePressed: #283730;
-  --surface2Hover: #24372F;
-  --surface2Pressed: #2D3F38;
-  --accentSubtle: #1C3E34;
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
 
-  /* Emphasized borders & focus */
-  --borderAccent: #2F7560;
-  --borderFocus: #328E76;
-  --focusRing: rgba(57, 198, 167, 0.35);
-  --focusRingStrong: rgba(57, 198, 167, 0.55);
+  /* Letter Spacing */
+  --letter-spacing-tight: -2px;
+  --letter-spacing-normal: -1px;
+  --letter-spacing-wide: 2px;
+  --letter-spacing-wider: 3px;
+
+  /* Core Colors - Background */
+  --bg: #1a1512;
+  --bg-primary: #1a1512;
+  --bg-secondary: #2a2018;
+  --bg-tertiary: #1f1810;
+
+  /* Legacy surface mappings */
+  --surface: #2a2018;
+  --surface2: #2a2018;
+
+  /* Gold/Amber Accent System */
+  --gold-primary: #d4a574;
+  --gold-bright: #e6b873;
+  --gold-muted: #c9b397;
+  --gold-pale: #f5d4a0;
+  --gold-brown: #8b7355;
+
+  /* Brand / interaction (mapped to gold) */
+  --accent: #d4a574;
+  --accentDark: #c9b397;
+  --link: #e6b873;
+  --linkHover: #d4a574;
+
+  /* Borders and Dividers */
+  --border: #3d2f20;
+  --border-primary: #3d2f20;
+  --border-subtle: rgba(212, 165, 116, 0.15);
+  --border-accent: rgba(212, 165, 116, 0.08);
+  --borderAccent: #d4a574;
+  --borderFocus: #e6b873;
+
+  /* Interactive States */
+  --hover-bg: rgba(212, 165, 116, 0.08);
+  --active-bg: rgba(212, 165, 116, 0.12);
+  --surfaceHover: rgba(212, 165, 116, 0.08);
+  --surfacePressed: rgba(212, 165, 116, 0.12);
+  --surface2Hover: rgba(212, 165, 116, 0.08);
+  --surface2Pressed: rgba(212, 165, 116, 0.12);
+  --accentSubtle: rgba(212, 165, 116, 0.08);
+
+  /* Text Hierarchy */
+  --text: #f5ede3;
+  --text-primary: #f5ede3;
+  --text-secondary: #c9b397;
+  --text-accent: #d4a574;
+  --muted: #c9b397;
+  --icon: #d4a574;
+  --onAccent: #1a1512;
+  --onLink: #1a1512;
+
+  /* Functional Colors */
+  --success: #7fb069;
+  --warning: #e6b873;
+  --error: #e67373;
+
+  /* Focus States */
+  --focusRing: rgba(212, 165, 116, 0.35);
+  --focusRingStrong: rgba(212, 165, 116, 0.55);
 
   /* Overlays */
-  --scrim: rgba(0, 0, 0, 0.55);
-  --tooltipBg: var(--surface2);
+  --scrim: rgba(0, 0, 0, 0.7);
+  --tooltipBg: var(--bg-secondary);
   --tooltipText: var(--text);
   --divider: var(--border);
 
-  /* Skeleton loading */
-  --skeletonBase: var(--surface2);
-  --skeletonShimmer: var(--surface2Hover);
+  /* Ambient Effects */
+  --ambient-glow: rgba(212, 165, 116, 0.08);
+  --subtle-highlight: rgba(212, 165, 116, 0.05);
+  --card-bg-overlay: rgba(212, 165, 116, 0.05);
+  --stat-bg-overlay: rgba(212, 165, 116, 0.08);
 
-  /* Spacing scale */
+  /* Opacity Scale */
+  --decorative-low: 0.3;
+  --decorative-med: 0.4;
+
+  /* Skeleton loading */
+  --skeletonBase: var(--bg-secondary);
+  --skeletonShimmer: var(--hover-bg);
+
+  /* Spacing Scale */
+  --space-xs: 6px;
+  --space-sm: 12px;
+  --space-md: 20px;
+  --space-lg: 28px;
+  --space-xl: 40px;
+
+  /* Legacy spacing mappings */
   --s1: 4px;
   --s2: 8px;
   --s3: 12px;
@@ -55,16 +130,26 @@
   --s5: 20px;
   --s6: 24px;
   --s7: 32px;
+  --s8: 40px;
 
-  /* Radii */
-  --rSm: 10px;
+  /* Border Radius */
+  --rSm: 12px;
   --rMd: 14px;
-  --rLg: 18px;
+  --rLg: 24px;
   --rPill: 999px;
 
   /* Shadows */
-  --shadowSm: 0 6px 18px rgba(0,0,0,.28);
-  --shadowMd: 0 12px 30px rgba(0,0,0,.32);
-  --shadowLg: 0 20px 50px rgba(0,0,0,.38);
-  --innerHighlight: inset 0 1px 0 rgba(255,255,255,.04);
+  --shadowSm: 0 4px 12px rgba(212, 165, 116, 0.25);
+  --shadowMd: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadowLg: 0 20px 50px rgba(0, 0, 0, 0.38);
+  --innerHighlight: inset 0 1px 0 rgba(212, 165, 116, 0.1);
+
+  /* Button Shadows */
+  --shadow-button: 0 4px 12px rgba(212, 165, 116, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  --shadow-button-hover: 0 6px 20px rgba(212, 165, 116, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
 }

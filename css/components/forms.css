@@ -1,23 +1,24 @@
-/* Form Components */
+/* Form Components - Craft Game Lounge */
 
 .input {
   border: 2px solid var(--border);
-  border-radius: var(--rMd);
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
+  border-radius: var(--rSm);
+  padding: var(--space-md) var(--space-md);
+  font-size: var(--font-size-body);
   width: 100%;
-  font-family: inherit;
-  background: var(--surface2);
+  font-family: var(--font-body);
+  background: transparent;
   color: var(--text);
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 .input:hover {
-  border-color: var(--borderAccent);
+  border-color: var(--border-subtle);
+  background: var(--hover-bg);
 }
 .input:focus {
   outline: none;
-  border-color: var(--borderFocus);
-  box-shadow: 0 0 0 2px var(--focusRing), 0 0 12px var(--focusRing);
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 0 3px var(--focusRing);
 }
 
 .checkbox {

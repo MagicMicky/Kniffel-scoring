@@ -10,14 +10,41 @@ This document provides comprehensive instructions for managing, updating, and ma
 
 ## 📱 Table of Contents
 
-1. [Game Modes](#game-modes)
-2. [GitHub Pages Setup](#github-pages-setup)
-3. [Installing the PWA](#installing-the-pwa)
-4. [Updating the PWA](#updating-the-pwa)
-5. [Export & Import Data](#export--import-data)
-6. [Data Safety & localStorage](#data-safety--localstorage)
-7. [Troubleshooting](#troubleshooting)
-8. [Development Workflow](#development-workflow)
+1. [Design System](#design-system)
+2. [Game Modes](#game-modes)
+3. [GitHub Pages Setup](#github-pages-setup)
+4. [Installing the PWA](#installing-the-pwa)
+5. [Updating the PWA](#updating-the-pwa)
+6. [Export & Import Data](#export--import-data)
+7. [Data Safety & localStorage](#data-safety--localstorage)
+8. [Troubleshooting](#troubleshooting)
+9. [Development Workflow](#development-workflow)
+
+---
+
+## 🎨 Design System
+
+The Kniffel app follows the **"Craft Game Lounge"** design system - a modern board game café aesthetic that balances contemporary design with warm, inviting atmosphere.
+
+### For Developers
+
+When making UI changes or adding new features, consult **[DESIGN.md](DESIGN.md)** for comprehensive guidelines:
+
+- **Color tokens** - All colors, backgrounds, and semantic colors
+- **Typography** - Font families, sizes, weights, and usage rules
+- **Components** - Cards, buttons, score rows, dice display, etc.
+- **Spacing & Layout** - Consistent spacing scale and layout patterns
+- **Motion** - Animation timing and interaction patterns
+- **Anti-patterns** - What NOT to do
+
+### Key Principles
+
+1. **Contemporary Warmth** - Clean, sophisticated design with cozy feel
+2. **Premium Simplicity** - Upscale through restraint, not decoration
+3. **Typographic Hierarchy** - Let typography create visual interest
+4. **Consistent Patterns** - Reuse existing components and tokens
+
+**Always reference [DESIGN.md](DESIGN.md) before making visual changes to ensure consistency.**
 
 ---
 

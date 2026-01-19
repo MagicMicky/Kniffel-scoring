@@ -2,7 +2,7 @@
 
 .dice-area {
   background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-  border-radius: var(--rMd);
+  border-radius: var(--rSm);
   padding: var(--space-md);
   margin-bottom: var(--space-md);
   border: 2px solid var(--border-primary);

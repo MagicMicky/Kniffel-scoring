@@ -45,7 +45,7 @@
 .player-card {
   flex-shrink: 0;
   scroll-snap-align: start;
-  border-radius: var(--rMd);
+  border-radius: var(--rSm);
   padding: var(--space-md);
   box-shadow: var(--shadowSm);
   cursor: pointer;
@@ -196,7 +196,7 @@
   margin-bottom: 1rem;
   background: var(--bg-secondary);
   padding: 0.375rem;
-  border-radius: var(--rLg);
+  border-radius: var(--rSm);
   border: 2px solid var(--border-primary);
 }
 
@@ -207,7 +207,7 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.625rem 0.75rem;
-  border-radius: var(--rMd);
+  border-radius: var(--rSm);
   border: none;
   background: transparent;
   color: var(--muted);

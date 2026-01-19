@@ -2,7 +2,7 @@
 
 .card {
   background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-  border-radius: var(--rLg);
+  border-radius: var(--rMd);
   box-shadow: var(--shadowMd), var(--innerHighlight);
   overflow: hidden;
   border: 2px solid var(--border-primary);
@@ -111,4 +111,50 @@
 .session-value {
   color: var(--gold-primary);
   font-weight: var(--font-weight-bold);
+}
+
+/* Box utility - for smaller containers with consistent styling */
+.box {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border-radius: var(--rSm);
+  box-shadow: var(--shadowSm);
+  border: 2px solid var(--border-primary);
+  padding: var(--space-md);
+  position: relative;
+  transition: all var(--transition-normal);
+}
+
+.box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--space-md);
+  right: var(--space-md);
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--gold-primary) 50%,
+    transparent 100%
+  );
+  opacity: 0.4;
+}
+
+.box:hover {
+  border-color: var(--border-subtle);
+}
+
+/* Glass effect box - for floating elements */
+.glass {
+  background: rgba(42, 32, 24, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: var(--rSm);
+  border: 2px solid var(--border-primary);
+  box-shadow: var(--shadowMd);
+  transition: all var(--transition-normal);
+}
+
+.glass:hover {
+  background: rgba(42, 32, 24, 0.85);
+  border-color: var(--border-subtle);
 }

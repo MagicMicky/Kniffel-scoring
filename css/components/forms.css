@@ -106,7 +106,7 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  border-radius: var(--rLg);
+  border-radius: var(--rSm);
   border: 2px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
   cursor: pointer;

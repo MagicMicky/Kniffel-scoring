@@ -215,7 +215,7 @@
 .game-mode-btn {
   background: var(--gold-primary);
   border: none;
-  border-radius: var(--rMd);
+  border-radius: var(--rSm);
   padding: 1.5rem 0.875rem;
   cursor: pointer;
   transition: all var(--transition-normal);

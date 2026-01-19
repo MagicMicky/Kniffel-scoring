@@ -50,11 +50,12 @@
 .overflow-x-auto { overflow-x: auto; }
 .whitespace-nowrap { white-space: nowrap; }
 
-/* Border radius */
-.rounded-lg { border-radius: 0.5rem; }
-.rounded-xl { border-radius: 0.75rem; }
-.rounded-2xl { border-radius: 1rem; }
-.rounded-full { border-radius: 9999px; }
+/* Border radius - use CSS variables for consistency */
+.rounded-sm { border-radius: var(--rSm); }
+.rounded-md { border-radius: var(--rMd); }
+.rounded-lg { border-radius: var(--rLg); }
+.rounded-xl { border-radius: var(--rXl); }
+.rounded-full { border-radius: var(--rPill); }
 
 /* Font sizes */
 .text-xs { font-size: 0.75rem; }
@@ -141,7 +142,7 @@
 .mode-select-btn {
   padding: 0.5rem 0.875rem;
   border: 1px solid;
-  border-radius: 0.5rem;
+  border-radius: var(--rSm);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;

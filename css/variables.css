@@ -132,11 +132,12 @@
   --s7: 32px;
   --s8: 40px;
 
-  /* Border Radius */
-  --rSm: 12px;
-  --rMd: 14px;
-  --rLg: 24px;
-  --rPill: 999px;
+  /* Border Radius - Rounded Rectangles (clearer hierarchy) */
+  --rSm: 8px;   /* Small elements: buttons, inputs, small cards */
+  --rMd: 12px;  /* Medium elements: standard cards, sections */
+  --rLg: 16px;  /* Large elements: modals, major containers */
+  --rXl: 24px;  /* Extra large: special hero elements */
+  --rPill: 999px; /* Fully rounded: pills, badges, dots */
 
   /* Shadows */
   --shadowSm: 0 4px 12px rgba(212, 165, 116, 0.25);

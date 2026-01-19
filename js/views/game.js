@@ -179,7 +179,7 @@ function gameHeader(isPlayMode) {
     <div class="game-header">
       <div class="game-header-content">
         <button class="btn-text" onclick="pauseG()">← Back</button>
-        <h1>Kniffel</h1>
+        <h1>SCHNITZEL</h1>
         <button class="btn-sm btn-primary" onclick="finishG()">Finish</button>
       </div>
     </div>

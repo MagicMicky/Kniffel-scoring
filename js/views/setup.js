@@ -38,7 +38,7 @@ export function setupView() {
                style="width:96px;height:96px;margin:0 auto;border-radius:var(--rMd);box-shadow:0 4px 12px rgba(0,0,0,0.3)">
         </div>
         <h1 style="font-family:var(--font-display);font-size:var(--font-size-h1);font-weight:var(--font-weight-black);color:var(--gold-primary);letter-spacing:var(--letter-spacing-tight);line-height:1">SCHNITZEL</h1>
-        <p style="font-family:var(--font-body);font-size:var(--font-size-small);color:var(--gold-muted);letter-spacing:var(--letter-spacing-wider);text-transform:uppercase;margin-top:var(--space-xs)">Craft Game Lounge</p>
+        <p style="font-family:var(--font-body);font-size:var(--font-size-small);color:var(--gold-muted);letter-spacing:var(--letter-spacing-wider);text-transform:uppercase;margin-top:var(--space-xs)">Your Travel Yahtzee Companion</p>
       </div>
       ${savedGameBanner()}
       ${resumeButton}

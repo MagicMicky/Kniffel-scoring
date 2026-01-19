@@ -175,22 +175,11 @@ function gameViewReview(game, playerIndex) {
  * Create game header
  */
 function gameHeader(isPlayMode) {
-  let title = 'Kniffel';
-  let modeLabel = '';
-
-  if (S.isBlitzMode) {
-    modeLabel = '<span style="margin-left:0.5rem;font-size:0.75rem;opacity:0.8">⚡ Blitz</span>';
-  } else if (isPlayMode) {
-    modeLabel = '<span style="margin-left:0.5rem;font-size:0.75rem;opacity:0.8">🎲 Play</span>';
-  } else {
-    modeLabel = '<span style="margin-left:0.5rem;font-size:0.75rem;opacity:0.8">📝 Score</span>';
-  }
-
   return `
     <div class="game-header">
       <div class="game-header-content">
         <button class="btn-text" onclick="pauseG()">← Back</button>
-        <h1>${title}${modeLabel}</h1>
+        <h1>Kniffel</h1>
         <button class="btn-sm btn-primary" onclick="finishG()">Finish</button>
       </div>
     </div>
@@ -324,8 +313,8 @@ function reviewHeader() {
     <div class="game-header">
       <div class="game-header-content">
         <button class="btn-text" onclick="closeHistoryDetail()">← Back</button>
-        <h1>Game Review <span style="margin-left:0.5rem;font-size:0.75rem;opacity:0.8">📖</span></h1>
-        <div style="font-size:0.75rem;opacity:0.6">Read Only</div>
+        <h1>Review</h1>
+        <div style="width:4rem"></div>
       </div>
     </div>
   `;

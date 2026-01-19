@@ -241,13 +241,13 @@
 
 /* Game header components */
 .game-header {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  background: var(--bg-secondary);
   border-bottom: 2px solid var(--border-primary);
-  padding: var(--space-md) var(--space-md);
+  padding: var(--space-sm) var(--space-md);
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .game-header-content {
@@ -256,16 +256,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-md);
 }
 
 .game-header h1 {
-  font-size: var(--font-size-body);
+  font-size: var(--font-size-small);
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide);
   color: var(--gold-primary);
   font-family: var(--font-body);
   margin: 0;
+  flex: 1;
+  text-align: center;
 }
 
 /* Total display card */

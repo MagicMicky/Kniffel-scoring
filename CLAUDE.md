@@ -11,15 +11,16 @@ This document provides comprehensive instructions for managing, updating, and ma
 ## 📱 Table of Contents
 
 1. [Design System](#design-system)
-2. [UX Patterns](#ux-patterns)
-3. [Game Modes](#game-modes)
-4. [GitHub Pages Setup](#github-pages-setup)
-5. [Installing the PWA](#installing-the-pwa)
-6. [Updating the PWA](#updating-the-pwa)
-7. [Export & Import Data](#export--import-data)
-8. [Data Safety & localStorage](#data-safety--localstorage)
-9. [Troubleshooting](#troubleshooting)
-10. [Development Workflow](#development-workflow)
+2. [CSS Reference](#css-reference)
+3. [UX Patterns](#ux-patterns)
+4. [Game Modes](#game-modes)
+5. [GitHub Pages Setup](#github-pages-setup)
+6. [Installing the PWA](#installing-the-pwa)
+7. [Updating the PWA](#updating-the-pwa)
+8. [Export & Import Data](#export--import-data)
+9. [Data Safety & localStorage](#data-safety--localstorage)
+10. [Troubleshooting](#troubleshooting)
+11. [Development Workflow](#development-workflow)
 
 ---
 
@@ -46,6 +47,63 @@ When making UI changes or adding new features, consult **[DESIGN.md](DESIGN.md)*
 4. **Consistent Patterns** - Reuse existing components and tokens
 
 **Always reference [DESIGN.md](DESIGN.md) before making visual changes to ensure consistency.**
+
+---
+
+## 📐 CSS Reference
+
+Complete technical CSS documentation including all custom properties, component patterns, and implementation details.
+
+### For Developers
+
+When implementing components or debugging styles, consult **[CSS.md](CSS.md)** for technical specifications:
+
+- **CSS Custom Properties** - All tokens with actual variable names
+- **Architecture** - File organization and import order
+- **Component Patterns** - Card, button, score row, dice implementations
+- **Utility Classes** - Layout, spacing, typography utilities
+- **Color Mappings** - Legacy Tailwind-style classes mapped to theme
+- **Naming Conventions** - When to use abbreviations vs full names
+- **Browser Support** - Features used and compatibility
+
+### Implementation Status
+
+**✅ Implemented:**
+- All design tokens as CSS variables
+- Modular component architecture
+- Utility-first CSS system
+- Responsive breakpoints
+- PWA-safe area insets
+
+**⚠️ Missing (should be added):**
+- Z-index CSS variables (currently hardcoded)
+- `@media (prefers-reduced-motion)` support
+- `:focus-visible` for keyboard navigation
+- `@media (prefers-contrast: high)` support
+
+### Quick Reference
+
+```css
+/* Typography */
+--font-display: 'Playfair Display', serif;
+--font-body: 'DM Sans', sans-serif;
+
+/* Colors */
+--gold-primary: #d4a574;
+--gold-bright: #e6b873;
+--text-primary: #f5ede3;
+--bg-primary: #1a1512;
+
+/* Spacing */
+--space-xs: 6px;   --space-sm: 12px;
+--space-md: 20px;  --space-lg: 28px;
+
+/* Radius & Shadows */
+--rSm: 8px;  --rMd: 12px;  --rLg: 16px;
+--shadowMd: 0 8px 24px rgba(0, 0, 0, 0.6);
+```
+
+**Always reference [CSS.md](CSS.md) for complete variable listings and component implementations.**
 
 ---
 

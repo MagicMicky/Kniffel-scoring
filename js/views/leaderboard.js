@@ -6,6 +6,7 @@
 import { S } from '../state.js';
 import { COLORS } from '../constants.js';
 import { escapeHtml } from '../utils/helpers.js';
+import { PageHeader } from '../components/ui.js';
 
 /**
  * Calculate player statistics from history
@@ -278,14 +279,11 @@ export function leaderboardView() {
   }, 0);
 
   return `
-    <div class="container" style="min-height:100vh">
-      <div class="flex items-center justify-between mb-6">
-        <button class="btn-text text-purple-200 text-lg font-medium" onclick="navigateTo('setup')">
-          ← Back
-        </button>
-        <h1 class="text-2xl font-black text-white">🏆 Leaderboard</h1>
-        <div style="width:4rem"></div>
-      </div>
+    <div class="container container-fullheight p-md">
+      ${PageHeader({
+        title: '🏆 Leaderboard',
+        backButton: 'navigateTo(\'setup\')'
+      })}
 
       <div class="leaderboard-tabs mb-4">
         <button
@@ -319,14 +317,11 @@ export function leaderboardView() {
  */
 function noPlayersMessage() {
   return `
-    <div class="container" style="min-height:100vh">
-      <div class="flex items-center justify-between mb-6">
-        <button class="btn-text text-purple-200 text-lg font-medium" onclick="navigateTo('setup')">
-          ← Back
-        </button>
-        <h1 class="text-2xl font-black text-white">🏆 Leaderboard</h1>
-        <div style="width:4rem"></div>
-      </div>
+    <div class="container container-fullheight p-md">
+      ${PageHeader({
+        title: '🏆 Leaderboard',
+        backButton: 'navigateTo(\'setup\')'
+      })}
       <div class="text-center py-10 text-purple-200">
         <p class="text-5xl mb-4">🏆</p>
         <p class="text-xl mb-2">No players yet!</p>
@@ -341,14 +336,11 @@ function noPlayersMessage() {
  */
 function noGamesMessage() {
   return `
-    <div class="container" style="min-height:100vh">
-      <div class="flex items-center justify-between mb-6">
-        <button class="btn-text text-purple-200 text-lg font-medium" onclick="navigateTo('setup')">
-          ← Back
-        </button>
-        <h1 class="text-2xl font-black text-white">🏆 Leaderboard</h1>
-        <div style="width:4rem"></div>
-      </div>
+    <div class="container container-fullheight p-md">
+      ${PageHeader({
+        title: '🏆 Leaderboard',
+        backButton: 'navigateTo(\'setup\')'
+      })}
       <div class="text-center py-10 text-purple-200">
         <p class="text-5xl mb-4">🎮</p>
         <p class="text-xl mb-2">No games played yet!</p>
@@ -378,14 +370,11 @@ function noGamesForModeMessage() {
   }, 0);
 
   return `
-    <div class="container" style="min-height:100vh">
-      <div class="flex items-center justify-between mb-6">
-        <button class="btn-text text-purple-200 text-lg font-medium" onclick="navigateTo('setup')">
-          ← Back
-        </button>
-        <h1 class="text-2xl font-black text-white">🏆 Leaderboard</h1>
-        <div style="width:4rem"></div>
-      </div>
+    <div class="container container-fullheight p-md">
+      ${PageHeader({
+        title: '🏆 Leaderboard',
+        backButton: 'navigateTo(\'setup\')'
+      })}
 
       <div class="leaderboard-tabs mb-4">
         <button

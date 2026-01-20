@@ -1,8 +1,10 @@
 /**
  * Score Row Component
  * Renders individual score rows for upper and lower sections
+ * REFACTORED: Now uses unified ScoreRow component from components/scoreComponents.js
  */
 
+import { ScoreRow, ReadOnlyScoreRow } from '../../components/scoreComponents.js';
 import { hasSpeedBonus } from '../../utils/storage.js';
 
 /**
@@ -15,22 +17,16 @@ export function upperScoreRow(category, score) {
   const possibleValues = [0, 1, 2, 3, 4, 5].map(n => n * category.value).join(',');
   const hasScore = score !== null;
 
-  return `
-    <div class="flex items-center justify-between px-4 py-3">
-      <div class="flex-1">
-        <span class="font-medium text-gray-800">${category.name}</span>
-        <span class="text-xs text-gray-400 ml-2">(${possibleValues})</span>
-      </div>
-      <div class="flex items-center gap-2">
-        ${hasScore ? `<button class="clear-btn" onclick="clr('${category.id}')">✕</button>` : ''}
-        <button class="score-btn ${hasScore ? 'score-filled-blue' : 'score-empty'}"
-                onclick="openUp('${category.id}',${category.value},'${category.name}')">
-          ${hasScore ? score : 'Tap'}
-        </button>
-      </div>
-    </div>
-    <div class="divider"></div>
-  `;
+  return ScoreRow({
+    label: category.name,
+    hint: `(${possibleValues})`,
+    value: score,
+    state: hasScore ? 'filled' : 'empty',
+    variant: 'upper',
+    showClear: hasScore,
+    onClear: `clr('${category.id}')`,
+    onSelect: `openUp('${category.id}',${category.value},'${category.name}')`
+  }) + `<div class="divider"></div>`;
 }
 
 /**
@@ -43,22 +39,16 @@ export function lowerScoreRow(category, score) {
   const rangeHint = category.type === 'fixed' ? `(0/${category.fixed})` : `(0-${category.max})`;
   const hasScore = score !== null;
 
-  return `
-    <div class="flex items-center justify-between px-4 py-3">
-      <div class="flex-1">
-        <span class="font-medium text-gray-800">${category.name}</span>
-        <span class="text-xs text-gray-400 ml-2">${rangeHint}</span>
-      </div>
-      <div class="flex items-center gap-2">
-        ${hasScore ? `<button class="clear-btn" onclick="clr('${category.id}')">✕</button>` : ''}
-        <button class="score-btn ${hasScore ? 'score-filled-purple' : 'score-empty'}"
-                onclick="openLo('${category.id}','${category.type}',${category.fixed || category.max},'${category.name}')">
-          ${hasScore ? score : 'Tap'}
-        </button>
-      </div>
-    </div>
-    <div class="divider"></div>
-  `;
+  return ScoreRow({
+    label: category.name,
+    hint: rangeHint,
+    value: score,
+    state: hasScore ? 'filled' : 'empty',
+    variant: 'lower',
+    showClear: hasScore,
+    onClear: `clr('${category.id}')`,
+    onSelect: `openLo('${category.id}','${category.type}',${category.fixed || category.max},'${category.name}')`
+  }) + `<div class="divider"></div>`;
 }
 
 /**
@@ -72,38 +62,42 @@ export function lowerScoreRow(category, score) {
  */
 export function upperScoreRowPlay(category, currentScore, possibleScore, canSelect, scores) {
   if (currentScore !== null) {
+    // Filled score
     const hasSB = scores && hasSpeedBonus(scores, category.id);
-    const speedBonusIndicator = hasSB ? ' ⚡' : '';
-    return `
-      <div class="flex items-center justify-between px-4 py-3">
-        <span class="font-medium text-gray-800">${category.name}</span>
-        <div class="flex items-center gap-2">
-          <button class="clear-btn" onclick="clr('${category.id}')">✕</button>
-          <span class="score-btn score-filled-blue">${currentScore}${speedBonusIndicator}</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-    `;
+    const speedBonus = hasSB ? { amount: '', text: '⚡' } : null;
+
+    return ScoreRow({
+      label: category.name,
+      value: currentScore,
+      state: 'filled',
+      variant: 'upper',
+      showClear: true,
+      speedBonus,
+      onClear: `clr('${category.id}')`,
+      onSelect: ''
+    }) + `<div class="divider"></div>`;
   } else if (canSelect) {
-    const btnClass = possibleScore > 0 ? 'score-available' : 'score-zero-only';
-    return `
-      <div class="flex items-center justify-between px-4 py-3">
-        <span class="font-medium text-gray-800">${category.name}</span>
-        <button class="score-btn-play ${btnClass}"
-                onclick="selectPlayScore('${category.id}',${possibleScore})">
-          ${possibleScore}
-        </button>
-      </div>
-      <div class="divider"></div>
-    `;
+    // Can select score
+    const state = possibleScore > 0 ? 'available' : 'zero-only';
+
+    return ScoreRow({
+      label: category.name,
+      value: possibleScore,
+      state,
+      variant: 'upper',
+      showClear: false,
+      onSelect: `selectPlayScore('${category.id}',${possibleScore})`
+    }) + `<div class="divider"></div>`;
   } else {
-    return `
-      <div class="flex items-center justify-between px-4 py-3">
-        <span class="font-medium text-gray-400">${category.name}</span>
-        <span class="score-btn score-empty">-</span>
-      </div>
-      <div class="divider"></div>
-    `;
+    // Disabled (not current turn)
+    return ScoreRow({
+      label: category.name,
+      value: null,
+      state: 'empty',
+      variant: 'upper',
+      showClear: false,
+      disabled: true
+    }) + `<div class="divider"></div>`;
   }
 }
 
@@ -118,38 +112,42 @@ export function upperScoreRowPlay(category, currentScore, possibleScore, canSele
  */
 export function lowerScoreRowPlay(category, currentScore, possibleScore, canSelect, scores) {
   if (currentScore !== null) {
+    // Filled score
     const hasSB = scores && hasSpeedBonus(scores, category.id);
-    const speedBonusIndicator = hasSB ? ' ⚡' : '';
-    return `
-      <div class="flex items-center justify-between px-4 py-3">
-        <span class="font-medium text-gray-800">${category.name}</span>
-        <div class="flex items-center gap-2">
-          <button class="clear-btn" onclick="clr('${category.id}')">✕</button>
-          <span class="score-btn score-filled-purple">${currentScore}${speedBonusIndicator}</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-    `;
+    const speedBonus = hasSB ? { amount: '', text: '⚡' } : null;
+
+    return ScoreRow({
+      label: category.name,
+      value: currentScore,
+      state: 'filled',
+      variant: 'lower',
+      showClear: true,
+      speedBonus,
+      onClear: `clr('${category.id}')`,
+      onSelect: ''
+    }) + `<div class="divider"></div>`;
   } else if (canSelect) {
-    const btnClass = possibleScore > 0 ? 'score-available' : 'score-zero-only';
-    return `
-      <div class="flex items-center justify-between px-4 py-3">
-        <span class="font-medium text-gray-800">${category.name}</span>
-        <button class="score-btn-play ${btnClass}"
-                onclick="selectPlayScore('${category.id}',${possibleScore})">
-          ${possibleScore}
-        </button>
-      </div>
-      <div class="divider"></div>
-    `;
+    // Can select score
+    const state = possibleScore > 0 ? 'available' : 'zero-only';
+
+    return ScoreRow({
+      label: category.name,
+      value: possibleScore,
+      state,
+      variant: 'lower',
+      showClear: false,
+      onSelect: `selectPlayScore('${category.id}',${possibleScore})`
+    }) + `<div class="divider"></div>`;
   } else {
-    return `
-      <div class="flex items-center justify-between px-4 py-3">
-        <span class="font-medium text-gray-400">${category.name}</span>
-        <span class="score-btn score-empty">-</span>
-      </div>
-      <div class="divider"></div>
-    `;
+    // Disabled (not current turn)
+    return ScoreRow({
+      label: category.name,
+      value: null,
+      state: 'empty',
+      variant: 'lower',
+      showClear: false,
+      disabled: true
+    }) + `<div class="divider"></div>`;
   }
 }
 
@@ -157,7 +155,7 @@ export function lowerScoreRowPlay(category, currentScore, possibleScore, canSele
  * Create a read-only score row (for history view)
  * @param {string} name - Category name
  * @param {number} score - Score value
- * @param {string} colorClass - CSS class for styling
+ * @param {string} colorClass - CSS class for styling (kept for backward compatibility)
  * @param {string} categoryId - Category ID (optional, for speed bonus check)
  * @param {Object} scores - Player scores object (optional, for speed bonus check)
  * @returns {string} HTML string
@@ -165,6 +163,9 @@ export function lowerScoreRowPlay(category, currentScore, possibleScore, canSele
 export function readOnlyScoreRow(name, score, colorClass, categoryId = null, scores = null) {
   const hasSB = categoryId && scores && hasSpeedBonus(scores, categoryId);
   const speedBonusIndicator = hasSB ? ' ⚡' : '';
+
+  // For backward compatibility, we still output the old structure
+  // TODO: Migrate to ReadOnlyScoreRow component in future refactoring
   return `
     <div class="flex items-center justify-between px-4 py-3">
       <span class="font-medium text-gray-800">${name}</span>

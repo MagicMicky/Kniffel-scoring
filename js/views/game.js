@@ -11,6 +11,7 @@ import { playerCarousel } from './components/playerCard.js';
 import { diceArea } from './components/diceArea.js';
 import { picker } from './components/picker.js';
 import { modal } from './components/modal.js';
+import { PageHeader, Button } from '../components/ui.js';
 import {
   upperScoreRow, lowerScoreRow,
   upperScoreRowPlay, lowerScoreRowPlay,
@@ -178,9 +179,9 @@ function gameHeader(isPlayMode) {
   return `
     <div class="game-header">
       <div class="game-header-content">
-        <button class="btn-text" onclick="pauseG()">← Back</button>
+        ${Button({ text: '← Back', variant: 'text', onClick: 'pauseG()' })}
         <h1>SCHNITZEL</h1>
-        <button class="btn-sm btn-primary" onclick="finishG()">Finish</button>
+        ${Button({ text: 'Finish', variant: 'primary', size: 'sm', onClick: 'finishG()' })}
       </div>
     </div>
   `;

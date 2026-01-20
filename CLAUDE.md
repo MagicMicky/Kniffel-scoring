@@ -13,14 +13,15 @@ This document provides comprehensive instructions for managing, updating, and ma
 1. [Design System](#design-system)
 2. [CSS Reference](#css-reference)
 3. [UX Patterns](#ux-patterns)
-4. [Game Modes](#game-modes)
-5. [GitHub Pages Setup](#github-pages-setup)
-6. [Installing the PWA](#installing-the-pwa)
-7. [Updating the PWA](#updating-the-pwa)
-8. [Export & Import Data](#export--import-data)
-9. [Data Safety & localStorage](#data-safety--localstorage)
-10. [Troubleshooting](#troubleshooting)
-11. [Development Workflow](#development-workflow)
+4. [Component Architecture](#component-architecture)
+5. [Game Modes](#game-modes)
+6. [GitHub Pages Setup](#github-pages-setup)
+7. [Installing the PWA](#installing-the-pwa)
+8. [Updating the PWA](#updating-the-pwa)
+9. [Export & Import Data](#export--import-data)
+10. [Data Safety & localStorage](#data-safety--localstorage)
+11. [Troubleshooting](#troubleshooting)
+12. [Development Workflow](#development-workflow)
 
 ---
 
@@ -68,15 +69,13 @@ When implementing components or debugging styles, consult **[CSS.md](CSS.md)** f
 
 ### Implementation Status
 
-**✅ Implemented:**
+**✅ Fully Implemented:**
 - All design tokens as CSS variables
 - Modular component architecture
 - Utility-first CSS system
 - Responsive breakpoints
 - PWA-safe area insets
-
-**⚠️ Missing (should be added):**
-- Z-index CSS variables (currently hardcoded)
+- Z-index CSS variables
 - `@media (prefers-reduced-motion)` support
 - `:focus-visible` for keyboard navigation
 - `@media (prefers-contrast: high)` support
@@ -140,6 +139,46 @@ When implementing new features or modifying interactions, consult **[UX.md](UX.m
 - ⚠️ **Accessibility partially implemented** (focus indicators present, ARIA support needed)
 
 **Always reference [UX.md](UX.md) before changing interaction patterns to maintain consistency.**
+
+---
+
+## 🧩 Component Architecture
+
+The Kniffel app uses **atomic component design** with functional JavaScript to ensure code reusability, maintainability, and consistency.
+
+### For Developers
+
+When building features or modifying views, consult **[COMPONENTS.md](COMPONENTS.md)** for architectural guidelines:
+
+- **Atomic Components** - Reusable Button, Card, Section, Badge, ScoreRow components
+- **No Inline Styles** - All styling through CSS classes, zero style attributes
+- **Props/Options Pattern** - Components accept configuration objects
+- **Separation of Concerns** - Structure, style, and behavior are separate layers
+- **Component Catalog** - Complete reference of all available components
+- **File Organization** - Where components live and how to import them
+
+### Core Principles
+
+1. **Reuse Over Duplication** - One flexible component beats four specialized variants
+2. **CSS Classes Only** - Never use inline `style=""` attributes
+3. **Small & Composable** - Build complex UIs from simple building blocks
+4. **Props Pattern** - `Component({ text, variant, onClick })` configuration style
+
+### Current Status
+
+**✅ Available Components:**
+- Button (all variants: primary, secondary, danger, icon, text)
+- Card (with title, content areas)
+- Section (headers with progress indicators)
+- ScoreRow (unified for all modes and sections)
+- Badge (mode indicators, status tags)
+
+**📂 Component Locations:**
+- `js/components/ui.js` - Button, Card, Section, Badge
+- `js/components/scoreComponents.js` - ScoreRow, ScoreGrid
+- `js/components/layoutComponents.js` - Modal, Menu, Toast
+
+**Always reference [COMPONENTS.md](COMPONENTS.md) before creating new components to avoid duplication and ensure consistency.**
 
 ---
 

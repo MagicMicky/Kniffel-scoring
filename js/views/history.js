@@ -6,6 +6,7 @@
 import { S } from '../state.js';
 import { color, formatDate, formatTime, escapeHtml } from '../utils/helpers.js';
 import { gameView } from './game.js';
+import { PageHeader } from '../components/ui.js';
 
 /**
  * Render history list view
@@ -17,14 +18,11 @@ export function historyListView() {
     : historyGamesList();
 
   return `
-    <div class="container" style="min-height:100vh">
-      <div class="flex items-center justify-between mb-6">
-        <button class="btn-text text-purple-200 text-lg font-medium" onclick="navigateTo('setup')">
-          ← Back
-        </button>
-        <h1 class="text-2xl font-black text-white">📜 History</h1>
-        <div style="width:4rem"></div>
-      </div>
+    <div class="container container-fullheight p-md">
+      ${PageHeader({
+        title: '📜 History',
+        backButton: 'navigateTo(\'setup\')'
+      })}
       <div class="space-y-3">${gamesList}</div>
     </div>
   `;

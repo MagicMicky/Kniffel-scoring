@@ -228,3 +228,324 @@
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide);
 }
+
+/* ========================================
+   LAYOUT UTILITIES
+   Common layout patterns
+   ======================================== */
+
+/* Container variants */
+.container-fullheight {
+  min-height: 100vh;
+}
+
+/* Info Box Styles */
+.info-box {
+  padding: var(--space-md);
+  border-radius: var(--rMd);
+  background: var(--bg-elevated);
+  margin-bottom: var(--space-md);
+}
+
+.info-box-default {
+  background: linear-gradient(135deg, rgba(230, 184, 115, 0.1) 0%, rgba(212, 165, 116, 0.05) 100%);
+}
+
+.info-box-warning {
+  background: linear-gradient(135deg, rgba(230, 184, 115, 0.15) 0%, rgba(212, 165, 116, 0.08) 100%);
+  border: 1px solid rgba(230, 184, 115, 0.3);
+}
+
+.info-box-success {
+  background: linear-gradient(135deg, rgba(127, 176, 105, 0.15) 0%, rgba(127, 176, 105, 0.08) 100%);
+  border: 1px solid rgba(127, 176, 105, 0.3);
+}
+
+.info-box-danger {
+  background: linear-gradient(135deg, rgba(230, 115, 115, 0.15) 0%, rgba(230, 115, 115, 0.08) 100%);
+  border: 1px solid rgba(230, 115, 115, 0.3);
+}
+
+.info-title {
+  color: var(--text);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-body);
+}
+
+.info-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-small);
+  font-family: var(--font-body);
+  margin-bottom: var(--space-xs);
+}
+
+.info-meta {
+  color: var(--muted);
+  font-size: var(--font-size-tiny);
+  margin-top: var(--space-xs);
+  font-family: var(--font-body);
+}
+
+.info-icon {
+  margin-right: var(--space-xs);
+}
+
+/* Score Row Utilities */
+.score-row-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.score-row-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.label-text {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  font-size: var(--font-size-body);
+}
+
+.score-hint {
+  font-size: var(--font-size-tiny);
+  color: var(--muted);
+  font-family: var(--font-body);
+}
+
+.speed-bonus {
+  font-size: var(--font-size-tiny);
+  color: var(--gold-bright);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-body);
+}
+
+/* Score Section */
+.score-section {
+  margin-bottom: var(--space-lg);
+}
+
+.score-section-content {
+  margin-top: var(--space-md);
+}
+
+.section-progress {
+  font-size: var(--font-size-small);
+  color: var(--muted);
+  margin-left: var(--space-sm);
+  font-weight: var(--font-weight-regular);
+}
+
+.section-subtitle {
+  font-size: var(--font-size-small);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-regular);
+  display: block;
+  margin-top: var(--space-xs);
+}
+
+/* Card Utilities */
+.card-header {
+  margin-bottom: var(--space-md);
+}
+
+.card-title {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.card-content {
+  /* Content area - intentionally minimal */
+}
+
+.card-no-padding .card-content {
+  padding: 0;
+}
+
+/* Badge Utilities */
+.badge-icon {
+  margin-right: 0.25rem;
+}
+
+/* Session Info (Play Order) */
+.session-info {
+  margin-top: var(--space-md);
+  padding: var(--space-sm);
+  background: rgba(212, 165, 116, 0.05);
+  border-radius: var(--rSm);
+  font-family: var(--font-body);
+}
+
+.session-label {
+  color: var(--muted);
+  font-size: var(--font-size-small);
+  margin-right: var(--space-xs);
+}
+
+.session-value {
+  color: var(--text);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ========================================
+   SETUP SCREEN SPECIFIC
+   ======================================== */
+
+/* App Logo/Header */
+.app-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.app-logo {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto var(--space-md);
+  border-radius: var(--rMd);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.app-title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-black);
+  color: var(--gold-primary);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: 1;
+  margin: 0;
+}
+
+.app-tagline {
+  font-family: var(--font-body);
+  font-size: var(--font-size-small);
+  color: var(--gold-muted);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  margin-top: var(--space-xs);
+}
+
+/* Player Selection */
+.player-row-selected {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  box-shadow: 0 2px 8px rgba(212, 165, 116, 0.2);
+}
+
+.player-row-clickable {
+  cursor: pointer;
+}
+
+.player-name-text {
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+/* No Players Message */
+.no-players-msg {
+  text-align: center;
+  padding: var(--space-lg) 0;
+  color: var(--text-secondary);
+}
+
+/* Modal Headers */
+.modal-title {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-black);
+  color: var(--text);
+  margin-bottom: var(--space-md);
+  font-family: var(--font-body);
+}
+
+.modal-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-small);
+  margin-bottom: var(--space-lg);
+  font-family: var(--font-body);
+}
+
+/* Stats Grid Variant */
+.stats-grid-2col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* ========================================
+   PAGE HEADERS
+   Unified header component styles
+   ======================================== */
+
+.page-header {
+  margin-bottom: var(--space-lg);
+}
+
+.page-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  gap: var(--space-md);
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-page-title);
+  font-weight: var(--font-weight-bold);
+  color: var(--gold-primary);
+  text-align: center;
+  margin: 0;
+  flex: 1;
+  letter-spacing: var(--letter-spacing-slight);
+}
+
+.header-spacer {
+  width: 3rem;
+  flex-shrink: 0;
+}
+
+/* Text gold utility for back buttons */
+.text-gold {
+  color: var(--gold-muted) !important;
+}
+
+.text-gold:hover {
+  color: var(--gold-primary) !important;
+}
+
+/* Game header (in-game specific) */
+.game-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.game-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xs) var(--space-md);
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.game-header-content h1 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-app-bar);
+  font-weight: var(--font-weight-bold);
+  color: var(--gold-primary);
+  margin: 0;
+  letter-spacing: var(--letter-spacing-slight);
+}
+
+/* Compact buttons for game header - reduces total bar height */
+.game-header-content .btn-text,
+.game-header-content .btn-sm {
+  min-height: 2rem;  /* 32px instead of 40px */
+  padding: 0.5rem 1rem;  /* Reduced from 0.625rem 1.25rem */
+}

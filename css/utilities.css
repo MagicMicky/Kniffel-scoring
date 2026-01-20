@@ -542,3 +542,10 @@
   margin: 0;
   letter-spacing: var(--letter-spacing-slight);
 }
+
+/* Compact buttons for game header - reduces total bar height */
+.game-header-content .btn-text,
+.game-header-content .btn-sm {
+  min-height: 2rem;  /* 32px instead of 40px */
+  padding: 0.5rem 1rem;  /* Reduced from 0.625rem 1.25rem */
+}

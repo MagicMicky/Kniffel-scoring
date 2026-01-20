@@ -529,7 +529,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-xs) var(--space-md);
   max-width: 28rem;
   margin: 0 auto;
 }

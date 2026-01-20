@@ -19,10 +19,19 @@
   width: 100%;
   max-width: 24rem;
   max-height: 80vh;
-  overflow: auto;
+  max-height: 80dvh; /* Dynamic viewport height for mobile */
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   border: 2px solid var(--border-primary);
   box-shadow: var(--shadowLg), var(--innerHighlight);
   position: relative;
+}
+
+/* Keyboard-safe: Ensure inputs stay visible when focused */
+.modal input {
+  scroll-margin-top: var(--space-xl);
+  scroll-margin-bottom: var(--space-xl);
 }
 
 /* Modal accent line */

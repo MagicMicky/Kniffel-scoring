@@ -31,25 +31,38 @@ export function setupView() {
   const resumeButton = S.savedGame ? resumeGameSection() : '';
 
   return `
-    <div class="container container-fullheight p-md">
+    <div class="app-layout">
       ${hamburgerButton()}
       ${sideMenu()}
-      ${PageHeader({
-        title: 'SCHNITZEL',
-        subtitle: 'Your Travel Yahtzee Companion',
-        showLogo: true
-      })}
-      ${savedGameBanner()}
-      ${resumeButton}
-      <div class="card mb-lg">
-        <div class="flex justify-between items-center mb-md">
-          <h2 class="card-title">Select Players</h2>
-          ${Button({ icon: '⚙️', variant: 'icon', onClick: 'S.mgr=true;R()' })}
-        </div>
-        <div class="space-y-2">${playerList}</div>
-        ${playOrder}
+
+      <!-- Fixed Header -->
+      <div class="app-layout-header">
+        ${PageHeader({
+          title: 'SCHNITZEL',
+          subtitle: 'Your Travel Yahtzee Companion',
+          showLogo: true,
+          compact: true
+        })}
       </div>
-      ${gameModeButtons()}
+
+      <!-- Scrollable Content -->
+      <div class="app-layout-content">
+        ${savedGameBanner()}
+        ${resumeButton}
+        <div class="card card-compact">
+          <div class="flex justify-between items-center mb-sm">
+            <h2 class="card-title">Select Players</h2>
+            ${Button({ icon: '⚙️', variant: 'icon', onClick: 'S.mgr=true;R()' })}
+          </div>
+          <div class="player-list-compact space-y-2">${playerList}</div>
+          ${playOrder}
+        </div>
+      </div>
+
+      <!-- Fixed Actions -->
+      <div class="app-layout-actions">
+        ${gameModeButtons()}
+      </div>
     </div>
     ${S.mgr ? managerModal() : ''}
     ${S.stats ? statsModal() : ''}
@@ -124,7 +137,8 @@ function savedGameBanner() {
     icon: '📌',
     subtitle: players,
     meta: savedDate,
-    variant: 'default'
+    variant: 'default',
+    compact: true
   });
 }
 
@@ -133,7 +147,7 @@ function savedGameBanner() {
  */
 function resumeGameSection() {
   return `
-    <div class="grid grid-cols-2 gap-2 mb-md">
+    <div class="grid grid-cols-2 gap-2 mb-compact">
       ${Button({ text: 'Discard', icon: '🗑️', variant: 'secondary', onClick: 'discardSaved()' })}
       ${Button({ text: 'Resume', icon: '▶️', variant: 'primary', onClick: 'resumeGame()' })}
     </div>
@@ -149,15 +163,15 @@ function gameModeButtons() {
   const expandIcon = isExpanded ? '▲' : '▼';
 
   return `
-    <div class="mode-select-container">
-      <button class="game-mode-btn" onclick="startGameWithMode('score')" ${disabled}>
+    <div class="mode-select-compact">
+      <button class="game-mode-btn-compact" onclick="startGameWithMode('score')" ${disabled}>
         <div class="icon">🎲</div>
         <div class="title">Physical Dice</div>
         <div class="desc">Roll real dice • Enter scores</div>
       </button>
 
-      <div class="expandable-mode-container">
-        <button class="game-mode-btn expandable-header ${isExpanded ? 'expanded' : ''}"
+      <div class="expandable-mode-compact">
+        <button class="game-mode-btn-compact expandable-header ${isExpanded ? 'expanded' : ''}"
                 onclick="startGameWithMode('play', false)" ${disabled}>
           <div class="icon">📱</div>
           <div class="title">Virtual Dice</div>
@@ -166,7 +180,7 @@ function gameModeButtons() {
         </button>
 
         <div class="expandable-content ${isExpanded ? 'expanded' : ''}">
-          <button class="mode-variant-btn"
+          <button class="mode-variant-btn-compact"
                   onclick="startGameWithMode('play', false)" ${disabled}>
             <div class="variant-icon">📱</div>
             <div class="variant-info">
@@ -175,7 +189,7 @@ function gameModeButtons() {
             </div>
           </button>
 
-          <button class="mode-variant-btn"
+          <button class="mode-variant-btn-compact"
                   onclick="startGameWithMode('play', true)" ${disabled}>
             <div class="variant-icon">⚡</div>
             <div class="variant-info">

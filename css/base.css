@@ -9,6 +9,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Prevent pull-to-refresh on mobile */
+  overscroll-behavior: none;
+  touch-action: manipulation;
 }
 
 body {
@@ -21,6 +24,8 @@ body {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
   position: relative;
+  /* Prevent overscroll bounce on iOS */
+  overscroll-behavior-y: none;
 }
 
 /* Ambient lighting effect */

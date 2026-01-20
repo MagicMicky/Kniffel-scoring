@@ -154,6 +154,7 @@ export function Badge({
  * @param {string} [options.meta] - Optional metadata text (small, muted)
  * @param {string} [options.icon] - Optional emoji icon
  * @param {string} [options.variant='default'] - 'default' | 'warning' | 'success' | 'danger'
+ * @param {boolean} [options.compact=false] - Use compact layout
  * @param {string} [options.className=''] - Additional classes
  * @returns {string} HTML string
  */
@@ -163,10 +164,11 @@ export function InfoBox({
   meta = '',
   icon = '',
   variant = 'default',
+  compact = false,
   className = ''
 }) {
   const classes = [
-    'info-box',
+    compact ? 'info-box-compact' : 'info-box',
     `info-box-${variant}`,
     className
   ].filter(Boolean).join(' ');
@@ -219,6 +221,7 @@ export function Grid({
  * @param {string} [options.backButton] - Back button onclick handler (if omitted, no back button)
  * @param {string} [options.rightButton] - Right button config { text, onClick, variant }
  * @param {boolean} [options.showLogo=false] - Show logo icon (only for home page)
+ * @param {boolean} [options.compact=false] - Use compact layout for fixed viewport
  * @param {string} [options.className=''] - Additional classes
  * @returns {string} HTML string
  */
@@ -228,15 +231,17 @@ export function PageHeader({
   backButton = '',
   rightButton = null,
   showLogo = false,
+  compact = false,
   className = ''
 }) {
   const classes = ['page-header', className].filter(Boolean).join(' ');
 
   // Home page style (with logo)
   if (showLogo) {
+    const headerClass = compact ? 'app-header-compact' : 'app-header';
     return `
       <div class="${classes}">
-        <div class="app-header">
+        <div class="${headerClass}">
           <div>
             <img src="icon-192-v2.png" alt="SCHNITZEL" class="app-logo">
           </div>

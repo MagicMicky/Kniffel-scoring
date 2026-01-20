@@ -1,0 +1,451 @@
+/* App-Like Layout System - Fixed Viewport, No Resize */
+
+/* ========================================
+   FIXED VIEWPORT LAYOUT
+   Modern PWA structure with no scrolling issues
+   ======================================== */
+
+/* Main app container - fixed viewport height */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh; /* Dynamic viewport height - accounts for mobile browser chrome */
+  height: 100vh; /* Fallback for older browsers */
+  max-height: -webkit-fill-available; /* iOS Safari fix */
+  overflow: hidden;
+  position: relative;
+  /* Prevent pull-to-refresh and other touch gestures from interfering */
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior: none;
+}
+
+/* Keyboard-safe: prevent iOS Safari resize on keyboard */
+@supports (-webkit-touch-callout: none) {
+  .app-layout {
+    height: -webkit-fill-available;
+  }
+}
+
+/* Header - Fixed at top */
+.app-layout-header {
+  flex-shrink: 0;
+  padding: var(--space-md) var(--space-md) var(--space-sm);
+  background: var(--bg-primary);
+  position: relative;
+  z-index: var(--z-sticky);
+}
+
+/* Scrollable content area - the only part that scrolls */
+.app-layout-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  padding: 0 var(--space-md) var(--space-sm);
+  position: relative;
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+}
+
+.app-layout-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.app-layout-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-layout-content::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 2px;
+}
+
+.app-layout-content::-webkit-scrollbar-thumb:hover {
+  background: var(--border-primary);
+}
+
+/* Footer/Actions - Fixed at bottom */
+.app-layout-actions {
+  flex-shrink: 0;
+  padding: var(--space-md);
+  background: linear-gradient(to top, var(--bg-primary) 0%, transparent 100%);
+  position: relative;
+  z-index: var(--z-sticky);
+  /* Add blur backdrop for depth */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ========================================
+   COMPACT SPACING FOR APP-LIKE FEEL
+   Reduce vertical space usage
+   ======================================== */
+
+/* Compact header - reduced logo/title size */
+.app-header-compact {
+  text-align: center;
+  margin-bottom: var(--space-md);
+}
+
+.app-header-compact .app-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto var(--space-sm);
+  border-radius: var(--rSm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.app-header-compact .app-title {
+  font-family: var(--font-display);
+  font-size: 2rem; /* Smaller than default */
+  font-weight: var(--font-weight-black);
+  color: var(--gold-primary);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: 1;
+  margin: 0;
+}
+
+.app-header-compact .app-tagline {
+  font-family: var(--font-body);
+  font-size: 0.625rem; /* Smaller tagline */
+  color: var(--gold-muted);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  margin-top: var(--space-xs);
+}
+
+/* Compact cards */
+.card-compact {
+  margin-bottom: var(--space-md);
+}
+
+.card-compact .card-title {
+  font-size: var(--font-size-h3);
+  margin-bottom: var(--space-sm);
+}
+
+/* Compact spacing utilities */
+.mb-compact { margin-bottom: var(--space-sm); }
+.mt-compact { margin-top: var(--space-sm); }
+.p-compact { padding: var(--space-sm); }
+
+/* ========================================
+   GAME MODE BUTTONS - COMPACT LAYOUT
+   Optimized for fixed viewport
+   ======================================== */
+
+/* Compact mode selection container */
+.mode-select-compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+/* Compact game mode button */
+.game-mode-btn-compact {
+  background: var(--gold-primary);
+  border: none;
+  border-radius: var(--rSm);
+  padding: var(--space-md) var(--space-sm);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: center;
+  min-height: 110px; /* Reduced from 140px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem; /* Reduced gap */
+  box-shadow: var(--shadow-button);
+}
+
+.game-mode-btn-compact:hover {
+  background: var(--gold-bright);
+  box-shadow: var(--shadow-button-hover);
+  transform: translateY(-2px);
+}
+
+.game-mode-btn-compact:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.game-mode-btn-compact:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.game-mode-btn-compact .icon {
+  font-size: 1.75rem; /* Reduced from 2rem */
+  line-height: 1;
+}
+
+.game-mode-btn-compact .title {
+  font-weight: var(--font-weight-bold);
+  font-size: 0.875rem; /* Reduced */
+  color: var(--onAccent);
+  margin-top: 0.125rem;
+  font-family: var(--font-body);
+}
+
+.game-mode-btn-compact .desc {
+  font-size: 0.625rem; /* Reduced */
+  color: var(--onAccent);
+  opacity: 0.85;
+  line-height: 1.2;
+}
+
+/* ========================================
+   KEYBOARD-SAFE INPUT HANDLING
+   Prevent window resize on mobile keyboards
+   ======================================== */
+
+/* Modal overlay - prevent body scroll when keyboard appears */
+.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure modals scroll independently */
+.modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Input focus handling - keep input visible */
+.input-focus-scroll {
+  scroll-margin-top: var(--space-xl);
+  scroll-margin-bottom: var(--space-xl);
+}
+
+/* ========================================
+   COMPACT INFO BOXES
+   Reduced padding for space efficiency
+   ======================================== */
+
+.info-box-compact {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--rSm);
+  background: var(--bg-elevated);
+  margin-bottom: var(--space-sm);
+}
+
+.info-box-compact .info-title {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 0.25rem;
+}
+
+.info-box-compact .info-subtitle {
+  font-size: 0.75rem;
+  margin-bottom: 0;
+}
+
+.info-box-compact .info-meta {
+  font-size: 0.625rem;
+  margin-top: 0.25rem;
+}
+
+/* ========================================
+   PLAYER SELECTION - COMPACT LAYOUT
+   ======================================== */
+
+.player-list-compact .player-row {
+  padding: var(--space-sm);
+  min-height: 2.75rem; /* Reduced from 3.5rem */
+  margin-bottom: var(--space-xs);
+}
+
+.player-list-compact .player-row:last-child {
+  margin-bottom: 0;
+}
+
+/* ========================================
+   EXPANDABLE MODE CONTAINER - COMPACT
+   ======================================== */
+
+.expandable-mode-compact {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.expandable-mode-compact .expandable-header {
+  position: relative;
+}
+
+.expandable-mode-compact .expand-icon {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  transition: transform 0.3s ease;
+  padding: 0.25rem;
+  cursor: pointer;
+  z-index: var(--z-overlay);
+}
+
+.expandable-mode-compact .expand-icon:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.expandable-mode-compact .expandable-header.expanded .expand-icon {
+  transform: rotate(180deg);
+}
+
+.expandable-mode-compact .expandable-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.expandable-mode-compact .expandable-content.expanded {
+  max-height: 240px; /* Reduced from 300px */
+  opacity: 1;
+  margin-top: 0.375rem;
+}
+
+/* Compact mode variant buttons */
+.mode-variant-btn-compact {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: var(--rSm);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 0.375rem;
+}
+
+.mode-variant-btn-compact:last-child {
+  margin-bottom: 0;
+}
+
+.mode-variant-btn-compact:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.mode-variant-btn-compact:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.mode-variant-btn-compact:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mode-variant-btn-compact .variant-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mode-variant-btn-compact .variant-info {
+  flex: 1;
+  text-align: left;
+}
+
+.mode-variant-btn-compact .variant-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.125rem;
+}
+
+.mode-variant-btn-compact .variant-desc {
+  font-size: 0.625rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+/* Larger screens - more breathing room */
+@media (min-width: 600px) {
+  .app-layout-header {
+    padding: var(--space-lg) var(--space-xl) var(--space-md);
+  }
+
+  .app-layout-content {
+    padding: 0 var(--space-xl) var(--space-md);
+  }
+
+  .app-layout-actions {
+    padding: var(--space-lg) var(--space-xl);
+  }
+
+  .app-header-compact .app-logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .app-header-compact .app-title {
+    font-size: 2.5rem;
+  }
+
+  .game-mode-btn-compact {
+    min-height: 130px;
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .game-mode-btn-compact .icon {
+    font-size: 2rem;
+  }
+
+  .game-mode-btn-compact .title {
+    font-size: 1rem;
+  }
+
+  .game-mode-btn-compact .desc {
+    font-size: 0.75rem;
+  }
+}
+
+/* ========================================
+   SAFE AREA INSETS (iOS notch support)
+   ======================================== */
+
+.app-layout-header {
+  padding-top: max(var(--space-md), env(safe-area-inset-top));
+}
+
+.app-layout-actions {
+  padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
+}
+
+/* ========================================
+   ACCESSIBILITY - REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .app-layout-content {
+    scroll-behavior: auto;
+  }
+
+  .expandable-mode-compact .expandable-content {
+    transition: none;
+  }
+
+  .game-mode-btn-compact {
+    transition: none;
+  }
+}

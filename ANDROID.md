@@ -2,9 +2,30 @@
 
 This document explains how to build and release the Kniffel app as an Android application using GitHub Actions.
 
+## ⚠️ Initial Setup Required
+
+**IMPORTANT:** The Android project must be generated locally once before CI builds will work.
+
+### Quick Setup (One-Time)
+
+```bash
+# Install Bubblewrap CLI
+npm install -g @bubblewrap/cli
+
+# Generate Android project (answer prompts interactively)
+bubblewrap init --manifest=twa-manifest.json
+
+# Commit the generated project
+git add android/
+git commit -m "Add: Generated Android project from Bubblewrap"
+git push
+```
+
+After this one-time setup, GitHub Actions will automatically build APK and AAB files on every push!
+
 ## 🎯 Overview
 
-The Kniffel PWA is automatically packaged as an Android app using:
+The Kniffel PWA is packaged as an Android app using:
 - **Bubblewrap** - Google's official CLI for packaging PWAs as Trusted Web Activities (TWA)
 - **GitHub Actions** - Automated builds on every commit
 - **GitHub Artifacts** - Download built APK/AAB files

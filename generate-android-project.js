@@ -70,6 +70,7 @@ const appBuildGradle = `apply plugin: 'com.android.application'
 
 android {
     compileSdk 33
+    namespace "${twaManifest.packageId}"
 
     defaultConfig {
         applicationId "${twaManifest.packageId}"
@@ -90,9 +91,19 @@ android {
         ]
     }
 
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE_PATH") ?: "${twaManifest.signingKey.path}")
+            storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD") ?: "android"
+            keyAlias System.getenv("KEYSTORE_ALIAS") ?: "${twaManifest.signingKey.alias}"
+            keyPassword System.getenv("ANDROID_KEY_PASSWORD") ?: "android"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
+            signingConfig signingConfigs.release
         }
     }
 

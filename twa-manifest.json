@@ -25,7 +25,6 @@
   "appVersionCode": 1,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
-  "webManifestUrl": "https://magicmicky.github.io/Kniffel-scoring/manifest.json",
   "fallbackType": "custom-tabs",
   "features": {
     "locationDelegation": {

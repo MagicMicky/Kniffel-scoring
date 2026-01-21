@@ -116,7 +116,8 @@ jobs:
           # Check if android project already exists
           if [ ! -d "android" ]; then
             echo "Initializing new Bubblewrap project..."
-            bubblewrap init --manifest=twa-manifest.json
+            # Skip PWA validation since manifest might not be deployed yet
+            bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
           else
             echo "Android project already exists, updating..."
             bubblewrap update --manifest=twa-manifest.json

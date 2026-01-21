@@ -109,80 +109,19 @@ jobs:
       - name: Generate Android project
         if: steps.check_android.outputs.needs_generation == 'true'
         run: |
-          echo "📦 Generating Android project from twa-manifest.json..."
+          echo "📦 Generating Android project using Docker..."
 
-          # Update twa-manifest.json with correct keystore path
-          jq '.signingKey.path = "/tmp/android.keystore"' twa-manifest.json > twa-manifest-tmp.json
-          mv twa-manifest-tmp.json twa-manifest.json
-
-          # Start a local HTTP server to serve the manifest
-          python3 -m http.server 8000 &
-          SERVER_PID=$!
-          sleep 5
-
-          # Install expect for interactive prompts
-          sudo apt-get install -y expect
-
-          # Create expect script to handle Bubblewrap prompts
-          printf '%s\n' \
-            '#!/usr/bin/expect -f' \
-            'set timeout 180' \
-            '' \
-            'spawn bubblewrap init --manifest=http://127.0.0.1:8000/manifest.json' \
-            '' \
-            'expect "? Domain:"' \
-            'send "magicmicky.github.io\r"' \
-            '' \
-            'expect "? URL path:"' \
-            'send "/Kniffel-scoring/\r"' \
-            '' \
-            'expect "? Application name:"' \
-            'send "Schnitzel\r"' \
-            '' \
-            'expect "? Short name:"' \
-            'send "Schnitzel\r"' \
-            '' \
-            'expect "? Application ID:"' \
-            'send "com.magicmicky.kniffel\r"' \
-            '' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "Display mode|Status bar|Dark mode|Navigation|Icon URL|Splash|Notifications|Shortcuts"' \
-            'send "\r"' \
-            'expect -re "app shortcuts"' \
-            'send "n\r"' \
-            'expect -re "JDK"' \
-            'send "n\r"' \
-            'expect "Path:"' \
-            'send "$env(JAVA_HOME)\r"' \
-            'expect -re "Android SDK"' \
-            'send "$env(ANDROID_HOME)\r"' \
-            'expect eof' \
-            > /tmp/bubblewrap-init.exp
-
-          chmod +x /tmp/bubblewrap-init.exp
-          /tmp/bubblewrap-init.exp || echo "Bubblewrap init completed with code: $?"
-
-          # Stop the server
-          kill $SERVER_PID || true
+          # Create a simple script to run bubblewrap build which regenerates the project
+          docker run --rm \
+            -v "$PWD:/workspace" \
+            -w /workspace \
+            node:20 \
+            bash -c "
+              npm install -g @bubblewrap/cli && \
+              apt-get update && apt-get install -y openjdk-17-jdk && \
+              export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 && \
+              yes | bubblewrap build --manifest=twa-manifest.json || true
+            "
 
           # Verify android folder was created
           if [ -d "android" ]; then
@@ -190,7 +129,27 @@ jobs:
             echo "android_exists=true" >> $GITHUB_OUTPUT
           else
             echo "❌ Failed to generate Android project"
-            exit 1
+            echo "📝 Attempting alternative generation method..."
+
+            # Alternative: Try with bubblewrap init
+            docker run --rm \
+              -v "$PWD:/workspace" \
+              -w /workspace \
+              node:20 \
+              bash -c "
+                npm install -g @bubblewrap/cli && \
+                apt-get update && apt-get install -y openjdk-17-jdk && \
+                export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 && \
+                printf 'magicmicky.github.io\n/Kniffel-scoring/\nSchnitzel\nSchnitzel\ncom.magicmicky.kniffel\n\n\n\n\n\n\n\n\n\n\nn\nn\n\$JAVA_HOME\n\n' | bubblewrap init --manifest=twa-manifest.json || true
+              "
+
+            if [ -d "android" ]; then
+              echo "✅ Android project generated successfully (alternative method)"
+              echo "android_exists=true" >> $GITHUB_OUTPUT
+            else
+              echo "❌ Failed to generate Android project"
+              exit 1
+            fi
           fi
 
       - name: Build Android App Bundle (AAB)

@@ -95,8 +95,11 @@ jobs:
           # Check if android project already exists
           if [ ! -d "android" ]; then
             echo "Initializing new Bubblewrap project..."
-            # Use --skipJdkInstall to prevent interactive prompt
-            bubblewrap init --manifest=twa-manifest.json --skipJdkInstall
+            echo "Using JDK from JAVA_HOME: $JAVA_HOME"
+
+            # Use --jdkPath to provide the JDK path and avoid interactive prompt
+            # The setup-java action sets JAVA_HOME automatically
+            bubblewrap init --manifest=twa-manifest.json --jdkPath="$JAVA_HOME"
           else
             echo "Android project already exists, updating..."
             bubblewrap update --manifest=twa-manifest.json

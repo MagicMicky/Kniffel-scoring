@@ -38,10 +38,32 @@ jobs:
       - name: Install Bubblewrap CLI
         run: npm install -g @bubblewrap/cli
 
-      - name: Generate keystore
+      - name: Setup keystore
         run: |
-          # Create a keystore for signing (using a default password for demo)
-          # For production, you should use GitHub Secrets
+          # Check if production keystore is provided via GitHub Secrets
+          if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
+            echo "📦 Using production keystore from GitHub Secrets"
+            echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > /tmp/android.keystore
+
+            # Verify keystore was decoded successfully (without exposing content)
+            if [ -f /tmp/android.keystore ] && [ -s /tmp/android.keystore ]; then
+              echo "✅ Production keystore decoded successfully"
+              echo "KEYSTORE_PATH=/tmp/android.keystore" >> $GITHUB_ENV
+              echo "KEYSTORE_ALIAS=${{ secrets.ANDROID_KEY_ALIAS }}" >> $GITHUB_ENV
+              echo "USE_PRODUCTION_KEY=true" >> $GITHUB_ENV
+            else
+              echo "❌ Failed to decode keystore, falling back to demo keystore"
+              echo "USE_PRODUCTION_KEY=false" >> $GITHUB_ENV
+            fi
+          else
+            echo "🔧 No production keystore found, using demo keystore"
+            echo "USE_PRODUCTION_KEY=false" >> $GITHUB_ENV
+          fi
+
+      - name: Generate demo keystore
+        if: env.USE_PRODUCTION_KEY != 'true'
+        run: |
+          echo "Generating demo keystore for testing..."
           keytool -genkey \
             -keystore /tmp/android.keystore \
             -alias android \
@@ -52,12 +74,29 @@ jobs:
             -keypass android \
             -dname "CN=Kniffel, OU=Development, O=MagicMicky, L=Unknown, ST=Unknown, C=US"
 
+          echo "KEYSTORE_PATH=/tmp/android.keystore" >> $GITHUB_ENV
+          echo "KEYSTORE_ALIAS=android" >> $GITHUB_ENV
+
+      - name: Update manifest with keystore alias
+        run: |
+          # Update twa-manifest.json with the correct keystore alias
+          if [ "$USE_PRODUCTION_KEY" = "true" ]; then
+            echo "Updating manifest to use production key alias: $KEYSTORE_ALIAS"
+            # Use jq to update the alias (install jq first)
+            sudo apt-get update && sudo apt-get install -y jq
+            jq --arg alias "$KEYSTORE_ALIAS" '.signingKey.alias = $alias' twa-manifest.json > twa-manifest-tmp.json
+            mv twa-manifest-tmp.json twa-manifest.json
+          else
+            echo "Using demo keystore alias from manifest: android"
+          fi
+
       - name: Initialize Bubblewrap project
         run: |
           # Check if android project already exists
           if [ ! -d "android" ]; then
             echo "Initializing new Bubblewrap project..."
-            bubblewrap init --manifest=twa-manifest.json
+            # Use --skipJdkInstall to prevent interactive prompt
+            bubblewrap init --manifest=twa-manifest.json --skipJdkInstall
           else
             echo "Android project already exists, updating..."
             bubblewrap update --manifest=twa-manifest.json
@@ -66,18 +105,32 @@ jobs:
       - name: Build Android App Bundle (AAB)
         run: |
           cd android
+
+          # Set passwords based on whether using production or demo keystore
+          if [ "$USE_PRODUCTION_KEY" = "true" ]; then
+            export ANDROID_KEYSTORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+            export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
+          else
+            export ANDROID_KEYSTORE_PASSWORD="android"
+            export ANDROID_KEY_PASSWORD="android"
+          fi
+
           ./gradlew bundleRelease
-        env:
-          ANDROID_KEYSTORE_PASSWORD: android
-          ANDROID_KEY_PASSWORD: android
 
       - name: Build Android APK
         run: |
           cd android
+
+          # Set passwords based on whether using production or demo keystore
+          if [ "$USE_PRODUCTION_KEY" = "true" ]; then
+            export ANDROID_KEYSTORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+            export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
+          else
+            export ANDROID_KEYSTORE_PASSWORD="android"
+            export ANDROID_KEY_PASSWORD="android"
+          fi
+
           ./gradlew assembleRelease
-        env:
-          ANDROID_KEYSTORE_PASSWORD: android
-          ANDROID_KEY_PASSWORD: android
 
       - name: Rename artifacts
         run: |

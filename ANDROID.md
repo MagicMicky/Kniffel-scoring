@@ -91,50 +91,87 @@ A TWA is a way to package your PWA as an Android app that:
 
 ## 🔐 Production Signing (Important!)
 
-The current workflow uses a **demo keystore** generated during build. For production releases:
+The workflow **automatically supports both demo and production keystores**:
+- 🔧 **No secrets configured** → Uses auto-generated demo keystore (for testing)
+- 🔐 **Secrets configured** → Uses your production keystore automatically
 
-### Option 1: Use GitHub Secrets (Recommended)
+### Option 1: Use Your Own Production Keystore (via GitHub Secrets)
 
-1. **Generate a production keystore locally**:
-   ```bash
-   keytool -genkey -v \
-     -keystore kniffel-release.keystore \
-     -alias kniffel \
-     -keyalg RSA \
-     -keysize 2048 \
-     -validity 10000
-   ```
+**The workflow is already configured to use secrets automatically!** Just add them:
 
-2. **Encode keystore to base64**:
-   ```bash
-   base64 kniffel-release.keystore > keystore.b64
-   ```
+#### Step 1: Generate a Production Keystore
 
-3. **Add to GitHub Secrets**:
-   - Go to your repo → Settings → Secrets and variables → Actions
-   - Add these secrets:
-     - `ANDROID_KEYSTORE_BASE64` - Contents of `keystore.b64`
-     - `ANDROID_KEYSTORE_PASSWORD` - Your keystore password
-     - `ANDROID_KEY_PASSWORD` - Your key password
-     - `ANDROID_KEY_ALIAS` - Key alias (e.g., "kniffel")
+```bash
+keytool -genkey -v \
+  -keystore kniffel-release.keystore \
+  -alias kniffel \
+  -keyalg RSA \
+  -keysize 2048 \
+  -validity 10000
+```
 
-4. **Update workflow** (`.github/workflows/android-build.yml`):
-   ```yaml
-   - name: Decode keystore
-     run: |
-       echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > /tmp/android.keystore
+**⚠️ Important:**
+- Remember your passwords! You'll need them forever.
+- Keep the keystore file safe - if you lose it, you can't update your app.
+- Use a strong alias like "kniffel" or "kniffel-release" (not "android").
 
-   # Then use secrets in build steps
-   env:
-     ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-     ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-   ```
+#### Step 2: Encode Keystore to Base64
 
-### Option 2: Use Google Play App Signing
+```bash
+# On Linux/macOS:
+base64 kniffel-release.keystore > keystore.b64
 
-- Let Google manage signing (recommended for beginners)
-- You only need an upload key (can be the demo one for testing)
-- Google re-signs with their key for distribution
+# On Windows (PowerShell):
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("kniffel-release.keystore")) > keystore.b64
+```
+
+#### Step 3: Add Secrets to GitHub
+
+Go to your repository → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
+
+Add these **4 secrets** (exact names required):
+
+| Secret Name | Value | Example |
+|-------------|-------|---------|
+| `ANDROID_KEYSTORE_BASE64` | Contents of `keystore.b64` file | `MIIJpwIBAzCC...` (very long) |
+| `ANDROID_KEYSTORE_PASSWORD` | Your keystore password | `MyStorePass123!` |
+| `ANDROID_KEY_PASSWORD` | Your key password | `MyKeyPass456!` |
+| `ANDROID_KEY_ALIAS` | Your key alias | `kniffel` |
+
+**🔒 Security Features:**
+- Secrets are encrypted and never exposed in logs
+- Keystore is decoded in memory only
+- Passwords are masked in all output
+- Files are cleaned up after build
+
+#### Step 4: That's It!
+
+The workflow **automatically detects** the secrets and uses them. No workflow changes needed!
+
+Next push to `main` or `claude/**` will show:
+```
+📦 Using production keystore from GitHub Secrets
+✅ Production keystore decoded successfully
+```
+
+### Option 2: Use Google Play App Signing (Easiest)
+
+**Recommended for beginners!** Let Google manage your signing keys:
+
+1. Use the demo keystore (no secrets needed)
+2. Upload your first AAB to Play Console
+3. Choose **"Let Google manage and protect your app signing key"**
+4. Google re-signs with their secure key
+5. You keep using the same upload key for all future updates
+
+**Benefits:**
+- ✅ No need to manage production keystore locally
+- ✅ No risk of losing your signing key
+- ✅ Google handles security
+- ✅ Can reset upload key if compromised
+
+**Drawback:**
+- ❌ APKs for direct installation won't be signed with Google's key (only AAB from Play Store)
 
 ## 🧪 Testing the APK
 
@@ -280,6 +317,41 @@ Output files:
 - ❌ Invalid `twa-manifest.json` syntax
 - ❌ Incorrect startUrl or host
 - ❌ Network issues downloading dependencies
+- ❌ Bubblewrap interactive prompt (should be fixed with `--skipJdkInstall`)
+
+### Keystore Issues
+
+**"Failed to decode keystore" message:**
+- Check that `ANDROID_KEYSTORE_BASE64` is valid base64
+- Verify you copied the entire contents of the `.b64` file
+- Make sure there are no extra newlines or spaces
+
+**Build succeeds but shows "Using demo keystore":**
+- Verify all 4 secrets are added: `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_PASSWORD`, `ANDROID_KEY_ALIAS`
+- Check secret names exactly match (case-sensitive)
+- Secrets must be "Repository secrets" not "Environment secrets"
+
+**How to verify secrets are being used:**
+Look for this in the build logs:
+```
+📦 Using production keystore from GitHub Secrets
+✅ Production keystore decoded successfully
+```
+
+If you see:
+```
+🔧 No production keystore found, using demo keystore
+```
+Then secrets are not configured or not accessible.
+
+**Checking if keystore is valid:**
+```bash
+# List contents of your keystore
+keytool -list -v -keystore kniffel-release.keystore
+
+# Verify alias exists
+keytool -list -alias kniffel -keystore kniffel-release.keystore
+```
 
 ### APK Won't Install
 

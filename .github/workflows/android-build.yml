@@ -97,9 +97,11 @@ jobs:
             echo "Initializing new Bubblewrap project..."
             echo "Using JDK from JAVA_HOME: $JAVA_HOME"
 
-            # Pipe "No" to tell Bubblewrap to use the existing JDK instead of installing its own
-            # This avoids the interactive prompt while using the JDK we already installed
-            echo "No" | bubblewrap init --manifest=twa-manifest.json
+            # Bubblewrap asks TWO questions in CI:
+            # 1. "Do you want Bubblewrap to install the JDK?" -> No
+            # 2. "Path to your existing JDK 17:" -> $JAVA_HOME
+            # Use printf to provide both answers with newlines
+            printf "No\n$JAVA_HOME\n" | bubblewrap init --manifest=twa-manifest.json
           else
             echo "Android project already exists, updating..."
             bubblewrap update --manifest=twa-manifest.json

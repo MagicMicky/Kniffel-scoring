@@ -1,0 +1,127 @@
+name: Build Android App
+
+on:
+  push:
+    branches:
+      - main
+      - 'claude/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create GitHub Release'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install Bubblewrap CLI
+        run: npm install -g @bubblewrap/cli
+
+      - name: Generate keystore
+        run: |
+          # Create a keystore for signing (using a default password for demo)
+          # For production, you should use GitHub Secrets
+          keytool -genkey \
+            -keystore /tmp/android.keystore \
+            -alias android \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass android \
+            -keypass android \
+            -dname "CN=Kniffel, OU=Development, O=MagicMicky, L=Unknown, ST=Unknown, C=US"
+
+      - name: Initialize Bubblewrap project
+        run: |
+          # Check if android project already exists
+          if [ ! -d "android" ]; then
+            echo "Initializing new Bubblewrap project..."
+            bubblewrap init --manifest=twa-manifest.json
+          else
+            echo "Android project already exists, updating..."
+            bubblewrap update --manifest=twa-manifest.json
+          fi
+
+      - name: Build Android App Bundle (AAB)
+        run: |
+          cd android
+          ./gradlew bundleRelease
+        env:
+          ANDROID_KEYSTORE_PASSWORD: android
+          ANDROID_KEY_PASSWORD: android
+
+      - name: Build Android APK
+        run: |
+          cd android
+          ./gradlew assembleRelease
+        env:
+          ANDROID_KEYSTORE_PASSWORD: android
+          ANDROID_KEY_PASSWORD: android
+
+      - name: Rename artifacts
+        run: |
+          # Get version from version.json
+          VERSION=$(cat version.json | grep -o '"version": "[^"]*' | grep -o '[^"]*$')
+
+          # Find and rename the AAB
+          AAB_PATH=$(find android/app/build/outputs/bundle/release -name "*.aab" | head -n 1)
+          if [ -f "$AAB_PATH" ]; then
+            cp "$AAB_PATH" "kniffel-${VERSION}.aab"
+            echo "Created: kniffel-${VERSION}.aab"
+          fi
+
+          # Find and rename the APK
+          APK_PATH=$(find android/app/build/outputs/apk/release -name "*.apk" | head -n 1)
+          if [ -f "$APK_PATH" ]; then
+            cp "$APK_PATH" "kniffel-${VERSION}.apk"
+            echo "Created: kniffel-${VERSION}.apk"
+          fi
+
+      - name: Upload AAB as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-app-bundle
+          path: '*.aab'
+          retention-days: 30
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: '*.apk'
+          retention-days: 30
+
+      - name: Create Release
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.create_release == 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Release v${{ github.run_number }}
+          draft: false
+          prerelease: false
+          files: |
+            *.aab
+            *.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

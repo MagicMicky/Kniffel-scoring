@@ -1,0 +1,46 @@
+{
+  "packageId": "com.magicmicky.kniffel",
+  "host": "magicmicky.github.io",
+  "name": "Kniffel",
+  "launcherName": "Kniffel",
+  "display": "standalone",
+  "orientation": "portrait",
+  "themeColor": "#1a1512",
+  "navigationColor": "#1a1512",
+  "navigationColorDark": "#1a1512",
+  "navigationDividerColor": "#1a1512",
+  "navigationDividerColorDark": "#1a1512",
+  "backgroundColor": "#1a1512",
+  "enableNotifications": false,
+  "startUrl": "/Kniffel-scoring/",
+  "iconUrl": "https://magicmicky.github.io/Kniffel-scoring/icon-512-v2.png",
+  "maskableIconUrl": "https://magicmicky.github.io/Kniffel-scoring/icon-512-v2.png",
+  "monochromeIconUrl": "https://magicmicky.github.io/Kniffel-scoring/icon-512-v2.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "/tmp/android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://magicmicky.github.io/Kniffel-scoring/manifest.json",
+  "fallbackType": "custom-tabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": false
+    },
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "minSdkVersion": 23,
+  "targetSdkVersion": 33
+}

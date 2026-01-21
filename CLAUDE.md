@@ -17,11 +17,12 @@ This document provides comprehensive instructions for managing, updating, and ma
 5. [Game Modes](#game-modes)
 6. [GitHub Pages Setup](#github-pages-setup)
 7. [Installing the PWA](#installing-the-pwa)
-8. [Updating the PWA](#updating-the-pwa)
-9. [Export & Import Data](#export--import-data)
-10. [Data Safety & localStorage](#data-safety--localstorage)
-11. [Troubleshooting](#troubleshooting)
-12. [Development Workflow](#development-workflow)
+8. [Android App Build](#android-app-build)
+9. [Updating the PWA](#updating-the-pwa)
+10. [Export & Import Data](#export--import-data)
+11. [Data Safety & localStorage](#data-safety--localstorage)
+12. [Troubleshooting](#troubleshooting)
+13. [Development Workflow](#development-workflow)
 
 ---
 
@@ -273,6 +274,49 @@ After merging changes to the `main` branch:
 2. Tap the **⋮ menu**
 3. Select **"Install"** or **"Add to Home screen"**
 4. Confirm installation
+
+---
+
+## 📦 Android App Build
+
+The Kniffel PWA can also be packaged as a native Android app and distributed through the Google Play Store!
+
+### 🤖 Automated Builds with GitHub Actions
+
+Every time you push to the `main` branch or any `claude/**` branch, GitHub Actions automatically:
+- Packages your PWA as an Android app (using Google's Bubblewrap)
+- Builds both AAB (for Play Store) and APK (for testing)
+- Makes the files available for download
+
+### 📥 Downloading Your Android App
+
+1. Go to your repository on GitHub
+2. Click the **"Actions"** tab
+3. Click on the latest successful workflow run
+4. Scroll to **"Artifacts"** section
+5. Download:
+   - **android-app-bundle** - `.aab` file for uploading to Google Play Console
+   - **android-apk** - `.apk` file for testing on your device
+
+### 🏪 Publishing to Google Play Store
+
+1. **Download the AAB** from GitHub Actions artifacts
+2. **Go to [Google Play Console](https://play.google.com/console)**
+3. **Create a new app** (first time only)
+4. **Upload the AAB file** to a new release
+5. **Complete store listing** (description, screenshots, etc.)
+6. **Submit for review**
+
+### 📚 Complete Documentation
+
+For detailed instructions on:
+- Production signing with GitHub Secrets
+- Configuring Digital Asset Links
+- Updating app versions
+- Troubleshooting build issues
+- Manual local builds
+
+**See [ANDROID.md](ANDROID.md) for comprehensive Android app documentation.**
 
 ---
 

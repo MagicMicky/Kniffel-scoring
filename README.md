@@ -2,6 +2,8 @@
 
 A mobile-first Progressive Web App for scoring Yahtzee (Kniffel) games. Works offline, installs to your home screen, and now includes a full **Play Mode** with virtual dice!
 
+**Also available as a native Android app!** Automatically built and packaged using GitHub Actions.
+
 ## Features
 
 ### Two Game Modes
@@ -32,15 +34,26 @@ A mobile-first Progressive Web App for scoring Yahtzee (Kniffel) games. Works of
 
 ## Installation
 
-### iOS (Safari)
+### As a PWA (Web App)
+
+**iOS (Safari)**
 1. Open the app URL in Safari
 2. Tap Share button → "Add to Home Screen"
 3. Tap "Add"
 
-### Android (Chrome)
+**Android (Chrome)**
 1. Open the app URL in Chrome
 2. Tap "Add to Home Screen" banner or Menu → "Install app"
 3. Tap "Install"
+
+### As a Native Android App
+
+1. Go to the [Actions tab](../../actions) in this repository
+2. Click on the latest successful workflow run
+3. Download the `android-apk` artifact
+4. Install the APK on your Android device
+
+**For Google Play Store distribution**, see [ANDROID.md](ANDROID.md) for complete instructions on uploading the AAB to Google Play Console.
 
 ## Development
 

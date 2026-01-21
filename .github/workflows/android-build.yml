@@ -99,18 +99,106 @@ jobs:
           if [ -d "android" ] && [ -f "android/build.gradle" ]; then
             echo "✅ Android project found"
             echo "android_exists=true" >> $GITHUB_OUTPUT
+            echo "needs_generation=false" >> $GITHUB_OUTPUT
           else
-            echo "⚠️  Android project not found - skipping build"
-            echo "📝 To enable Android builds, generate the project locally:"
-            echo "   npm install -g @bubblewrap/cli"
-            echo "   bubblewrap init --manifest=twa-manifest.json"
-            echo "   git add android/"
-            echo "   git commit -m 'Add Android project'"
+            echo "⚠️  Android project not found - will generate automatically"
             echo "android_exists=false" >> $GITHUB_OUTPUT
+            echo "needs_generation=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate Android project
+        if: steps.check_android.outputs.needs_generation == 'true'
+        run: |
+          echo "📦 Generating Android project from twa-manifest.json..."
+
+          # Update twa-manifest.json with correct keystore path
+          jq '.signingKey.path = "/tmp/android.keystore"' twa-manifest.json > twa-manifest-tmp.json
+          mv twa-manifest-tmp.json twa-manifest.json
+
+          # Start a local HTTP server to serve the manifest
+          python3 -m http.server 8000 &
+          SERVER_PID=$!
+          sleep 5
+
+          # Run bubblewrap init with expect to handle prompts
+          cat > /tmp/bubblewrap-init.exp << 'EXPECT_EOF'
+#!/usr/bin/expect -f
+set timeout 180
+
+spawn bubblewrap init --manifest=http://127.0.0.1:8000/manifest.json
+
+expect {
+            "? Domain:" {
+                send "magicmicky.github.io\r"
+            }
+            timeout {
+                puts "ERROR: Timeout waiting for Domain prompt"
+                exit 1
+            }
+          }
+
+expect "? URL path:"
+send "/Kniffel-scoring/\r"
+
+expect "? Application name:"
+send "Schnitzel\r"
+
+expect "? Short name:"
+send "Schnitzel\r"
+
+expect "? Application ID:"
+send "com.magicmicky.kniffel\r"
+
+expect {
+            "? Display mode:" { send "\r"; exp_continue }
+            "? Status bar color:" { send "\r"; exp_continue }
+            "? Dark mode:" { send "\r"; exp_continue }
+            "? Navigation color:" { send "\r"; exp_continue }
+            "? Navigation divider color:" { send "\r"; exp_continue }
+            "? Icon URL:" { send "\r"; exp_continue }
+            "? Maskable Icon URL:" { send "\r"; exp_continue }
+            "? Monochrome Icon URL:" { send "\r"; exp_continue }
+            "? Splash screen color:" { send "\r"; exp_continue }
+            "? Splash fade out duration:" { send "\r"; exp_continue }
+            "? Enable Notifications:" { send "\r"; exp_continue }
+            "? Shortcuts:" { send "\r"; exp_continue }
+            "? Include app shortcuts?" { send "n\r"; exp_continue }
+            "JDK" {
+                send "n\r"
+                expect "? JDK Path:"
+                send "$env(JAVA_HOME)\r"
+                exp_continue
+            }
+            "Android SDK" {
+                send "$env(ANDROID_HOME)\r"
+                exp_continue
+            }
+            "Project generated successfully" { exit 0 }
+            eof { exit 0 }
+            timeout { puts "\nERROR: Timeout"; exit 1 }
+          }
+
+expect eof
+EXPECT_EOF
+
+          chmod +x /tmp/bubblewrap-init.exp
+          sudo apt-get install -y expect
+          /tmp/bubblewrap-init.exp
+
+          # Stop the server
+          kill $SERVER_PID || true
+
+          # Verify android folder was created
+          if [ -d "android" ]; then
+            echo "✅ Android project generated successfully"
+            echo "android_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Failed to generate Android project"
+            exit 1
           fi
 
       - name: Build Android App Bundle (AAB)
-        if: steps.check_android.outputs.android_exists == 'true'
+        if: steps.check_android.outputs.android_exists == 'true' || steps.check_android.outputs.needs_generation == 'true'
         run: |
           cd android
 
@@ -128,7 +216,7 @@ jobs:
           ./gradlew bundleRelease
 
       - name: Build Android APK
-        if: steps.check_android.outputs.android_exists == 'true'
+        if: steps.check_android.outputs.android_exists == 'true' || steps.check_android.outputs.needs_generation == 'true'
         run: |
           cd android
 
@@ -144,7 +232,7 @@ jobs:
           ./gradlew assembleRelease
 
       - name: Rename artifacts
-        if: steps.check_android.outputs.android_exists == 'true'
+        if: steps.check_android.outputs.android_exists == 'true' || steps.check_android.outputs.needs_generation == 'true'
         run: |
           # Get version from version.json
           VERSION=$(cat version.json | grep -o '"version": "[^"]*' | grep -o '[^"]*$')

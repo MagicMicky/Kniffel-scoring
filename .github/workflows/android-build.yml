@@ -123,9 +123,12 @@ jobs:
           fi
 
           # Use bubblewrap build command which does init + build in one step
-          # Pipe 'y' to answer the "regenerate project" prompt
+          # Provide answers to multiple prompts:
+          # 1. Regenerate project? y
+          # 2. versionName? 1.0.0 (from manifest)
+          # 3. Just press enter for remaining prompts
           echo "Building Android app with Bubblewrap..."
-          echo "y" | bubblewrap build --manifest=twa-manifest.json
+          printf 'y\n1.0.0\n\n\n\n\n\n' | bubblewrap build --manifest=twa-manifest.json
 
       - name: Rename artifacts
         run: |

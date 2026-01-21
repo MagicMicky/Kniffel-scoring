@@ -99,12 +99,13 @@ jobs:
           if [ ! -d "android" ]; then
             echo "Initializing new Bubblewrap project..."
             echo "Using JDK from JAVA_HOME: $JAVA_HOME"
+            echo "Using Android SDK from ANDROID_HOME: $ANDROID_HOME"
 
             # Bubblewrap asks TWO questions in CI:
-            # 1. "Do you want Bubblewrap to install the JDK?" -> No
+            # 1. "Do you want Bubblewrap to install the JDK?" -> n (single character)
             # 2. "Path to your existing JDK 17:" -> $JAVA_HOME
-            # Use printf to provide both answers with newlines
-            printf "No\n$JAVA_HOME\n" | bubblewrap init --manifest=twa-manifest.json
+            # Use printf with single character 'n' followed by JDK path
+            printf 'n\n%s\n' "$JAVA_HOME" | bubblewrap init --manifest=twa-manifest.json
           else
             echo "Android project already exists, updating..."
             bubblewrap update --manifest=twa-manifest.json

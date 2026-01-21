@@ -317,7 +317,8 @@ Output files:
 - ❌ Invalid `twa-manifest.json` syntax
 - ❌ Incorrect startUrl or host
 - ❌ Network issues downloading dependencies
-- ❌ Bubblewrap interactive prompt (should be fixed with `--skipJdkInstall`)
+- ❌ Bubblewrap interactive prompt (should be fixed by providing JDK path via printf)
+- ❌ Missing Android SDK (now installed via android-actions/setup-android)
 
 ### Keystore Issues
 

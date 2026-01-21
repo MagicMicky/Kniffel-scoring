@@ -111,45 +111,23 @@ jobs:
         run: |
           echo "📦 Generating Android project using Docker..."
 
-          # Create a simple script to run bubblewrap build which regenerates the project
-          docker run --rm \
-            -v "$PWD:/workspace" \
-            -w /workspace \
-            node:20 \
-            bash -c "
-              npm install -g @bubblewrap/cli && \
-              apt-get update && apt-get install -y openjdk-17-jdk && \
-              export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 && \
-              yes | bubblewrap build --manifest=twa-manifest.json || true
-            "
+          # Build Docker image with Android project
+          docker build -f Dockerfile.android -t android-builder .
+
+          # Extract the generated android folder from the container
+          docker create --name temp-container android-builder
+          docker cp temp-container:/workspace/android ./android || echo "Copying android folder..."
+          docker cp temp-container:/workspace/twa-manifest.json ./twa-manifest.json || true
+          docker rm temp-container
 
           # Verify android folder was created
-          if [ -d "android" ]; then
+          if [ -d "android" ] && [ -f "android/build.gradle" ]; then
             echo "✅ Android project generated successfully"
             echo "android_exists=true" >> $GITHUB_OUTPUT
           else
             echo "❌ Failed to generate Android project"
-            echo "📝 Attempting alternative generation method..."
-
-            # Alternative: Try with bubblewrap init
-            docker run --rm \
-              -v "$PWD:/workspace" \
-              -w /workspace \
-              node:20 \
-              bash -c "
-                npm install -g @bubblewrap/cli && \
-                apt-get update && apt-get install -y openjdk-17-jdk && \
-                export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 && \
-                printf 'magicmicky.github.io\n/Kniffel-scoring/\nSchnitzel\nSchnitzel\ncom.magicmicky.kniffel\n\n\n\n\n\n\n\n\n\n\nn\nn\n\$JAVA_HOME\n\n' | bubblewrap init --manifest=twa-manifest.json || true
-              "
-
-            if [ -d "android" ]; then
-              echo "✅ Android project generated successfully (alternative method)"
-              echo "android_exists=true" >> $GITHUB_OUTPUT
-            else
-              echo "❌ Failed to generate Android project"
-              exit 1
-            fi
+            ls -la
+            exit 1
           fi
 
       - name: Build Android App Bundle (AAB)

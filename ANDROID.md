@@ -1,31 +1,19 @@
 # 📱 Android App - Build & Release Guide
 
-This document explains how to build and release the Kniffel app as an Android application using GitHub Actions.
+This document explains how to build and release the Schnitzel app as an Android application using GitHub Actions.
 
-## ⚠️ Initial Setup Required
+## 🎉 Fully Automated Builds
 
-**IMPORTANT:** The Android project must be generated locally once before CI builds will work.
+**No local setup required!** GitHub Actions automatically:
+- Generates the Android project on the first run (if it doesn't exist)
+- Builds both AAB (for Play Store) and APK (for testing) files
+- Makes them available for download as artifacts
 
-### Quick Setup (One-Time)
-
-```bash
-# Install Bubblewrap CLI
-npm install -g @bubblewrap/cli
-
-# Generate Android project (answer prompts interactively)
-bubblewrap init --manifest=twa-manifest.json
-
-# Commit the generated project
-git add android/
-git commit -m "Add: Generated Android project from Bubblewrap"
-git push
-```
-
-After this one-time setup, GitHub Actions will automatically build APK and AAB files on every push!
+Just push to `main` or any `claude/**` branch and the Android app will be built automatically!
 
 ## 🎯 Overview
 
-The Kniffel PWA is packaged as an Android app using:
+The Schnitzel PWA is packaged as an Android app using:
 - **Bubblewrap** - Google's official CLI for packaging PWAs as Trusted Web Activities (TWA)
 - **GitHub Actions** - Automated builds on every commit
 - **GitHub Artifacts** - Download built APK/AAB files
@@ -80,7 +68,7 @@ A TWA is a way to package your PWA as an Android app that:
 
 2. **Create New App**
    - Click "Create app"
-   - App name: **Kniffel**
+   - App name: **Schnitzel**
    - Language: Select primary language
    - App type: **App**
    - Free or paid: **Free** (or your choice)
@@ -251,8 +239,8 @@ Key fields you might want to customize:
   "packageId": "com.magicmicky.kniffel",  // Must be unique
   "host": "magicmicky.github.io",         // Your GitHub Pages domain
   "startUrl": "/Kniffel-scoring/",        // Your app path
-  "name": "Kniffel",                      // App name
-  "launcherName": "Kniffel",              // Home screen name
+  "name": "Schnitzel",                    // App name
+  "launcherName": "Schnitzel",            // Home screen name
   "themeColor": "#1a1512",                // Status bar color
   "backgroundColor": "#1a1512",           // Splash screen bg
   "appVersionName": "1.0.0",              // Display version

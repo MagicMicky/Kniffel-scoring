@@ -75,7 +75,7 @@ jobs:
             -validity 10000 \
             -storepass android \
             -keypass android \
-            -dname "CN=Kniffel, OU=Development, O=MagicMicky, L=Unknown, ST=Unknown, C=US"
+            -dname "CN=Schnitzel, OU=Development, O=MagicMicky, L=Unknown, ST=Unknown, C=US"
 
           echo "KEYSTORE_PATH=/tmp/android.keystore" >> $GITHUB_ENV
           echo "KEYSTORE_ALIAS=android" >> $GITHUB_ENV
@@ -240,15 +240,15 @@ EXPECT_EOF
           # Find and rename the AAB
           AAB_PATH=$(find android/app/build/outputs/bundle/release -name "*.aab" | head -n 1)
           if [ -f "$AAB_PATH" ]; then
-            cp "$AAB_PATH" "kniffel-${VERSION}.aab"
-            echo "Created: kniffel-${VERSION}.aab"
+            cp "$AAB_PATH" "schnitzel-${VERSION}.aab"
+            echo "Created: schnitzel-${VERSION}.aab"
           fi
 
           # Find and rename the APK
           APK_PATH=$(find android/app/build/outputs/apk/release -name "*.apk" | head -n 1)
           if [ -f "$APK_PATH" ]; then
-            cp "$APK_PATH" "kniffel-${VERSION}.apk"
-            echo "Created: kniffel-${VERSION}.apk"
+            cp "$APK_PATH" "schnitzel-${VERSION}.apk"
+            echo "Created: schnitzel-${VERSION}.apk"
           fi
 
       - name: Upload AAB as artifact

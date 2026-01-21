@@ -22,6 +22,8 @@ const dirs = [
   'android/app/src/main/java/com/magicmicky/kniffel',
   'android/app/src/main/res',
   'android/app/src/main/res/values',
+  'android/app/src/main/res/drawable',
+  'android/app/src/main/res/xml',
   'android/app/src/main/res/mipmap-hdpi',
   'android/app/src/main/res/mipmap-mdpi',
   'android/app/src/main/res/mipmap-xhdpi',
@@ -220,6 +222,35 @@ zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
 `;
 
+// Generate splash screen drawable
+const splashXml = `<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:opacity="opaque">
+    <item android:drawable="@color/backgroundColor" />
+</layer-list>
+`;
+
+// Generate file provider paths
+const filePathsXml = `<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <cache-path name="my_cache" path="." />
+</paths>
+`;
+
+// Generate assetlinks.json content for Digital Asset Links
+const assetlinksJson = JSON.stringify([
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": twaManifest.packageId,
+      "sha256_cert_fingerprints": [
+        "PLACEHOLDER_FINGERPRINT_TO_BE_REPLACED"
+      ]
+    }
+  }
+], null, 2);
+
 // Write all files
 console.log('Generating build files...');
 fs.writeFileSync('android/build.gradle', rootBuildGradle);
@@ -227,11 +258,16 @@ fs.writeFileSync('android/app/build.gradle', appBuildGradle);
 fs.writeFileSync('android/app/src/main/AndroidManifest.xml', androidManifest);
 fs.writeFileSync('android/app/src/main/res/values/colors.xml', colorsXml);
 fs.writeFileSync('android/app/src/main/res/values/strings.xml', stringsXml);
+fs.writeFileSync('android/app/src/main/res/drawable/splash.xml', splashXml);
+fs.writeFileSync('android/app/src/main/res/xml/filepaths.xml', filePathsXml);
 fs.writeFileSync('android/gradle.properties', gradleProperties);
 fs.writeFileSync('android/settings.gradle', settingsGradle);
 fs.writeFileSync('android/gradle/wrapper/gradle-wrapper.properties', gradleWrapperProperties);
+fs.writeFileSync('android/assetlinks.json', assetlinksJson);
 
 console.log('✅ Android project structure generated successfully!');
-console.log('Next steps:');
-console.log('1. Download Gradle wrapper: cd android && ./gradlew wrapper');
-console.log('2. Build: ./gradlew bundleRelease');
+console.log('Project created at: ./android/');
+console.log('');
+console.log('Note: Remember to:');
+console.log('1. Replace PLACEHOLDER_FINGERPRINT in assetlinks.json with your actual signing key fingerprint');
+console.log('2. Deploy assetlinks.json to https://' + twaManifest.host + '/.well-known/assetlinks.json');

@@ -97,9 +97,9 @@ jobs:
             echo "Initializing new Bubblewrap project..."
             echo "Using JDK from JAVA_HOME: $JAVA_HOME"
 
-            # Use --jdkPath to provide the JDK path and avoid interactive prompt
-            # The setup-java action sets JAVA_HOME automatically
-            bubblewrap init --manifest=twa-manifest.json --jdkPath="$JAVA_HOME"
+            # Pipe "No" to tell Bubblewrap to use the existing JDK instead of installing its own
+            # This avoids the interactive prompt while using the JDK we already installed
+            echo "No" | bubblewrap init --manifest=twa-manifest.json
           else
             echo "Android project already exists, updating..."
             bubblewrap update --manifest=twa-manifest.json

@@ -123,9 +123,9 @@ jobs:
           fi
 
           # Use bubblewrap build command which does init + build in one step
-          # This bypasses the interactive init and builds directly
+          # Pipe 'y' to answer the "regenerate project" prompt
           echo "Building Android app with Bubblewrap..."
-          bubblewrap build --manifest=twa-manifest.json
+          echo "y" | bubblewrap build --manifest=twa-manifest.json
 
       - name: Rename artifacts
         run: |

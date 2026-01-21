@@ -1,8 +1,8 @@
 {
   "packageId": "com.magicmicky.kniffel",
   "host": "magicmicky.github.io",
-  "name": "Kniffel",
-  "launcherName": "Kniffel",
+  "name": "Schnitzel",
+  "launcherName": "Schnitzel",
   "display": "standalone",
   "orientation": "portrait",
   "themeColor": "#1a1512",

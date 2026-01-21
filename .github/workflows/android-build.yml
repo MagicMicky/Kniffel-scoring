@@ -121,12 +121,12 @@ jobs:
           docker rm temp-container
 
           # Verify android folder was created
-          if [ -d "android" ] && [ -f "android/build.gradle" ]; then
+          if [ -d "android" ] && [ -f "android/build.gradle" ] && [ -f "android/gradlew" ]; then
             echo "✅ Android project generated successfully"
             echo "android_exists=true" >> $GITHUB_OUTPUT
           else
             echo "❌ Failed to generate Android project"
-            ls -la
+            ls -la android/
             exit 1
           fi
 

@@ -1,14 +1,6 @@
-FROM node:20-bullseye
+FROM node:20-slim
 
-# Install Java for Gradle
-RUN apt-get update && apt-get install -y \
-    openjdk-17-jdk \
-    wget \
-    unzip \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set up environment
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+RUN apt-get update && apt-get install -y wget unzip && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
 
@@ -19,19 +11,21 @@ COPY generate-android-project.js ./
 COPY icon-192-v2.png ./
 COPY icon-512-v2.png ./
 
-# Generate Android project using our custom script
+# Generate Android project structure using our custom script
 RUN node generate-android-project.js
 
-# Download and install Gradle wrapper
+# Download Gradle wrapper jar and scripts from official distribution
 RUN cd android && \
-    wget -q https://services.gradle.org/distributions/gradle-8.0-bin.zip && \
-    unzip -q gradle-8.0-bin.zip && \
-    ./gradle-8.0/bin/gradle wrapper && \
-    rm -rf gradle-8.0 gradle-8.0-bin.zip
+    wget -q https://raw.githubusercontent.com/gradle/gradle/v8.0.0/gradle/wrapper/gradle-wrapper.jar -O gradle/wrapper/gradle-wrapper.jar && \
+    wget -q https://raw.githubusercontent.com/gradle/gradle/v8.0.0/gradlew -O gradlew && \
+    wget -q https://raw.githubusercontent.com/gradle/gradle/v8.0.0/gradlew.bat -O gradlew.bat && \
+    chmod +x gradlew && \
+    ls -la gradle/wrapper/
 
 # Verify the project was created
 RUN ls -la android/ && \
     test -f android/build.gradle && \
+    test -f android/app/build.gradle && \
     test -f android/gradlew && \
     echo "✅ Android project generated successfully"
 

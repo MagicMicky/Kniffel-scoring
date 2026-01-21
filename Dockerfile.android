@@ -1,65 +1,38 @@
 FROM node:20-bullseye
 
-# Install dependencies
+# Install Java for Gradle
 RUN apt-get update && apt-get install -y \
     openjdk-17-jdk \
     wget \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Set up environment variables
+# Set up environment
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-ENV ANDROID_SDK_ROOT=/opt/android-sdk
-ENV ANDROID_HOME=/opt/android-sdk
-ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-
-# Install Android SDK
-RUN mkdir -p $ANDROID_SDK_ROOT/cmdline-tools && \
-    wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip && \
-    unzip -q commandlinetools-linux-9477386_latest.zip -d $ANDROID_SDK_ROOT/cmdline-tools && \
-    mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest && \
-    rm commandlinetools-linux-9477386_latest.zip
-
-# Accept Android SDK licenses
-RUN yes | sdkmanager --licenses 2>&1 > /dev/null || true
-
-# Install required SDK packages
-RUN sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0" 2>&1 > /dev/null
-
-# Install Bubblewrap globally
-RUN npm install -g @bubblewrap/cli 2>&1 > /dev/null
-
-# Pre-configure Bubblewrap
-RUN mkdir -p /root/.bubblewrap && \
-    printf '{"jdkPath":"%s","androidSdkPath":"%s"}\n' "$JAVA_HOME" "$ANDROID_HOME" > /root/.bubblewrap/config.json
 
 WORKDIR /workspace
 
-# Copy necessary files
+# Copy project files
 COPY twa-manifest.json ./
 COPY manifest.json ./
+COPY generate-android-project.js ./
 COPY icon-192-v2.png ./
 COPY icon-512-v2.png ./
 
-# Generate the project - use the updateProject command which is less interactive
-# First, we need to scaffold the project
-RUN npx @bubblewrap/cli init \
-    --manifest=./manifest.json \
-    --directory=. 2>&1 | head -1 || true
+# Generate Android project using our custom script
+RUN node generate-android-project.js
 
-# If that didn't work, try using the CLI directly with all required answers piped
-RUN bash -c ' \
-    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64 && \
-    export ANDROID_HOME=/opt/android-sdk && \
-    (echo "magicmicky.github.io"; \
-     echo "/Kniffel-scoring/"; \
-     echo "Schnitzel"; \
-     echo "Schnitzel"; \
-     echo "com.magicmicky.kniffel"; \
-     echo ""; echo ""; echo ""; echo ""; echo ""; echo ""; echo ""; echo ""; echo ""; \
-     echo "n"; echo "n"; echo "$JAVA_HOME"; echo "$ANDROID_HOME") | \
-    npx @bubblewrap/cli init --manifest=./manifest.json 2>&1 || \
-    echo "Init attempted - checking results..." \
-    '
+# Download and install Gradle wrapper
+RUN cd android && \
+    wget -q https://services.gradle.org/distributions/gradle-8.0-bin.zip && \
+    unzip -q gradle-8.0-bin.zip && \
+    ./gradle-8.0/bin/gradle wrapper && \
+    rm -rf gradle-8.0 gradle-8.0-bin.zip
 
-CMD ["sh", "-c", "if [ -d android ]; then echo 'Success: android folder exists'; ls -la android/; else echo 'Failed: no android folder'; ls -la; fi"]
+# Verify the project was created
+RUN ls -la android/ && \
+    test -f android/build.gradle && \
+    test -f android/gradlew && \
+    echo "✅ Android project generated successfully"
+
+CMD ["ls", "-la", "android/"]

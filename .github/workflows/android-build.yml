@@ -93,7 +93,7 @@ jobs:
             echo "Using demo keystore alias from manifest: android"
           fi
 
-      - name: Initialize Bubblewrap project
+      - name: Build Android app with Bubblewrap
         run: |
           # Create Bubblewrap config directory to avoid interactive prompts
           mkdir -p ~/.bubblewrap
@@ -113,45 +113,19 @@ jobs:
           echo "Bubblewrap config created:"
           cat ~/.bubblewrap/config.json
 
-          # Check if android project already exists
-          if [ ! -d "android" ]; then
-            echo "Initializing new Bubblewrap project..."
-            # Skip PWA validation since manifest might not be deployed yet
-            bubblewrap init --manifest=twa-manifest.json --skipPwaValidation
-          else
-            echo "Android project already exists, updating..."
-            bubblewrap update --manifest=twa-manifest.json
-          fi
-
-      - name: Build Android App Bundle (AAB)
-        run: |
-          cd android
-
-          # Set passwords based on whether using production or demo keystore
+          # Set keystore passwords based on whether using production or demo keystore
           if [ "$USE_PRODUCTION_KEY" = "true" ]; then
-            export ANDROID_KEYSTORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
-            export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
+            export BUBBLEWRAP_KEYSTORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+            export BUBBLEWRAP_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
           else
-            export ANDROID_KEYSTORE_PASSWORD="android"
-            export ANDROID_KEY_PASSWORD="android"
+            export BUBBLEWRAP_KEYSTORE_PASSWORD="android"
+            export BUBBLEWRAP_KEY_PASSWORD="android"
           fi
 
-          ./gradlew bundleRelease
-
-      - name: Build Android APK
-        run: |
-          cd android
-
-          # Set passwords based on whether using production or demo keystore
-          if [ "$USE_PRODUCTION_KEY" = "true" ]; then
-            export ANDROID_KEYSTORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
-            export ANDROID_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
-          else
-            export ANDROID_KEYSTORE_PASSWORD="android"
-            export ANDROID_KEY_PASSWORD="android"
-          fi
-
-          ./gradlew assembleRelease
+          # Use bubblewrap build command which does init + build in one step
+          # This bypasses the interactive init and builds directly
+          echo "Building Android app with Bubblewrap..."
+          bubblewrap build --manifest=twa-manifest.json
 
       - name: Rename artifacts
         run: |

@@ -1,13 +1,13 @@
 # Component Architecture & Modularity Guidelines
 
 **Version:** 1.0
-**Purpose:** Define reusable component patterns for the Kniffel PWA
+**Purpose:** Define reusable component patterns for the Schnitzel PWA
 
 ---
 
 ## Philosophy
 
-The Kniffel app uses **atomic component design** with functional JavaScript to create:
+The Schnitzel app uses **atomic component design** with functional JavaScript to create:
 
 1. **Reusable building blocks** - Small, composable functions
 2. **Separation of concerns** - Structure, style, and behavior are separate

@@ -1,6 +1,6 @@
 /**
  * Atomic UI Components
- * Reusable building blocks for the Kniffel PWA
+ * Reusable building blocks for the Schnitzel PWA
  */
 
 import { escapeHtml } from '../utils/helpers.js';

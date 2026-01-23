@@ -1,7 +1,7 @@
 {
-  "name": "Kniffel",
-  "short_name": "Kniffel",
-  "description": "Craft Game Lounge - Premium Yahtzee companion",
+  "name": "Schnitzel",
+  "short_name": "Schnitzel",
+  "description": "Your Travel Yahtzee Companion",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#1a1512",

@@ -1,8 +1,8 @@
-# Kniffel PWA Refactoring Plan
+# Schnitzel PWA Refactoring Plan
 
 ## Overview
 
-This document outlines the refactoring of the Kniffel/Yahtzee PWA from a single 2900+ line `index.html` file into a modular, maintainable architecture.
+This document outlines the refactoring of the Schnitzel Yahtzee PWA from a single 2900+ line `index.html` file into a modular, maintainable architecture.
 
 ## Goals
 

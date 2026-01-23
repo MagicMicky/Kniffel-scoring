@@ -1,4 +1,4 @@
-# Kniffel Scoring PWA - Documentation
+# Schnitzel - Your Travel Yahtzee Companion
 
 > ⚠️ **CRITICAL - DO THIS FIRST BEFORE ANY WORK:**
 > ```bash
@@ -6,7 +6,7 @@
 > ```
 > This installs git hooks for automatic version updates. Without this, PWA users won't get update notifications!
 
-This document provides comprehensive instructions for managing, updating, and maintaining your Kniffel (Yahtzee) scoring Progressive Web App.
+This document provides comprehensive instructions for managing, updating, and maintaining the Schnitzel Yahtzee scoring Progressive Web App.
 
 ## 📱 Table of Contents
 
@@ -27,7 +27,7 @@ This document provides comprehensive instructions for managing, updating, and ma
 
 ## 🎨 Design System
 
-The Kniffel app follows the **"Craft Game Lounge"** design system - a modern board game café aesthetic that balances contemporary design with warm, inviting atmosphere.
+The Schnitzel app follows the **"Craft Game Lounge"** design system - a modern board game café aesthetic that balances contemporary design with warm, inviting atmosphere.
 
 ### For Developers
 
@@ -108,7 +108,7 @@ When implementing components or debugging styles, consult **[CSS.md](CSS.md)** f
 
 ## 🎯 UX Patterns
 
-The Kniffel app follows user-centered interaction patterns that prioritize immediate feedback, intuitive controls, and delightful micro-interactions.
+The Schnitzel app follows user-centered interaction patterns that prioritize immediate feedback, intuitive controls, and delightful micro-interactions.
 
 ### For Developers
 
@@ -144,7 +144,7 @@ When implementing new features or modifying interactions, consult **[UX.md](UX.m
 
 ## 🧩 Component Architecture
 
-The Kniffel app uses **atomic component design** with functional JavaScript to ensure code reusability, maintainability, and consistency.
+The Schnitzel app uses **atomic component design** with functional JavaScript to ensure code reusability, maintainability, and consistency.
 
 ### For Developers
 
@@ -242,7 +242,7 @@ After merging changes to the `main` branch:
 1. Open **Safari** and navigate to your GitHub Pages URL
 2. Tap the **Share** button (square with arrow pointing up)
 3. Scroll down and tap **"Add to Home Screen"**
-4. Edit the name if desired (default: "Kniffel")
+4. Edit the name if desired (default: "Schnitzel")
 5. Tap **"Add"**
 6. The app icon will appear on your home screen!
 
@@ -255,7 +255,7 @@ After merging changes to the `main` branch:
 ### On Android (Chrome)
 
 1. Open **Chrome** and navigate to your GitHub Pages URL
-2. You'll see a banner: **"Add Kniffel to Home screen"**
+2. You'll see a banner: **"Add Schnitzel to Home screen"**
    - Tap **"Add"** → **"Install"**
 3. **OR** tap the **⋮ menu** → **"Add to Home screen"** or **"Install app"**
 4. Confirm by tapping **"Add"** or **"Install"**
@@ -327,7 +327,7 @@ The app automatically checks for updates **every 60 seconds** when open. When a 
 5. Return to the PWA
 
 **If that doesn't work:**
-1. Settings → Apps → [Kniffel PWA]
+1. Settings → Apps → [Schnitzel PWA]
 2. Tap "Storage" → **"Clear cache"** (NOT "Clear data"!)
 3. Open the PWA again
 
@@ -439,7 +439,7 @@ localStorage is browser storage that:
 
 **Solution 2: Clear Cache (keeps data)**
 - iOS: Safari → Settings → Clear History and Website Data → Reinstall PWA
-- Android: Settings → Apps → Kniffel → Storage → Clear Cache
+- Android: Settings → Apps → Schnitzel → Storage → Clear Cache
 
 **Solution 3: Unregister Service Worker**
 
@@ -632,7 +632,7 @@ If you encounter issues or have suggestions:
 
 ## 📄 License & Credits
 
-Built with ❤️ as a Progressive Web App for Yahtzee/Kniffel scoring.
+Built with ❤️ as a Progressive Web App for Yahtzee scoring.
 
 **Tech Stack:**
 - Vanilla JavaScript

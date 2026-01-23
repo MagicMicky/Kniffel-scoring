@@ -1,6 +1,6 @@
 # CSS Reference
 
-Complete CSS architecture documentation for the Kniffel Craft Game Lounge theme.
+Complete CSS architecture documentation for the Schnitzel Craft Game Lounge theme.
 
 ---
 

@@ -1,6 +1,6 @@
-# Kniffel / Yahtzee Scoring PWA
+# Schnitzel - Your Travel Yahtzee Companion
 
-A mobile-first Progressive Web App for scoring Yahtzee (Kniffel) games. Works offline, installs to your home screen, and now includes a full **Play Mode** with virtual dice!
+A mobile-first Progressive Web App for scoring Yahtzee games. Works offline, installs to your home screen, and now includes a full **Play Mode** with virtual dice!
 
 ## Features
 

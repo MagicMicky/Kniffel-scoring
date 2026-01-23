@@ -1,4 +1,4 @@
-# Kniffel UX Patterns
+# Schnitzel UX Patterns
 
 ## Interaction Principles
 

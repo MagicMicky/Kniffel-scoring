@@ -1,4 +1,4 @@
-# Kniffel Design System
+# Schnitzel Design System
 
 ## Craft Game Lounge
 
@@ -9,7 +9,7 @@
 
 ## Design Philosophy
 
-The Kniffel app embodies **"Craft Game Lounge"** - a modern board game café aesthetic that balances contemporary design with warm, inviting atmosphere.
+The Schnitzel app embodies **"Craft Game Lounge"** - a modern board game café aesthetic that balances contemporary design with warm, inviting atmosphere.
 
 ### Core Principles
 
